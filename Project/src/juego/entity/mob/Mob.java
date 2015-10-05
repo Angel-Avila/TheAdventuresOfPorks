@@ -30,6 +30,8 @@ public abstract class Mob extends Entity{
         }
     }
     
+    
+    
     public void update(){
         
     }
