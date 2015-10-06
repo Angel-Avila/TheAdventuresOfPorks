@@ -47,6 +47,21 @@ public class Screen {
         }
     } ye' old example method to render a screen full of pixels*/
     
+    public void renderSprite(int xp, int yp, Sprite sprite, boolean fixed){
+    	if(fixed){
+	    	xp -= xOffset;
+	    	yp -= yOffset;
+    	}
+    	for(int y = 0; y < sprite.getHeight(); y++){
+    		int ya = y + yp;
+    		for(int x = 0; x < sprite.getWidth(); x++){
+    			int xa = x + xp;
+    			if(xa < 0 || xa >= width || ya < 0 || ya >= height) continue;
+    			pixels[x + y * width] = sprite.pixels[x + y * sprite.getWidth()];
+    		}
+    	}
+    }
+    
     /**
      * 
      * @param xp gives the x position of the tile on the map
