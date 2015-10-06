@@ -6,7 +6,7 @@ import src.juego.graphics.Sprite;
 public class WizardProjectile extends Projectile{
 	
 	public static final int FIRE_RATE = 15; // The higher, the slower
-
+	public static final int WIZARD_P_SIZE = 10;
 	public WizardProjectile(int x, int y, double dir) {
 		super(x, y, dir);
 		range = 110;
@@ -20,12 +20,16 @@ public class WizardProjectile extends Projectile{
 	}
 	
 	public void update(){
+		if(level.tileCollision(x, y, nx, ny, WIZARD_P_SIZE))
+			remove();
 		move();
 	}
 	
 	protected void move(){
-		x += nx;
-		y += ny;
+		if(!level.tileCollision(x, y, nx, ny, WIZARD_P_SIZE)){
+			x += nx;
+			y += ny;
+		}
 		
 		if(distance() > range)
 			remove();

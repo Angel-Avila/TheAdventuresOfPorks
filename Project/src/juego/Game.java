@@ -18,8 +18,6 @@ import src.juego.input.Mouse;
 import src.juego.level.Level;
 import src.juego.level.TileCoordinate;
 
-// Test para github
-
 public class Game extends Canvas implements Runnable {
 
     private static final long serialVersionUID = 1L;
