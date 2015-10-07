@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import src.juego.entity.Entity;
+import src.juego.entity.particle.Particle;
 import src.juego.entity.projectile.Projectile;
 import src.juego.entity.projectile.WizardProjectile;
 import src.juego.graphics.Sprite;
@@ -23,11 +24,11 @@ public abstract class Mob extends Entity{
         // Sliding
         if(!collision(xa, 0)){
             x += xa; 
-        }
+        } 
         
         if(!collision(0, ya)){
             y += ya;
-        }
+        } 
     }
     
     public void update(){
@@ -36,7 +37,7 @@ public abstract class Mob extends Entity{
     
     protected void shoot(int x, int y, double dir){
     	Projectile p = new WizardProjectile(x, y, dir);
-    	level.addProjectile(p);
+    	level.add(p);
     }
     
     private boolean collision(int xa, int ya){

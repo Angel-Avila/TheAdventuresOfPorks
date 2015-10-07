@@ -53,6 +53,11 @@ public class Sprite {
     // Projectile Sprites here:
     public static Sprite wizard_projectile = new Sprite(16, 2 , 0 , SpriteSheet.wizard_projectile);
     
+    // Particles
+    
+    public static Sprite particle_normal = new Sprite(3, 0xffffff);
+    public static Sprite particle_wizard_p = new Sprite(3, 0xFFFF0000);
+    
     // Just the void sprite
     
     public static Sprite voidSprite = new Sprite(16, 0x3F87D9);

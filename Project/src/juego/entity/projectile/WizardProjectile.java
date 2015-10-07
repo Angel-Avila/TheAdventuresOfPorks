@@ -1,5 +1,6 @@
 package src.juego.entity.projectile;
 
+import src.juego.entity.particle.Particle;
 import src.juego.graphics.Screen;
 import src.juego.graphics.Sprite;
 
@@ -20,8 +21,11 @@ public class WizardProjectile extends Projectile{
 	}
 	
 	public void update(){
-		if(level.tileCollision(x, y, nx, ny, WIZARD_P_SIZE))
+		if(level.tileCollision(x, y, nx, ny, WIZARD_P_SIZE)){
+			Particle p = new Particle((int)x,(int) y, 50);
+        	level.add(p);
 			remove();
+		}
 		move();
 	}
 	
