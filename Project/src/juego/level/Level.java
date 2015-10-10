@@ -30,9 +30,7 @@ public class Level {
     
     public Level(String path){
         loadLevel(path);
-        generateLevel();
-        
-        add(new Spawner(31 * 16, 44 * 16, Spawner.Type.PARTICLE, 800, this));
+        generateLevel();   
     }
     
     protected void generateLevel(){
@@ -55,7 +53,21 @@ public class Level {
     	for (int i = 0; i < particles.size(); i++) {
     		particles.get(i).update();
 		}
-        
+        remove();
+    }
+    
+    private void remove(){
+    	for (int i = 0; i < entities.size(); i++) {
+    		if(entities.get(i).isRemoved()) entities.remove(i);
+		}
+    	
+    	for (int i = 0; i < projectiles.size(); i++) {
+    		if(projectiles.get(i).isRemoved()) projectiles.remove(i);
+		}
+    	
+    	for (int i = 0; i < particles.size(); i++) {
+    		if(particles.get(i).isRemoved()) particles.remove(i);
+		}
     }
     
     public List<Projectile> getProjectiles(){
@@ -115,7 +127,7 @@ public class Level {
 		}
         
         for (int i = 0; i < particles.size(); i++) {
-    		particles.get(i).render(screen);
+       		particles.get(i).render(screen);
 		}
     }
     

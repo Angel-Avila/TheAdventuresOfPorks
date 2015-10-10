@@ -49,18 +49,11 @@ public class Player extends Mob{
         
         if(fireRate > 0) fireRate--;
         
-        clear();
         updateShooting();
     }
-    
-    private void clear() {
-		for(int i = 0; i < level.getProjectiles().size(); i++){
-			Projectile p = level.getProjectiles().get(i);
-			if(p.isRemoved()) level.getProjectiles().remove(i);
-		}
-		
-	}
 
+    // the old clear() method is now done in level in removed() but now removing also particles, projectiles and entities
+    
 	private void updateShooting() {	
     	if(Mouse.getB() == 1 && fireRate <= 0){
     		double dx = Mouse.getX() - Game.getWindowWidth() / 2;
