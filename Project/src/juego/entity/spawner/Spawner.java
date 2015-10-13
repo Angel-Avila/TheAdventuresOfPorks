@@ -16,8 +16,7 @@ public class Spawner extends Entity{
 		init(level);
 		this.x = x;
 		this.y = y;
-		this.type = type;
-		
+		this.type = type;	
 	}
 	
 }

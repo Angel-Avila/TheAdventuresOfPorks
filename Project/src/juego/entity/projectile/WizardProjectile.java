@@ -21,22 +21,19 @@ public class WizardProjectile extends Projectile{
 	}
 	
 	public void update(){
-		if(level.tileCollision(x, y, nx, ny, WIZARD_P_SIZE)){
-			level.add(new ParticleSpawner((int) x, (int) y, 60, 7, level));
+		if(level.tileCollision((int)(x + nx), (int)(y + ny), WIZARD_P_SIZE, 3, 3)){
+			level.add(new ParticleSpawner((int) x, (int) y, 200, 25, level));
 			remove();
 		}
 		move();
 	}
 	
-	protected void move(){
-		if(!level.tileCollision(x, y, nx, ny, WIZARD_P_SIZE)){
-			x += nx;
-			y += ny;
-		}
+	protected void move(){		
+		x += nx;
+		y += ny;
 		
 		if(distance() > range)
 			remove();
-		
 	}
 	
 	private double distance() {

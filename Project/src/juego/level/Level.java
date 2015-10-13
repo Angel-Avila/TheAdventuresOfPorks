@@ -79,20 +79,17 @@ public class Level {
     }
     
     /**
-     * @param x position of our entity
-     * @param y position of our entity 
-     * @param xa direction in which it's heading
-     * @param ya direction in which it's heading
+     * @param x position of our entity + the direction in which it's heading
+     * @param y position of our entity + the direction in which it's heading
      * @param size of the entity
      * @return if the tile our object is moving to is solid or not
      */
-    public boolean tileCollision(double x, double y, double xa, double ya, int size){
+    public boolean tileCollision(int x, int y, int size, int xOffset, int yOffset){
     	boolean solid = false;
     	for (int c = 0; c < 4; c++) {
-    		int xt = (((int)x +(int) xa) + c % 2 * size - 5) >> 4;
-    		int yt = (((int)y +(int) ya) + c / 2 * size - 2) >> 4;
-    		if(getTile(xt,yt).solid()) 
-        		solid = true;
+    		int xt = (x - c % 2 * size + xOffset) >> 4;
+    		int yt = (y - c / 2 * size + yOffset) >> 4;
+    		if(getTile(xt, yt).solid()) solid = true;
 		}
         return solid;
     }

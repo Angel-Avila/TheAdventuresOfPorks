@@ -56,7 +56,7 @@ public class Sprite {
     // Particles
     
     public static Sprite particle_normal = new Sprite(3, 0xffffff);
-    public static Sprite particle_wizard_p = new Sprite(3, 0xFFFF0000);
+    public static Sprite particle_wizard_p = new Sprite(3, 0xFF0F65FF);
     
     // Just the void sprite
     
