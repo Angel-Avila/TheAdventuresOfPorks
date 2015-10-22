@@ -23,11 +23,13 @@ public class Particle extends Entity{
 		this.xx = x;
 		this.yy = y;
 		this.life = life + (random.nextInt(30) - 10);
-		sprite = Sprite.particle_normal;
+		sprite = Sprite.particle_wizard_p;
 		
+		// xa and ya with randoms are for the movement in this axis; zz is for the bounce. The +(int) in zz
+		// can be changed depending on how much you want the particles to bounce after a projectile collision.
 		this.xa = random.nextGaussian();
 		this.ya = random.nextGaussian();
-		this.zz = random.nextFloat() + 15.0;
+		this.zz = random.nextFloat() + 8.0;
 	}
 	
 	public void update(){
@@ -48,6 +50,7 @@ public class Particle extends Entity{
 	}
 	
 	private void move(double x, double y) {
+		// If there's a collision, they change direction
 		if(collision(x, y)){
 			this.xa *= -0.5;
 			this.ya *= -0.5;
@@ -58,9 +61,18 @@ public class Particle extends Entity{
 		this.zz += za;
 	}
 	
+	
+	/**
+	 * @param x coordinate
+	 * @param y coordinate
+	 * xt is the x coordinate depending on the corner the for loop is checking
+	 * yt is the y coordinate depending on the corner the for loop is checking
+	 * @return if it's solid or not
+	 */
 	private boolean collision(double x, double y){
     	boolean solid = false;
     	for (int c = 0; c < 4; c++) {
+    		// This algorithm is just to get the 4 corners of the tile and use them to check if they're solid
     		double xt = (x - c % 2 * 16) / 16;
     		double yt = (y - c / 2 * 16) / 16;
     		int ix = (int) Math.ceil(xt);
@@ -73,7 +85,7 @@ public class Particle extends Entity{
     }
 
 	public void render(Screen screen){
-		// I offset "y" by 14 because without it I feel the particle spawner renders like ~-14 pixels from where the projectile explodes
-		screen.renderSprite((int) xx - 1, (int) yy - (int) zz + 14, sprite, true);
+		// I offset "y" by 9 because without it I feel the particle spawner renders like ~-9 pixels from where the projectile explodes
+		screen.renderSprite((int) xx - 1, (int) yy - (int) zz + 9, sprite, true);
 	}
 }

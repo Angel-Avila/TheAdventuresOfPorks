@@ -143,6 +143,8 @@ public class Level {
      *  Flower = 0xFFFFFF00
      *  Bush   = 0xFF007F00
      *  Rock   = 0xFF7F7F00
+     *  This method checks our tiles int array that's filled with colors(in hexadecimal value) and returns the
+     *  corresponding tile.
      */    
     public Tile getTile(int x, int y){
         if(x < 0 || y < 0 || x >= width || y >= height ) return Tile.voidTile;
