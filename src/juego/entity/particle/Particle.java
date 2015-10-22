@@ -33,6 +33,7 @@ public class Particle extends Entity{
 	}
 	
 	public void update(){
+		// Removes the particles if they their lifespan is over in the level
 		time++;
 		if(time > 9000) time = 0;
 		if(time > life) remove();
@@ -46,9 +47,12 @@ public class Particle extends Entity{
 			ya *= 0.4;
 		}
 	
+		// xx is our x but in a double value so we sum xa to simulate some physics, the same goes with yy but we also
+		// sum zz and za to simulate bouncing and gravity
 		move(xx + xa, (yy + ya) + (zz + za));
 	}
 	
+	// Moves the particles
 	private void move(double x, double y) {
 		// If there's a collision, they change direction
 		if(collision(x, y)){
@@ -72,7 +76,9 @@ public class Particle extends Entity{
 	private boolean collision(double x, double y){
     	boolean solid = false;
     	for (int c = 0; c < 4; c++) {
-    		// This algorithm is just to get the 4 corners of the tile and use them to check if they're solid
+    		// This algorithm is just to get the 4 corners of the tile and use them to check if they're solid,
+    		// the logic is that c % 2 or c / 2 sometimes is 0 and sometimes is 1, so when it's 0 it doesn't do 
+    		// anything but when it's 1 it takes 16 (size of the tile) to x, so it checks the other side of it
     		double xt = (x - c % 2 * 16) / 16;
     		double yt = (y - c / 2 * 16) / 16;
     		int ix = (int) Math.ceil(xt);

@@ -8,6 +8,8 @@ public class Sprite {
     public int[] pixels;
     private SpriteSheet sheet;
     
+    // Some sprites
+    
     public static Sprite grass = new Sprite(16, 1, 0, SpriteSheet.tiles);
     public static Sprite tall_grass = new Sprite(16, 2, 0, SpriteSheet.tiles);
     public static Sprite normal_flower = new Sprite(16, 3, 0, SpriteSheet.tiles);

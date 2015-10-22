@@ -47,6 +47,8 @@ public class Screen {
         }
     } ye' old example method to render a screen full of pixels*/
     
+    // Renders the sprite where we want to in the map if it's not fixed, if it's fixed renders it somewhere
+    // relative to the screen, not to the map
     public void renderSprite(int xp, int yp, Sprite sprite, boolean fixed){
     	if(fixed){
 	    	xp -= xOffset;
@@ -87,6 +89,7 @@ public class Screen {
         }
     }
     
+    // Renders our projectile
     public void renderProjectile(int xp, int yp, Projectile p){
 		xp -= xOffset;
 		yp -= yOffset;
@@ -103,6 +106,7 @@ public class Screen {
 		}
 	}
     
+    // Renders our player
     public void renderPlayer(int xp, int yp, Sprite sprite){
         xp -= xOffset;
         yp -= yOffset;

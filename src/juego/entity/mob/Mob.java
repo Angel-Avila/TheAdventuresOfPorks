@@ -36,10 +36,20 @@ public abstract class Mob extends Entity{
     }
     
     protected void shoot(int x, int y, double dir){
+    	// Adds a new WizardProjectile in x and y in the desired direction and adds it into the projectile ArrayList
+    	// in Level.java
     	Projectile p = new WizardProjectile(x, y, dir);
     	level.add(p);
     }
-    
+    /**
+     * Checks for collision. xt is the coordinate of the tile in x, this algorithm makes it so it checks every side of
+     * the square that is a tile and does the same with yt in y; then it calls level.getTile(xt, yt) to check if the 
+     * tile in xt, yt is solid or not
+     * 
+     * @param xa
+     * @param ya
+     * @return
+     */
     private boolean collision(int xa, int ya){
     	boolean solid = false;
     	for (int c = 0; c < 4; c++) {

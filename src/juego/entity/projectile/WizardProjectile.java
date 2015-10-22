@@ -15,7 +15,7 @@ public class WizardProjectile extends Projectile{
 		damage = 20;
 		sprite = Sprite.wizard_projectile;
 		
-		// Vector algebra here
+		// Vector algebra here; nx and ny are the coordinates where our projectile wants to go to
 		nx = speed * Math.cos(angle);
 		ny = speed * Math.sin(angle);
 	}
@@ -45,6 +45,7 @@ public class WizardProjectile extends Projectile{
 		
 	}
 
+	// Renders projectile with an Offset to make it match the game
 	public void render(Screen screen){
 		screen.renderProjectile((int)x - 8,(int) y - 5, this);
 	  

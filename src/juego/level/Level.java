@@ -41,6 +41,7 @@ public class Level {
         
     }
     
+    // Updates all of our ArrayLists and removes them if they should be removed
     public void update(){
     	for (int i = 0; i < entities.size(); i++) {
     		entities.get(i).update();
@@ -56,6 +57,8 @@ public class Level {
         remove();
     }
     
+    // Checks all our arraylists to check if an entity should be removed and it removes it from the arraylist if it is
+    // and that ultimately makes it so it isn't rendered because we only render the entities that are on the arraylists
     private void remove(){
     	for (int i = 0; i < entities.size(); i++) {
     		if(entities.get(i).isRemoved()) entities.remove(i);
@@ -95,6 +98,8 @@ public class Level {
     }
     
     /**
+     * Gets our tiles eith the getTile method and renders them to the screen, then checks all our arraylists and 
+     * renders all the entities inside
      * 
      * @param xScroll x location of the player
      * @param yScroll y location of the player
@@ -128,6 +133,7 @@ public class Level {
 		}
     }
     
+    // Adds entities to our arraylists
     public void add(Entity e){
     	e.init(this);
     	if(e instanceof Particle){

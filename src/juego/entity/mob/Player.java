@@ -47,23 +47,30 @@ public class Player extends Mob{
         else
             walking = false;
         
+        // Takes 1 from firerate because the player only shoots in the updateShooting() method if fireRate is <= 0
+        // and after shooting it resets the fireRate int value to the declared FIRE_RATE value in WizardProjectile
         if(fireRate > 0) fireRate--;
         
         updateShooting();
     }
-
-    // the old clear() method is now done in level in removed() but now removing also particles, projectiles and entities
     
 	private void updateShooting() {	
+		// If the player is clicking the left click and the fireRate is <= 0 
     	if(Mouse.getB() == 1 && fireRate <= 0){
+    		// Gets the x and y coordinates from where the user wants to shoot relative to the window, not the map
     		double dx = Mouse.getX() - Game.getWindowWidth() / 2;
     		double dy = Mouse.getY() - Game.getWindowHeight() / 2;
+    		// Uses the atan function of y / x to get the angle
     		double dir = Math.atan2(dy, dx);
+    		// Shoots to the desired direction
     		shoot(x, y, dir);
+    		// Resets the fireRate so it can shoot again
     		fireRate = WizardProjectile.FIRE_RATE;
     	}
 	}
 
+	// The anim % 20 > 10 is just an animation to alternate between the 2 walking sprites, one with the right leg
+	// and one with the left leg
 	public void render(Screen screen){
         if(dir == 0) {
             sprite = Sprite.player_backward;
@@ -93,6 +100,8 @@ public class Player extends Mob{
                 else sprite = Sprite.player_left_2; 
             }
         }
+        
+        // Renders the player with a slight offset
         screen.renderPlayer(x - 8, y - 16, sprite);        
     }
 }
