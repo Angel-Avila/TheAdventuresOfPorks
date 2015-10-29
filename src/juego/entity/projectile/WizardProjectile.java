@@ -9,9 +9,9 @@ public class WizardProjectile extends Projectile{
 	public static final int FIRE_RATE = 15; // The higher, the slower
 	public static final int WIZARD_P_SIZE = 10;
 	public WizardProjectile(int x, int y, double dir) {
-		super(x, y, dir);
+		super(x - 8, y - 5, dir);
 		range = 110;
-		speed = 3;
+		speed = 1;
 		damage = 20;
 		sprite = Sprite.wizard_projectile;
 		
@@ -22,8 +22,10 @@ public class WizardProjectile extends Projectile{
 	
 	public void update(){
 		// If there's a collision where the projectile wants to go, it spawns a particle spawner there
-		if(level.tileCollision((int)(x + nx), (int)(y + ny), WIZARD_P_SIZE, 3, 3)){
-			level.add(new ParticleSpawner((int) x, (int) y, 180, 18, level));
+		if(level.tileCollision((int)(x + nx) + 8, (int)(y + ny) + 8, WIZARD_P_SIZE, 3, 3)){
+			// The -1 and the +9 are just some offsets I had to add to make the explosion match where the projectile 
+			// actually exploded.
+			level.add(new ParticleSpawner((int) x + 6, (int) y + 9, 780, 18, level));
 			remove();
 		}
 		move();
@@ -47,7 +49,7 @@ public class WizardProjectile extends Projectile{
 
 	// Renders projectile with an Offset to make it match the game
 	public void render(Screen screen){
-		screen.renderProjectile((int)x - 8,(int) y - 5, this);
+		screen.renderProjectile((int)x,(int) y, this);
 	  
 	}
 }

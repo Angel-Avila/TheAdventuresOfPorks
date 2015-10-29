@@ -149,12 +149,13 @@ public class Game extends Canvas implements Runnable {
         Graphics g = bs.getDrawGraphics();
         // Next comes all the graphics that should be displayed
         g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
-        /*
-        g.fillRect(Mouse.getX() - 32, Mouse.getY() - 32, 64, 64);
+        
+        //g.fillRect(Mouse.getX() - 32, Mouse.getY() - 32, 64, 64);
         g.setColor(Color.WHITE);
         g.setFont(new Font("Verdana",0,50));
-        g.drawString("Button: " + Mouse.getB(), 80, 80);
-        */
+       // g.drawString("Coord: " + Mouse.mouseX + " " + Mouse.mouseY, 80, 80);
+        g.drawString("solid: " + level.getTile(29, 45).solid(), 80, 80);
+        
         // Dispose of all the graphics that aren't gonna be used
         g.dispose();
 

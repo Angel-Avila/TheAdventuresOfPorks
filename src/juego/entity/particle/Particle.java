@@ -42,23 +42,23 @@ public class Particle extends Entity{
 		// Bouncing
 		if(zz < 0){
 			zz = 0;
-			za *= -0.55;
-			xa *= 0.4;
-			ya *= 0.4;
+			za *= -0.;
+			xa *= 1.;
+			ya *= 1.;
 		}
 	
 		// xx is our x but in a double value so we sum xa to simulate some physics, the same goes with yy but we also
 		// sum zz and za to simulate bouncing and gravity
-		move(xx + xa, (yy + ya) + (zz + za));
+		move(xx + xa, (yy + ya));
 	}
 	
 	// Moves the particles
 	private void move(double x, double y) {
 		// If there's a collision, they change direction
 		if(collision(x, y)){
-			this.xa *= -0.5;
-			this.ya *= -0.5;
-			this.za *= -0.5;
+			this.xa *= -01.;
+			this.ya *= -01.;
+			this.za *= -01.;
 		}
 		this.xx += xa;
 		this.yy += ya;
@@ -84,14 +84,13 @@ public class Particle extends Entity{
     		int ix = (int) Math.ceil(xt);
     		int iy = (int) Math.ceil(yt);
     		if(c % 2 == 0) ix = (int) Math.floor(xt);
-    		if(c / 2 == 0) iy = (int) Math.floor(yt);
+    		if(c / 2 == 0) iy = (int) Math.floor(yt); 
     		if(level.getTile(ix, iy).solid()) solid = true;
 		}
         return solid;
     }
 
 	public void render(Screen screen){
-		// I offset "y" by 9 because without it I feel the particle spawner renders like ~-9 pixels from where the projectile explodes
-		screen.renderSprite((int) xx - 1, (int) yy - (int) zz + 9, sprite, true);
+		screen.renderSprite((int) xx, (int) yy - (int) zz , sprite, true);
 	}
 }
