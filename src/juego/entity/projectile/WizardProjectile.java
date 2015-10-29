@@ -11,7 +11,7 @@ public class WizardProjectile extends Projectile{
 	public WizardProjectile(int x, int y, double dir) {
 		super(x - 8, y - 5, dir);
 		range = 110;
-		speed = 1;
+		speed = 3;
 		damage = 20;
 		sprite = Sprite.wizard_projectile;
 		
