@@ -52,6 +52,15 @@ public class Sprite {
     public static Sprite player_left_1 = new Sprite(32, 1, 7, SpriteSheet.tiles);
     public static Sprite player_left_2 = new Sprite(32, 2, 7, SpriteSheet.tiles);
     
+    // Zombie pig sprites
+    
+    public static Sprite zombie_pig_forward = new Sprite(32, 0, 0, SpriteSheet.mobs);
+    
+    // Zombie pig animation sprites
+    
+    public static Sprite zombie_pig_forward1 = new Sprite(32, 1, 0, SpriteSheet.mobs);
+    public static Sprite zombie_pig_forward2 = new Sprite(32, 2, 0, SpriteSheet.mobs);
+    
     // Projectile Sprites here:
     public static Sprite wizard_projectile = new Sprite(16, 2 , 0 , SpriteSheet.wizard_projectile);
     

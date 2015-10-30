@@ -1,10 +1,6 @@
 package juego.entity.mob;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import juego.entity.Entity;
-import juego.entity.particle.Particle;
 import juego.entity.projectile.Projectile;
 import juego.entity.projectile.WizardProjectile;
 import juego.graphics.Sprite;
@@ -44,21 +40,21 @@ public abstract class Mob extends Entity{
     /**
      * Checks for collision. xt is the coordinate of the tile in x, this algorithm makes it so it checks every side of
      * the square that is a tile and does the same with yt in y; then it calls level.getTile(xt, yt) to check if the 
-     * tile in xt, yt is solid or not
+     * tile in xt, yt is walkable or not
      * 
      * @param xa
      * @param ya
      * @return
      */
     private boolean collision(int xa, int ya){
-    	boolean solid = false;
+    	boolean walkable = true;
     	for (int c = 0; c < 4; c++) {
 			int xt = ((x + xa) + c % 2 * 12 - 7) >> 4;
     		int yt = ((y + ya) + c / 2 * 12 - 2) >> 4;
-    		if(level.getTile(xt, yt).solid()) 
-        		solid = true;
+    		if(!level.getTile(xt, yt).walkable()) 
+        		walkable = false;
 		}
-        return solid;
+        return !walkable;
     }
     
     

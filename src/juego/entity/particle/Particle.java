@@ -9,7 +9,6 @@ import juego.graphics.Sprite;
 
 public class Particle extends Entity{
 
-	private static List<Particle> particles = new ArrayList<Particle>();
 	private Sprite sprite;
 	
 	private int life;
@@ -49,13 +48,13 @@ public class Particle extends Entity{
 	
 		// xx is our x but in a double value so we sum xa to simulate some physics, the same goes with yy but we also
 		// sum zz and za to simulate bouncing and gravity
-		move(xx + xa, yy + ya);
+		move(xx + xa, yy + ya + zz + za);
 	}
 	
 	// Moves the particles
 	private void move(double x, double y) {
 		// If there's a collision, they change direction
-		if(collision(x, y)){
+		if(collision(x, y - zz - za)){
 			this.xa *= -0.5;
 			this.ya *= -0.5;
 			this.za *= -0.5;

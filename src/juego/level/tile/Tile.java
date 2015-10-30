@@ -61,4 +61,8 @@ public class Tile {
         return false;
     }
     
+    public boolean walkable(){
+    	return true;
+    }
+    
 }

@@ -87,7 +87,7 @@ public class Level {
      * @param size of the entity
      * @return if the tile our object is moving to is solid or not
      */
-    public boolean tileCollision(int x, int y, int size, int xOffset, int yOffset){
+    public boolean tileProjectileCollision(int x, int y, int size, int xOffset, int yOffset){
     	boolean solid = false;
     	for (int c = 0; c < 4; c++) {
     		int xt = (x - c % 2 * size + xOffset) >> 4;

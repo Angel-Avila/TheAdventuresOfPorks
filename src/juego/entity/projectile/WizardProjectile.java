@@ -22,10 +22,10 @@ public class WizardProjectile extends Projectile{
 	
 	public void update(){
 		// If there's a collision where the projectile wants to go, it spawns a particle spawner there
-		if(level.tileCollision((int)(x + nx) + 8, (int)(y + ny) + 8, WIZARD_P_SIZE, 3, 3)){
+		if(level.tileProjectileCollision((int)(x + nx) + 8, (int)(y + ny) + 8, WIZARD_P_SIZE, 3, 3)){
 			// The -1 and the +9 are just some offsets I had to add to make the explosion match where the projectile 
 			// actually exploded.
-			level.add(new ParticleSpawner((int) x + 6, (int) y + 9, 780, 18, level));
+			level.add(new ParticleSpawner((int) x + 6, (int) y + 9, 150, 18, level));
 			remove();
 		}
 		move();

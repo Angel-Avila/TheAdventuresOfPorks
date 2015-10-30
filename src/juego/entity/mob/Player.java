@@ -1,7 +1,6 @@
 package juego.entity.mob;
 
 import juego.Game;
-import juego.entity.projectile.Projectile;
 import juego.entity.projectile.WizardProjectile;
 import juego.graphics.Screen;
 import juego.graphics.Sprite;
