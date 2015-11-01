@@ -1,5 +1,9 @@
 package juego;
-
+/*
+ * Disclaimer* The pig and zombie pig sprites where made by me, and the other ones
+ * were ripped from pokemon emerald and uploaded to 
+ * http://www.spriters-resource.com/game_boy_advance/pokeem/
+ */
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -53,7 +57,7 @@ public class Game extends Canvas implements Runnable {
         level = Level.spawn;
         TileCoordinate playerSpawn = new TileCoordinate(30, 43);
         player = new Player(playerSpawn.getX(), playerSpawn.getY() + 6, key);
-        player.init(level);
+        level.add(player);
         
         addKeyListener(key);
         addMouseListener(mouse);
@@ -122,7 +126,6 @@ public class Game extends Canvas implements Runnable {
 
     public void update() {
         key.update();
-        player.update();
         level.update();
     }
      
@@ -136,10 +139,9 @@ public class Game extends Canvas implements Runnable {
         }
         
         screen.clear();
-        int xScroll = player.x - screen.width / 2;
-        int yScroll = player.y - screen.height / 2;
+        int xScroll = player.getX() - screen.width / 2;
+        int yScroll = player.getY() - screen.height / 2;
         level.render(xScroll, yScroll, screen);
-        player.render(screen);
 
         // Copy the pixels we have in Screen.java to the pixels array here/*
         for (int i = 0; i < pixels.length; i++) {

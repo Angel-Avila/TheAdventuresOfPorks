@@ -12,7 +12,6 @@ public class Player extends Mob{
     private Keyboard input;
     private Sprite sprite;
     private int anim = 0;
-    private boolean walking = false;
     
     private int fireRate = 0;
     
@@ -25,7 +24,7 @@ public class Player extends Mob{
         this.x = x;
         this.y = y;
         this.input = input;
-        dir = 2;
+        dir = Direction.DOWN;
         sprite = Sprite.player_forward;
         fireRate = WizardProjectile.FIRE_RATE;
     }
@@ -71,28 +70,28 @@ public class Player extends Mob{
 	// The anim % 20 > 10 is just an animation to alternate between the 2 walking sprites, one with the right leg
 	// and one with the left leg
 	public void render(Screen screen){
-        if(dir == 0) {
+        if(dir == Direction.UP) {
             sprite = Sprite.player_backward;
             if(walking){
                 if(anim % 20 > 10) sprite = Sprite.player_backward_1;
                 else sprite = Sprite.player_backward_2; 
             }
         }
-        if(dir == 1) {
+        if(dir == Direction.RIGHT) {
             sprite = Sprite.player_right;
             if(walking){
                 if(anim % 20 > 10) sprite = Sprite.player_right_1;
                 else sprite = Sprite.player_right_2; 
             }
         }
-        if(dir == 2) {
+        if(dir == Direction.DOWN) {
             sprite = Sprite.player_forward;
             if(walking){
                 if(anim % 20 > 10) sprite = Sprite.player_forward_1;
                 else sprite = Sprite.player_forward_2; 
             }
         }
-        if(dir == 3) {
+        if(dir == Direction.LEFT) {
             sprite = Sprite.player_left;
             if(walking){
                 if(anim % 20 > 10) sprite = Sprite.player_left_1;
@@ -101,6 +100,6 @@ public class Player extends Mob{
         }
         
         // Renders the player with a slight offset
-        screen.renderPlayer(x - 8, y - 16, sprite);        
+        screen.renderMob(x - 8, y - 16, sprite);        
     }
 }

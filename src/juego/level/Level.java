@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import juego.entity.Entity;
+import juego.entity.mob.Player;
 import juego.entity.particle.Particle;
 import juego.entity.projectile.Projectile;
-import juego.entity.spawner.Spawner;
 import juego.graphics.Screen;
 import juego.level.tile.Tile;
 
@@ -21,6 +21,8 @@ public class Level {
     private List<Projectile> projectiles = new ArrayList<Projectile>();
     private List<Particle> particles = new ArrayList<Particle>();
     
+    private List<Player> players = new ArrayList<>();
+    
     public Level(int width, int height){
         this.width = width;
         this.height = height;
@@ -30,7 +32,7 @@ public class Level {
     
     public Level(String path){
         loadLevel(path);
-        generateLevel();   
+        generateLevel();
     }
     
     protected void generateLevel(){
@@ -54,6 +56,10 @@ public class Level {
     	for (int i = 0; i < particles.size(); i++) {
     		particles.get(i).update();
 		}
+    	
+    	for (int i = 0; i < players.size(); i++) {
+    		players.get(i).update();
+		}
         remove();
     }
     
@@ -71,30 +77,10 @@ public class Level {
     	for (int i = 0; i < particles.size(); i++) {
     		if(particles.get(i).isRemoved()) particles.remove(i);
 		}
-    }
-    
-    public List<Projectile> getProjectiles(){
-    	return projectiles;
-    }
-    
-    private void time(){
-        
-    }
-    
-    /**
-     * @param x position of our entity + the direction in which it's heading
-     * @param y position of our entity + the direction in which it's heading
-     * @param size of the entity
-     * @return if the tile our object is moving to is solid or not
-     */
-    public boolean tileProjectileCollision(int x, int y, int size, int xOffset, int yOffset){
-    	boolean solid = false;
-    	for (int c = 0; c < 4; c++) {
-    		int xt = (x - c % 2 * size + xOffset) >> 4;
-    		int yt = (y - c / 2 * size + yOffset) >> 4;
-    		if(getTile(xt, yt).solid()) solid = true;
+    	
+    	for (int i = 0; i < players.size(); i++) {
+    		if(players.get(i).isRemoved()) players.remove(i);
 		}
-        return solid;
     }
     
     /**
@@ -131,6 +117,34 @@ public class Level {
         for (int i = 0; i < particles.size(); i++) {
        		particles.get(i).render(screen);
 		}
+        
+        for (int i = 0; i < players.size(); i++) {
+       		players.get(i).render(screen);
+		}
+    }
+    
+    public List<Projectile> getProjectiles(){
+    	return projectiles;
+    }
+    
+    private void time(){
+        
+    }
+    
+    /**
+     * @param x position of our entity + the direction in which it's heading
+     * @param y position of our entity + the direction in which it's heading
+     * @param size of the entity
+     * @return if the tile our object is moving to is solid or not
+     */
+    public boolean tileProjectileCollision(int x, int y, int size, int xOffset, int yOffset){
+    	boolean solid = false;
+    	for (int c = 0; c < 4; c++) {
+    		int xt = (x - c % 2 * size + xOffset) >> 4;
+    		int yt = (y - c / 2 * size + yOffset) >> 4;
+    		if(getTile(xt, yt).solid()) solid = true;
+		}
+        return solid;
     }
     
     // Adds entities to our arraylists
@@ -138,11 +152,25 @@ public class Level {
     	e.init(this);
     	if(e instanceof Particle){
     		particles.add((Particle) e);
-    	}else if(e instanceof Projectile) {
+    	} else if(e instanceof Projectile) {
     		projectiles.add((Projectile) e);
+    	} else if(e instanceof Player){
+    		players.add((Player) e);
     	} else{
     		entities.add(e);
     	}
+    }
+    
+    public List<Player> getPlayers(){
+    	return players;
+    }
+    
+    public Player getPlayerAt(int index){
+    	return players.get(index);
+    }
+    
+    public Player getClientPlayer(){
+    	return players.get(0);
     }
     
     /** Grass  = 0xFF00FF00

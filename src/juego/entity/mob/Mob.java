@@ -3,19 +3,24 @@ package juego.entity.mob;
 import juego.entity.Entity;
 import juego.entity.projectile.Projectile;
 import juego.entity.projectile.WizardProjectile;
+import juego.graphics.Screen;
 import juego.graphics.Sprite;
 
 public abstract class Mob extends Entity{
     
-    protected Sprite sprite;
-    protected int dir = 0;
-    protected boolean moving = false;
+    protected boolean walking = false;
+    
+    protected enum Direction{
+    	UP, DOWN, LEFT, RIGHT
+    }
+    
+    protected Direction dir;
     
     public void move(int xa, int ya){
-        if(xa > 0) dir = 1; // East
-        if(xa < 0) dir = 3; // West
-        if(ya > 0) dir = 2; // South
-        if(ya < 0) dir = 0; // North
+        if(xa > 0) dir = Direction.RIGHT; 
+        if(xa < 0) dir = Direction.LEFT; 
+        if(ya > 0) dir = Direction.DOWN; 
+        if(ya < 0) dir = Direction.UP;
         
         // Sliding
         if(!collision(xa, 0)){
@@ -27,9 +32,9 @@ public abstract class Mob extends Entity{
         } 
     }
     
-    public void update(){
-        
-    }
+    public abstract void update();
+    
+    public abstract void render(Screen screen);
     
     protected void shoot(int x, int y, double dir){
     	// Adds a new WizardProjectile in x and y in the desired direction and adds it into the projectile ArrayList

@@ -3,6 +3,8 @@ package juego.graphics;
 
 import java.util.Random;
 
+import juego.entity.mob.Chaser;
+import juego.entity.mob.Mob;
 import juego.entity.projectile.Projectile;
 import juego.level.tile.Tile;
 
@@ -106,8 +108,8 @@ public class Screen {
 		}
 	}
     
-    // Renders our player
-    public void renderPlayer(int xp, int yp, Sprite sprite){
+    // Renders our player and the mobs
+	public void renderMob(int xp, int yp, Sprite sprite){
         xp -= xOffset;
         yp -= yOffset;
         for(int y = 0; y < 32; y++){
@@ -119,6 +121,31 @@ public class Screen {
                 // X and Y in the sprite because they aren't offset, only
                 // things in the screen get offset, not in the sprite
                 int col = sprite.pixels[x + y * 32];
+                if(col != 0xff00ff50)
+                    pixels[xa + ya * width] = col;
+            }
+        }
+    }
+	
+	public void renderMob(int xp, int yp, Mob mob){
+        xp -= xOffset;
+        yp -= yOffset;
+        for(int y = 0; y < 32; y++){
+            int ya = y + yp;
+            for(int x = 0; x < 16; x++){
+                int xa = x + xp;
+                if(xa < -16 || xa >= width || ya < 0 || ya >= height) break;
+                if(xa < 0) xa = 0;				
+                // X and Y in the sprite because they aren't offset, only
+                // things in the screen get offset, not in the sprite
+                int col = mob.getSprite().pixels[x + y * 32];
+                if(mob instanceof Chaser){
+                	if(col == 0xffD89F97)
+                		col = 0xff2D2AD3;
+                	else if(col == 0xffDDB4AC)
+                		col = 0xff2DD9D3;
+                	
+                }
                 if(col != 0xff00ff50)
                     pixels[xa + ya * width] = col;
             }

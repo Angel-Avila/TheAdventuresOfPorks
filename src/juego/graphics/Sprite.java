@@ -55,11 +55,20 @@ public class Sprite {
     // Zombie pig sprites
     
     public static Sprite zombie_pig_forward = new Sprite(32, 0, 0, SpriteSheet.mobs);
+    public static Sprite zombie_pig_backward = new Sprite(32, 0, 1, SpriteSheet.mobs);
+    public static Sprite zombie_pig_right = new Sprite(32, 0, 2, SpriteSheet.mobs);
+    public static Sprite zombie_pig_left = new Sprite(32, 0, 3, SpriteSheet.mobs);
     
     // Zombie pig animation sprites
     
     public static Sprite zombie_pig_forward1 = new Sprite(32, 1, 0, SpriteSheet.mobs);
     public static Sprite zombie_pig_forward2 = new Sprite(32, 2, 0, SpriteSheet.mobs);
+    public static Sprite zombie_pig_backward1 = new Sprite(32, 1, 1, SpriteSheet.mobs);
+    public static Sprite zombie_pig_backward2 = new Sprite(32, 2, 1, SpriteSheet.mobs);
+    public static Sprite zombie_pig_right1 = new Sprite(32, 1, 2, SpriteSheet.mobs);
+    public static Sprite zombie_pig_right2 = new Sprite(32, 2, 2, SpriteSheet.mobs);
+    public static Sprite zombie_pig_left1 = new Sprite(32, 1, 3, SpriteSheet.mobs);
+    public static Sprite zombie_pig_left2 = new Sprite(32, 2, 3, SpriteSheet.mobs);
     
     // Projectile Sprites here:
     public static Sprite wizard_projectile = new Sprite(16, 2 , 0 , SpriteSheet.wizard_projectile);

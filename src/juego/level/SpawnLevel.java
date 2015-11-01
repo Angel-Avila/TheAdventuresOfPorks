@@ -2,7 +2,11 @@ package juego.level;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+
 import javax.imageio.ImageIO;
+
+import juego.entity.mob.Chaser;
+import juego.entity.mob.Dummy;
 
 public class SpawnLevel extends Level{
     
@@ -21,6 +25,16 @@ public class SpawnLevel extends Level{
            e.printStackTrace();
             System.out.println("Exception, could not load level file!");
         }
+        //add(new Dummy(18, 40));
+        add(new Chaser(21, 40));/*
+        add(new Dummy(24, 40));
+        add(new Chaser(27, 40));
+        add(new Dummy(30, 40));
+        add(new Chaser(33, 40));
+        add(new Dummy(36, 40));
+        add(new Chaser(39, 40));
+        add(new Dummy(42, 40));
+        add(new Chaser(44, 40));*/
     }
     
     
