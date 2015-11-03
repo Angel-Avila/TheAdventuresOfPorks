@@ -79,7 +79,7 @@ public class Dummy extends Mob {
 	}
 
 	public void render(Screen screen) {
-		screen.renderMob(x - 8, y - 16, sprite);
+		screen.renderMob((int)(x - 8), (int)(y - 16), sprite);
 	}
 
 }

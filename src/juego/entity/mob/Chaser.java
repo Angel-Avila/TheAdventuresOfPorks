@@ -1,12 +1,15 @@
 package juego.entity.mob;
 
+import java.util.List;
+
 import juego.graphics.Screen;
 import juego.graphics.Sprite;
 
 public class Chaser extends Mob{
 
 	private int anim = 0;
-	private int xa = 0, ya = 0;
+	private double xa = 0, ya = 0;
+	private double speed = 0.75;
 	
 	public Chaser(int x, int y){
 		this.x = x << 4;
@@ -16,13 +19,19 @@ public class Chaser extends Mob{
 	
 	private void move(){
 		xa = ya = 0;
-		
-		Player player = level.getClientPlayer();
-		if(x < player.getX() - 16) xa++;
-		else if(x > player.getX() + 16) xa--;
-		if(y < player.getY()) ya++;
-		else if(y > player.getY()) ya--;
-		
+		List<Player> players = level.getPlayers(this, 64);
+		if(players.size() > 0){
+			Player player = players.get(0);
+			
+			if(x < player.getX()) xa += speed;
+			else if(x > player.getX()) xa -= speed;
+			
+			if(y < player.getY()) ya += speed;
+			else if(y > player.getY()) ya -= speed;
+			
+			if (Math.floor(x) == Math.floor(player.getX())) xa = 0;
+			if (Math.floor(y) == Math.floor(player.getY())) ya = 0;
+		}
 		if (xa != 0 || ya != 0) {
 			move(xa, ya);
 			walking = true;
@@ -77,7 +86,7 @@ public class Chaser extends Mob{
 	}
 
 	public void render(Screen screen) {
-		screen.renderMob(x - 8, y - 16, this);
+		screen.renderMob((int)(x - 8),(int)(y - 16), this);
 	}
 
 }

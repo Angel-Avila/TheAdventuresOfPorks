@@ -27,16 +27,19 @@ public class Player extends Mob{
         dir = Direction.DOWN;
         sprite = Sprite.player_forward;
         fireRate = WizardProjectile.FIRE_RATE;
+        
     }
     
     public void update(){
-        int xa = 0, ya = 0;
         if(anim < 7500) anim++;
         else anim = 0;
-        if(input.up) ya-=2;
-        if(input.down) ya+=2;
-        if(input.left) xa-=2;
-        if(input.right) xa+=2;
+        double speed = 1.1;
+        double xa = 0, ya = 0;
+         
+        if(input.up) ya -= speed;
+        if(input.down) ya += speed;
+        if(input.left) xa -= speed;
+        if(input.right) xa += speed;
         
         if(xa != 0 || ya != 0) {
             move(xa, ya);
@@ -100,6 +103,6 @@ public class Player extends Mob{
         }
         
         // Renders the player with a slight offset
-        screen.renderMob(x - 8, y - 16, sprite);        
+        screen.renderMob((int)(x - 8), (int)(y - 16), sprite);        
     }
 }

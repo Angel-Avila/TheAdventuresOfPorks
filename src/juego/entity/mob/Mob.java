@@ -4,7 +4,6 @@ import juego.entity.Entity;
 import juego.entity.projectile.Projectile;
 import juego.entity.projectile.WizardProjectile;
 import juego.graphics.Screen;
-import juego.graphics.Sprite;
 
 public abstract class Mob extends Entity{
     
@@ -16,27 +15,53 @@ public abstract class Mob extends Entity{
     
     protected Direction dir;
     
-    public void move(int xa, int ya){
+    public void move(double xa, double ya){
+    	if(xa != 0 && ya != 0){
+    		move(xa, 0);
+    		move(0, ya);
+    		return;
+    	}
+    	
         if(xa > 0) dir = Direction.RIGHT; 
         if(xa < 0) dir = Direction.LEFT; 
         if(ya > 0) dir = Direction.DOWN; 
         if(ya < 0) dir = Direction.UP;
         
-        // Sliding
-        if(!collision(xa, 0)){
-            x += xa; 
-        } 
+        while(xa != 0){
+        	if(Math.abs(xa) > 1){
+        		if(!collision(abs(xa), ya))
+        			this.x += abs(xa); 
+        		xa -= abs(xa);
+        	} else{
+        		if(!collision(abs(xa), ya))
+        			this.x += xa;
+        		xa = 0;
+        	}
+        }
         
-        if(!collision(0, ya)){
-            y += ya;
-        } 
+        while(ya != 0){
+        	if(Math.abs(ya) > 1){
+        		if(!collision(xa, abs(ya)))
+        			this.y += abs(ya); 
+        		ya -= abs(ya);
+        	} else{
+        		if(!collision(xa, abs(ya)))
+        			this.y += ya;
+        		ya = 0;
+        	}
+        }
+    }
+    
+    private int abs(double value){
+    	if(value < 0) return -1;
+    	return 1;
     }
     
     public abstract void update();
     
     public abstract void render(Screen screen);
     
-    protected void shoot(int x, int y, double dir){
+    protected void shoot(double x, double y, double dir){
     	// Adds a new WizardProjectile in x and y in the desired direction and adds it into the projectile ArrayList
     	// in Level.java
     	Projectile p = new WizardProjectile(x, y, dir);
@@ -51,14 +76,22 @@ public abstract class Mob extends Entity{
      * @param ya
      * @return
      */
-    private boolean collision(int xa, int ya){
+    private boolean collision(double xa, double ya){
     	boolean walkable = true;
     	for (int c = 0; c < 4; c++) {
-			int xt = ((x + xa) + c % 2 * 12 - 7) >> 4;
-    		int yt = ((y + ya) + c / 2 * 12 - 2) >> 4;
-    		if(!level.getTile(xt, yt).walkable()) 
-        		walkable = false;
+    		// This algorithm is just to get the 4 corners of the tile and use them to check if they're solid,
+    		// the logic is that c % 2 or c / 2 sometimes is 0 and sometimes is 1, so when it's 0 it doesn't do 
+    		// anything but when it's 1 it takes 16 (size of the tile) to x, so it checks the other side of it
+			double xt = ((x + xa) - c % 2 * 16 - 1) / 16;
+    		double yt = ((y + ya) - c / 2 * 16 + 9) / 16;
+    		int ix = (int) Math.ceil(xt);
+    		int iy = (int) Math.ceil(yt);
+    		if(c % 2 == 0) ix = (int) Math.floor(xt);
+    		if(c / 2 == 0) iy = (int) Math.floor(yt);
+    		if(!level.getTile(ix, iy).walkable()) 
+        		walkable = false;		
 		}
+    	
         return !walkable;
     }
     

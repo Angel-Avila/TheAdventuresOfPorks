@@ -123,12 +123,68 @@ public class Level {
 		}
     }
     
+    // Adds entities to our arraylists
+    public void add(Entity e){
+    	e.init(this);
+    	if(e instanceof Particle){
+    		particles.add((Particle) e);
+    	} else if(e instanceof Projectile) {
+    		projectiles.add((Projectile) e);
+    	} else if(e instanceof Player){
+    		players.add((Player) e);
+    	} else{
+    		entities.add(e);
+    	}
+    }
+    
     public List<Projectile> getProjectiles(){
     	return projectiles;
     }
     
-    private void time(){
-        
+    public List<Player> getPlayers(){
+    	return players;
+    }
+    
+    public Player getPlayerAt(int index){
+    	return players.get(index);
+    }
+    
+    public Player getClientPlayer(){
+    	return players.get(0);
+    }
+    
+    public List<Entity> getEntities(Entity e, int radius){
+    	List<Entity> result = new ArrayList<>();
+    	for(int i = 0; i < entities.size(); i++){
+    		Entity entity = entities.get(i);
+    		int x = (int)entity.getX();
+    		int y = (int)entity.getY();
+    		
+    		int dx = (int)Math.abs(x - e.getX());
+    		int dy = (int)Math.abs(y - e.getY());
+    		
+    		double dt = Math.sqrt((dx * dx) + (dy * dy));
+    		
+    		if(dt <= radius) result.add(entity);
+    	}
+    	return result;
+    }
+    
+    public List<Player> getPlayers(Entity e, int radius){
+    	List<Player> result = new ArrayList<>();
+    	for(int i = 0; i < players.size(); i++){
+    		Player player = players.get(i);
+    		int x = (int)player.getX();
+    		int y = (int)player.getY();
+    		
+    		int dx = (int)Math.abs(x - e.getX());
+    		int dy = (int)Math.abs(y - e.getY());
+    		
+    		double dt = Math.sqrt((dx * dx) + (dy * dy));
+    		
+    		if(dt <= radius) result.add(player);
+    	}
+    	return result;
     }
     
     /**
@@ -145,32 +201,6 @@ public class Level {
     		if(getTile(xt, yt).solid()) solid = true;
 		}
         return solid;
-    }
-    
-    // Adds entities to our arraylists
-    public void add(Entity e){
-    	e.init(this);
-    	if(e instanceof Particle){
-    		particles.add((Particle) e);
-    	} else if(e instanceof Projectile) {
-    		projectiles.add((Projectile) e);
-    	} else if(e instanceof Player){
-    		players.add((Player) e);
-    	} else{
-    		entities.add(e);
-    	}
-    }
-    
-    public List<Player> getPlayers(){
-    	return players;
-    }
-    
-    public Player getPlayerAt(int index){
-    	return players.get(index);
-    }
-    
-    public Player getClientPlayer(){
-    	return players.get(0);
     }
     
     /** Grass  = 0xFF00FF00

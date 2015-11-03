@@ -9,7 +9,6 @@ import juego.level.tile.spawn_level.SpawnWaterTile;
 
 public class Tile {
     
-    public int x, y;
     public Sprite sprite;
     
     public static Tile grass = new GrassTile(Sprite.grass);

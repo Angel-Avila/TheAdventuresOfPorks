@@ -8,7 +8,7 @@ import juego.level.Level;
 
 public class Entity {
  
-    protected int x, y;
+    protected double x, y;
     protected Sprite sprite;
     private boolean removed = false;
     protected Level level;
@@ -32,11 +32,11 @@ public class Entity {
         
     }
     
-    public int getX(){
+    public double getX(){
     	return x;
     }
     
-    public int getY(){
+    public double getY(){
     	return y;
     }
     

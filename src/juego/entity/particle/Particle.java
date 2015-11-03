@@ -1,8 +1,5 @@
 package juego.entity.particle;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import juego.entity.Entity;
 import juego.graphics.Screen;
 import juego.graphics.Sprite;
