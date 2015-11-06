@@ -11,7 +11,7 @@ public class Entity {
     protected double x, y;
     protected Sprite sprite;
     private boolean removed = false;
-    protected Level level;
+    public Level level;
     protected final Random random = new Random();
     
     public Entity(){
@@ -40,9 +40,28 @@ public class Entity {
     	return y;
     }
     
+    public double getTileX(){
+    	return (int)(x + 7) >> 4;
+    }
+    
+    public double getTileY(){
+    	return (int)(y + 6) >> 4;
+    }
+    
+    public int[] getXY(){
+		int[] r = new int[2];
+		r[0] = (int) x;
+		r[1] = (int) y;
+		return r;
+	}
+    
     public void remove(){
         // Remove from level
         removed = true;
+    }
+    
+    public void unRemove(){
+    	removed = false;
     }
     
     public boolean isRemoved(){

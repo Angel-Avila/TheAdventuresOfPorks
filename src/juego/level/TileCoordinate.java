@@ -17,6 +17,14 @@ public class TileCoordinate {
 		return y;
 	}
 	
+	public int getTileX(){
+		return x >> 4;
+	}
+	
+	public int getTileY(){
+		return y >> 4;
+	}
+	
 	public int[] getXY(){
 		int[] r = new int[2];
 		r[0] = x;

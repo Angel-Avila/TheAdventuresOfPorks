@@ -78,6 +78,8 @@ public class Sprite {
     public static Sprite particle_normal = new Sprite(3, 0xffffff);
     public static Sprite particle_wizard_p = new Sprite(3, 0xFF0F65FF);
     
+    public static Sprite teleporter_particles = new Sprite(16, 32, 6, 4, SpriteSheet.tiles);
+    
     // Just the void sprite
     
     public static Sprite voidSprite = new Sprite(16, 0x3F87D9);
@@ -90,6 +92,19 @@ public class Sprite {
         // Coordinates of our sprite
         this.x = x * size;
         this.y = y * size;
+        
+        this.sheet = sheet;
+        load();
+    }
+    
+    public Sprite(int width, int height, int x, int y, SpriteSheet sheet){
+        SIZE = -1;
+        pixels = new int[width * height];
+        this.width = width;
+        this.height = height;
+        // Coordinates of our sprite
+        this.x = x * width;
+        this.y = y * height;
         
         this.sheet = sheet;
         load();
@@ -126,11 +141,11 @@ public class Sprite {
     }
     
     private void load(){
-        for(int y = 0; y < SIZE; y++){
-            for(int x = 0; x < SIZE; x++){
+        for(int y = 0; y < height; y++){
+            for(int x = 0; x < width; x++){
                 // Finds the place in the SpriteSheet of the Sprite
                 // we are looking for and extracts it in pixels
-                pixels[x + y * SIZE] = sheet.pixels[(x + this.x) + (y + this.y) * sheet.SIZE];
+                pixels[x + y * width] = sheet.pixels[(x + this.x) + (y + this.y) * sheet.SIZE];
             }
         }
     }

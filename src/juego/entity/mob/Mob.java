@@ -82,8 +82,8 @@ public abstract class Mob extends Entity{
     		// This algorithm is just to get the 4 corners of the tile and use them to check if they're solid,
     		// the logic is that c % 2 or c / 2 sometimes is 0 and sometimes is 1, so when it's 0 it doesn't do 
     		// anything but when it's 1 it takes 16 (size of the tile) to x, so it checks the other side of it
-			double xt = ((x + xa) - c % 2 * 16 - 1) / 16;
-    		double yt = ((y + ya) - c / 2 * 16 + 9) / 16;
+			double xt = ((x + Math.ceil(xa)) - c % 2 * 16 + 7) / 16;
+    		double yt = ((y + Math.ceil(ya)) - c / 2 * 16 + 6) / 16;
     		int ix = (int) Math.ceil(xt);
     		int iy = (int) Math.ceil(yt);
     		if(c % 2 == 0) ix = (int) Math.floor(xt);

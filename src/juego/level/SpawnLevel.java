@@ -5,8 +5,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import juego.entity.mob.Chaser;
-import juego.entity.mob.Dummy;
+import juego.entity.mob.Solver;
+import juego.entity.mob.Star;
 
 public class SpawnLevel extends Level{
     
@@ -25,10 +25,13 @@ public class SpawnLevel extends Level{
            e.printStackTrace();
             System.out.println("Exception, could not load level file!");
         }
+        //add(new Solver(30, 40));
+        //add(new Star(30, 40));
         
         for(int i = 0; i < 10; i++){
-        	if(i % 2 == 0) add(new Dummy(18 + i * 3, 40));
-        	else	       add(new Chaser(18 + i * 3, 40));
+        	/*if(i % 2 == 0) add(new Dummy(18 + i * 3, 40));
+        	else	       add(new Chaser(18 + i * 3, 40));*/
+        	
         }/*
         add(new Dummy(18, 40));
         add(new Chaser(21, 40));

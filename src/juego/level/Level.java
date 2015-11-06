@@ -1,27 +1,46 @@
 package juego.level;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import juego.entity.Entity;
+import juego.entity.mob.Chaser;
+import juego.entity.mob.Dummy;
 import juego.entity.mob.Player;
+import juego.entity.mob.Solver;
+import juego.entity.mob.Star;
 import juego.entity.particle.Particle;
 import juego.entity.projectile.Projectile;
 import juego.graphics.Screen;
 import juego.level.tile.Tile;
+import juego.util.Vector2i;
 
 public class Level {
     
     protected int width, height;
     protected int[] tilesInt;
     protected int[] tiles;
-    public static Level spawn = new SpawnLevel("/levels/spawn.png");
+    public static Level spawn = new SpawnLevel("/res/levels/spawn.png");
+    public static Level labyrinth = new SpawnLevel("/res/levels/labyrinth.png");
     
-    private List<Entity> entities = new ArrayList<Entity>();
-    private List<Projectile> projectiles = new ArrayList<Projectile>();
-    private List<Particle> particles = new ArrayList<Particle>();
+    public List<Entity> entities = new ArrayList<Entity>();
+    public List<Projectile> projectiles = new ArrayList<Projectile>();
+    public List<Particle> particles = new ArrayList<Particle>();
     
-    private List<Player> players = new ArrayList<>();
+    public List<Player> players = new ArrayList<>();
+    
+    private Comparator<Node> nodeSorter = new Comparator<Node>(){
+
+		public int compare(Node n0, Node n1) {
+			if(n1.fCost < n0.fCost) return +1;
+			if(n1.fCost > n0.fCost) return -1;
+			return 0;
+		}
+    	
+    };
+    
     
     public Level(int width, int height){
         this.width = width;
@@ -185,6 +204,95 @@ public class Level {
     		if(dt <= radius) result.add(player);
     	}
     	return result;
+    }
+    
+    public List<Node> findPath(Vector2i start, Vector2i goal){
+    	List<Node> openList = new ArrayList<>();
+    	List<Node> closedList = new ArrayList<>();
+    	Node current = new Node(start, null, 0, getDistance(start, goal));
+    	openList.add(current);
+    	
+    	while(openList.size() > 0){
+    		Collections.sort(openList, nodeSorter);
+    		current = openList.get(0);
+    		if(current.tile.equals(goal)){
+    			List<Node> path = new ArrayList<>();
+    			
+    			// Only node where this happens would be the start. This is gonna
+    			// backtrace it and return the path
+    			while(current.parent != null){
+    				path.add(current);
+    				current = current.parent;
+    			}
+    			openList.clear();
+    			closedList.clear();
+    			return path;
+    		}
+    		openList.remove(current);
+    		closedList.add(current);
+    		
+    		// Checks the adjacent nodes(8)
+    		for (int i = 0; i < 9; i++) {
+				if( i == 4) continue; // Because it would be the node we're actually on
+				int x = current.tile.getX();
+				int y = current.tile.getY();
+				
+				// These will help us check the adjacent tiles
+				int xi = (i % 3) - 1; // -1, 0 or 1
+				int yi = (i / 3) - 1; // -1, 0 or 1	
+				
+				// Tile we're checking now in the loop
+				Tile at = getTile(x + xi, y + yi); 
+				
+				// If the tile is null or is solid we don't wanna check it
+				if(at == null) continue;
+				if(!at.walkable()) continue;
+				
+				// We make a vector from the Tile we're checking
+				Vector2i atVector = new Vector2i(x + xi, y + yi);
+				
+				// We calculate the costs from a node made at the tile we're checking
+				double gCost = current.gCost + getDistance(current.tile, atVector);
+				double hCost = getDistance(atVector, goal);
+				// We create the node we just commented about
+				Node node = new Node(atVector, current, gCost, hCost);
+				
+				// If the vector is in the closed list we don't wanna add it
+				if(vecInList(closedList, atVector) && gCost >= node.gCost) continue;
+				
+				// If the vector isn't in the openList, we will add it
+				if(!vecInList(openList, atVector) || gCost < node.gCost) openList.add(node);
+				
+ 			}
+    	}
+    	closedList.clear();
+    	return null;
+    }
+    
+    private boolean vecInList(List<Node> list, Vector2i vector){
+    	for(Node n : list)
+    		if(n.tile.equals(vector)) return true;
+    	
+    	return false;
+    }
+    
+    private double getDistance(Vector2i v1, Vector2i v2){
+    	double dx = v1.getX() - v2.getX();
+    	double dy = v1.getY() - v2.getY();
+    	return Math.sqrt((dx * dx) + (dy * dy));
+    }
+    
+    public void addLevelMobs(){
+    	if(this == spawn){
+    		add(new Dummy(30, 40));
+    		add(new Dummy(33, 40));
+    		add(new Dummy(27, 40));
+    	}
+    	else if(this == labyrinth){
+    		add(new Star(30, 40));
+    		add(new Chaser(30, 40));
+    		add(new Solver(42, 18));
+    	}
     }
     
     /**

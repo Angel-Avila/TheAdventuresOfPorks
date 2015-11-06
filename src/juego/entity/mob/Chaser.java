@@ -86,7 +86,7 @@ public class Chaser extends Mob{
 	}
 
 	public void render(Screen screen) {
-		screen.renderMob((int)(x - 8),(int)(y - 16), this);
+		screen.renderMob((int)(x),(int)(y - 19), this);
 	}
 
 }

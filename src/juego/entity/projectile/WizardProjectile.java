@@ -9,7 +9,7 @@ public class WizardProjectile extends Projectile{
 	public static final int FIRE_RATE = 15; // The higher, the slower
 	public static final int WIZARD_P_SIZE = 10;
 	public WizardProjectile(double x, double y, double dir) {
-		super(x - 8, y - 5, dir);
+		super(x - 2, y - 7, dir);
 		range = 110;
 		speed = 3;
 		damage = 20;

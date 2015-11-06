@@ -6,6 +6,7 @@ import juego.graphics.Screen;
 import juego.graphics.Sprite;
 import juego.input.Keyboard;
 import juego.input.Mouse;
+import juego.level.TileCoordinate;
 
 public class Player extends Mob{
     
@@ -30,16 +31,21 @@ public class Player extends Mob{
         
     }
     
-    public void update(){
+    public void update(){/*
+    	int xi = (int)((x + 7) / 16);
+    	int yi = (int)((y + 6) / 16);
+    	System.out.println(xi + ", " + yi + ", " + level.getTile(xi, yi).walkable());*/
         if(anim < 7500) anim++;
         else anim = 0;
-        double speed = 1.1;
+        
+        double speed = 1.25;
         double xa = 0, ya = 0;
-         
+                
         if(input.up) ya -= speed;
         if(input.down) ya += speed;
         if(input.left) xa -= speed;
         if(input.right) xa += speed;
+        
         
         if(xa != 0 || ya != 0) {
             move(xa, ya);
@@ -68,6 +74,19 @@ public class Player extends Mob{
     		// Resets the fireRate so it can shoot again
     		fireRate = WizardProjectile.FIRE_RATE;
     	}
+	}
+	
+	public void setX(int x){
+		this.x = x;
+	}
+	
+	public void setY(int y){
+		this.y = y;
+	}
+	
+	public void setXY(int x, int y){
+		this.x = x;
+		this.y = y;
 	}
 
 	// The anim % 20 > 10 is just an animation to alternate between the 2 walking sprites, one with the right leg
@@ -103,6 +122,6 @@ public class Player extends Mob{
         }
         
         // Renders the player with a slight offset
-        screen.renderMob((int)(x - 8), (int)(y - 16), sprite);        
+        screen.renderMob((int)(x), (int)(y - 19), sprite);        
     }
 }
