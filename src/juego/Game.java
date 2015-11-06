@@ -135,8 +135,13 @@ public class Game extends Canvas implements Runnable {
 
     public void update() {
         key.update();
-        level.update();
-
+        level.update();/*
+        if(key.up){
+        	if(Sound.spawnMusic.clip.isActive())
+        		Sound.JOHNCENA.quickPlay(Sound.spawnMusic);
+        	if(!Sound.JOHNCENA.clip.isActive())
+        		Sound.spawnMusic.loop();
+        }*/
         // If the player is in the spawnlevel on the teleporter from the left side he goes to the labyrinth
         if(level == Level.spawn && 
         player.getTileX() == spawn_teleporter.getTileX() && 

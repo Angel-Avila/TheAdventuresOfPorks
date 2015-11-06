@@ -252,7 +252,9 @@ public class Level {
 				Vector2i atVector = new Vector2i(x + xi, y + yi);
 				
 				// We calculate the costs from a node made at the tile we're checking
-				double gCost = current.gCost + getDistance(current.tile, atVector);
+		    	// If it's taking a diagonal it returns a smaller value than 1 so our A* algorithm prefers 
+				// diagonals, this makes the movement more human than him taking diagonals at the end
+				double gCost = current.gCost + (getDistance(current.tile, atVector) == 1 ? 1 : .95);
 				double hCost = getDistance(atVector, goal);
 				// We create the node we just commented about
 				Node node = new Node(atVector, current, gCost, hCost);

@@ -24,7 +24,7 @@ public class Sound {
 	    return sound;
 	}
 
-	private Clip clip;
+	public Clip clip;
 	//you can play the clip by running this
 	public void play() {
 	    try {
@@ -60,6 +60,17 @@ public class Sound {
 	        if (clip != null) {
                 clip.stop();
                 clip.setFramePosition(0);
+	        }
+	    } catch (Exception e) {
+	        System.out.println(e + ":(");
+	    }
+	}
+	
+	public void quickPlay(Sound toPause){
+		try {
+	        if (clip != null) {
+                if(toPause.clip.isActive()) toPause.clip.stop();
+                this.play();
 	        }
 	    } catch (Exception e) {
 	        System.out.println(e + ":(");
