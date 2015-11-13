@@ -13,7 +13,7 @@ public class WizardProjectile extends Projectile{
 		range = 110;
 		speed = 3;
 		damage = 20;
-		sprite = Sprite.wizard_projectile;
+		sprite = Sprite.rotate(Sprite.wizard_projectile_fire, angle);
 		
 		// Vector algebra here; nx and ny are the coordinates where our projectile wants to go to
 		nx = speed * Math.cos(angle);
@@ -22,10 +22,11 @@ public class WizardProjectile extends Projectile{
 	
 	public void update(){
 		// If there's a collision where the projectile wants to go, it spawns a particle spawner there
-		if(level.tileProjectileCollision((int)(x + nx) + 8, (int)(y + ny) + 8, WIZARD_P_SIZE, 3, 3)){
+		if(level.tileProjectileCollision((int)(x + nx) + 8, (int)(y + ny) + 8, WIZARD_P_SIZE, 3, 3) ||
+		   level.entityProjectileCollision((int)(x + nx) + 8, (int)(y + ny) + 8, WIZARD_P_SIZE, 3, 3)){
 			// The -1 and the +9 are just some offsets I had to add to make the explosion match where the projectile 
 			// actually exploded.
-			level.add(new ParticleSpawner((int) x + 6, (int) y + 9, 150, 18, level));
+			new ParticleSpawner((int) x + 6, (int) y + 9, 150, 18, level);
 			remove();
 		}
 		move();
@@ -47,7 +48,7 @@ public class WizardProjectile extends Projectile{
 		
 	}
 
-	// Renders projectile with an Offset to make it match the game
+	// Renders projectile
 	public void render(Screen screen){
 		screen.renderProjectile((int)x,(int) y, this);
 	  

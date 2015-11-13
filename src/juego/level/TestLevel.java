@@ -5,15 +5,15 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class SpawnLevel extends Level{
-    
-    public SpawnLevel(String path) {
+public class TestLevel extends Level{
+	
+	public TestLevel(String path) {
         super(path);
     }
     
     protected void loadLevel(String path){    
         try{
-            BufferedImage image = ImageIO.read(SpawnLevel.class.getResource(path));
+            BufferedImage image = ImageIO.read(TestLevel.class.getResource(path));
             int w = width = image.getWidth();
             int h = height = image.getHeight();
             tiles = new int[w * h];
@@ -46,5 +46,4 @@ public class SpawnLevel extends Level{
     protected void generateLevel(){
         
     }
-    
 }

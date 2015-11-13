@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import juego.Game;
 import juego.entity.Entity;
 import juego.entity.mob.Chaser;
 import juego.entity.mob.Dummy;
@@ -14,7 +15,9 @@ import juego.entity.mob.Star;
 import juego.entity.particle.Particle;
 import juego.entity.projectile.Projectile;
 import juego.graphics.Screen;
+import juego.graphics.Sprite;
 import juego.level.tile.Tile;
+import juego.sound.Sound;
 import juego.util.Vector2i;
 
 public class Level {
@@ -22,8 +25,12 @@ public class Level {
     protected int width, height;
     protected int[] tilesInt;
     protected int[] tiles;
+    private int time = 0;
+    private boolean teleporting = false;
     public static Level spawn = new SpawnLevel("/res/levels/spawn.png");
     public static Level labyrinth = new SpawnLevel("/res/levels/labyrinth.png");
+    public static Level test = new TestLevel("/res/levels/test.png");
+    public static Level rock = new RockLevel("/res/levels/rock.png");
     
     public List<Entity> entities = new ArrayList<Entity>();
     public List<Projectile> projectiles = new ArrayList<Projectile>();
@@ -63,7 +70,7 @@ public class Level {
     }
     
     // Updates all of our ArrayLists and removes them if they should be removed
-    public void update(){
+    public void update(Game game, Player player){
     	for (int i = 0; i < entities.size(); i++) {
     		entities.get(i).update();
 		}
@@ -79,6 +86,43 @@ public class Level {
     	for (int i = 0; i < players.size(); i++) {
     		players.get(i).update();
 		}
+    	
+    	// If the player is in the spawnlevel on the teleporter from the left side he goes to the labyrinth
+        if(player.level == spawn){ 
+	        if(player.position.equals(new Vector2i(28, 24))){
+	        	time++;
+	        	teleporting = true;
+	        	if(time % 120 == 0){
+	        		changeLevel(labyrinth, game, player);		
+	        		return;
+	        	} 
+	        } else if(player.position.equals(new Vector2i(31, 24))){
+	        	time++;
+	        	teleporting = true;
+	        	if(time % 120 == 0){
+	        		changeLevel(rock, game, player);		
+	        		return;
+	        	}
+	        } else{
+	        	time = 0;
+	        	teleporting = false;
+	        }
+        }
+        // But if he is in the labyrinth and manages to get to the other side, he returns to the spawn
+        else if(player.level == labyrinth && getClientPlayer().getTileY() == 44){
+        	time++;
+        	teleporting = true;
+        	if(time % 120 == 0){
+        		changeLevel(spawn, game, player);
+        		return;
+        	}
+        }
+        
+        else{
+        	time = 0;
+        	teleporting = false;
+        }
+    	
         remove();
     }
     
@@ -125,21 +169,26 @@ public class Level {
             }
         }
         
-        for (int i = 0; i < entities.size(); i++) {
-			entities.get(i).render(screen);
-		}
-        
         for (int i = 0; i < projectiles.size(); i++) {
-			projectiles.get(i).render(screen);
-		}
+        	projectiles.get(i).render(screen);
+        }
         
         for (int i = 0; i < particles.size(); i++) {
-       		particles.get(i).render(screen);
+        	particles.get(i).render(screen);
+        }
+        
+        for (int i = 0; i < entities.size(); i++) {
+			entities.get(i).render(screen);
 		}
         
         for (int i = 0; i < players.size(); i++) {
        		players.get(i).render(screen);
 		}
+        
+        //Shows the teleporting "energy" under our player when he's about to teleport
+        if(teleporting)
+        	screen.renderSprite((int)getClientPlayer().getX() - 2, 
+        					    (int)getClientPlayer().getY() - 23, Sprite.teleporter_particles, true);
     }
     
     // Adds entities to our arraylists
@@ -170,6 +219,51 @@ public class Level {
     
     public Player getClientPlayer(){
     	return players.get(0);
+    }
+    
+    /**
+     * In order to change level we remove all the entities we have from the current one to avoid null pointer
+     * exceptions and then we proceed to go to the next level where we add the level entities we should.
+     */
+    public void changeLevel(Level level, Game game, Player player){
+    	for (int i = 0; i < entities.size(); i++) {
+    		entities.get(i).remove();
+		}
+    	
+    	for (int i = 0; i < projectiles.size(); i++) {
+    		projectiles.get(i).remove();
+		}
+    	
+    	for (int i = 0; i < particles.size(); i++) {
+    		particles.get(i).remove();
+		}
+    	
+    	for (int i = 0; i < players.size(); i++) {
+    		players.get(i).remove();
+		}
+    
+    	game.level = level;
+    	player.level = level;
+    	
+    	// Change music according to the level
+    	if(level == Level.labyrinth){
+    		player.setXY(game.playerSpawn_labyrinth.getX(), game.playerSpawn_labyrinth.getY());
+    		Sound.encounter.stopAll();
+    		Sound.encounter.loop();
+    	} else if(level == Level.spawn){
+    		player.setXY(game.playerSpawn_spawnLevel.getX(), game.playerSpawn_spawnLevel.getY());
+    		Sound.spawnMusic.stopAll();
+    		Sound.spawnMusic.loop();
+    	} else if(level == Level.rock){
+    		player.setXY(9 << 4, 70 << 4);
+    		Sound.JOHNCENA.stopAll();
+    		Sound.JOHNCENA.loop();
+    	}
+    	
+    	remove();
+    	player.unRemove();
+    	level.add(player);
+    	level.addLevelMobs();
     }
     
     public List<Entity> getEntities(Entity e, int radius){
@@ -313,6 +407,16 @@ public class Level {
         return solid;
     }
     
+    public boolean entityProjectileCollision(int x, int y, int size, int xOffset, int yOffset){
+    	boolean isHit = false;
+    	for(int i = 0; i < entities.size(); i++){
+    		if((x-5) < entities.get(i).getX() + 10 && (x-5) > entities.get(i).getX() - 8 &&
+    		   (y+1) < entities.get(i).getY() + 12 && (y+1) > entities.get(i).getY() - 12)
+    			isHit = true;
+    	}
+        return isHit;
+    }
+    
     /** Grass  = 0xFF00FF00
      *  Flower = 0xFFFFFF00
      *  Bush   = 0xFF007F00
@@ -322,19 +426,39 @@ public class Level {
      */    
     public Tile getTile(int x, int y){
         if(x < 0 || y < 0 || x >= width || y >= height ) return Tile.voidTile;
-        if(tiles[x + y * width] == Tile.col_spawn_grass) return Tile.spawn_grass;
-        if(tiles[x + y * width] == Tile.col_spawn_flower) return Tile.spawn_flower;
-        if(tiles[x + y * width] == Tile.col_spawn_sign) return Tile.spawn_sign;
-        if(tiles[x + y * width] == Tile.col_spawn_teleporter) return Tile.spawn_teleporter;
-        if(tiles[x + y * width] == Tile.col_spawn_water) return Tile.spawn_water;
-        if(tiles[x + y * width] == Tile.col_spawn_water_ledge_down) return Tile.spawn_water_ledge_down;
-        if(tiles[x + y * width] == Tile.col_spawn_water_ledge_down_left) return Tile.spawn_water_ledge_down_left;
-        if(tiles[x + y * width] == Tile.col_spawn_water_ledge_down_right) return Tile.spawn_water_ledge_down_right;
-        if(tiles[x + y * width] == Tile.col_spawn_water_ledge_left) return Tile.spawn_water_ledge_left;
-        if(tiles[x + y * width] == Tile.col_spawn_water_ledge_right) return Tile.spawn_water_ledge_right;
-        if(tiles[x + y * width] == Tile.col_spawn_water_ledge_up) return Tile.spawn_water_ledge_up;
-        if(tiles[x + y * width] == Tile.col_spawn_water_ledge_up_left) return Tile.spawn_water_ledge_up_left;
-        if(tiles[x + y * width] == Tile.col_spawn_water_ledge_up_right) return Tile.spawn_water_ledge_up_right;
+        if(this == spawn || this == labyrinth)
+	        if(tiles[x + y * width] == Tile.col_spawn_grass) return Tile.spawn_grass;
+	        if(tiles[x + y * width] == Tile.col_spawn_flower) return Tile.spawn_flower;
+	        if(tiles[x + y * width] == Tile.col_spawn_sign) return Tile.spawn_sign;
+	        if(tiles[x + y * width] == Tile.col_spawn_teleporter) return Tile.spawn_teleporter;
+	        if(tiles[x + y * width] == Tile.col_spawn_water) return Tile.spawn_water;
+	        if(tiles[x + y * width] == Tile.col_spawn_water_ledge_down) return Tile.spawn_water_ledge_down;
+	        if(tiles[x + y * width] == Tile.col_spawn_water_ledge_down_left) return Tile.spawn_water_ledge_down_left;
+	        if(tiles[x + y * width] == Tile.col_spawn_water_ledge_down_right) return Tile.spawn_water_ledge_down_right;
+	        if(tiles[x + y * width] == Tile.col_spawn_water_ledge_left) return Tile.spawn_water_ledge_left;
+	        if(tiles[x + y * width] == Tile.col_spawn_water_ledge_right) return Tile.spawn_water_ledge_right;
+	        if(tiles[x + y * width] == Tile.col_spawn_water_ledge_up) return Tile.spawn_water_ledge_up;
+	        if(tiles[x + y * width] == Tile.col_spawn_water_ledge_up_left) return Tile.spawn_water_ledge_up_left;
+	        if(tiles[x + y * width] == Tile.col_spawn_water_ledge_up_right) return Tile.spawn_water_ledge_up_right;
+        else
+        	if(tiles[x + y * width] == Tile.col_rock_floor) return Tile.rock_floor;
+	        if(tiles[x + y * width] == Tile.col_rock_wall_center_up) return Tile.rock_wall_center_up;
+	        if(tiles[x + y * width] == Tile.col_rock_wall_center_right) return Tile.rock_wall_center_right;
+	        if(tiles[x + y * width] == Tile.col_rock_wall_center_left) return Tile.rock_wall_center_left;
+	        if(tiles[x + y * width] == Tile.col_rock_wall_LU) return Tile.rock_wall_LU;
+	        if(tiles[x + y * width] == Tile.col_rock_wall_RU) return Tile.rock_wall_RU;
+	        if(tiles[x + y * width] == Tile.col_rock_rock) return Tile.rock_rock;
+	        if(tiles[x + y * width] == Tile.col_rock_lava_ledge_0) return Tile.rock_lava_ledge_0;
+	        if(tiles[x + y * width] == Tile.col_rock_lava_ledge_1) return Tile.rock_lava_ledge_1;
+	        if(tiles[x + y * width] == Tile.col_rock_lava_ledge_2) return Tile.rock_lava_ledge_2;
+	        if(tiles[x + y * width] == Tile.col_rock_lava_ledge_3) return Tile.rock_lava_ledge_3;
+	        if(tiles[x + y * width] == Tile.col_rock_lava_ledge_5) return Tile.rock_lava_ledge_5;
+	        if(tiles[x + y * width] == Tile.col_rock_lava_ledge_6) return Tile.rock_lava_ledge_6;
+	        if(tiles[x + y * width] == Tile.col_rock_lava_ledge_7) return Tile.rock_lava_ledge_7;
+	        if(tiles[x + y * width] == Tile.col_rock_lava_ledge_8) return Tile.rock_lava_ledge_8;
+	        if(tiles[x + y * width] == Tile.col_rock_lava_normal) return Tile.rock_lava_normal;
+	        if(tiles[x + y * width] == Tile.col_rock_lava_bubbles) return Tile.rock_lava_bubbles;
+	        if(tiles[x + y * width] == Tile.col_rock_teleporter) return Tile.rock_teleporter;
         return Tile.voidTile;
     }
 }

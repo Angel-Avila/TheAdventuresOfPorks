@@ -11,6 +11,7 @@ public class Entity {
     protected double x, y;
     protected Sprite sprite;
     private boolean removed = false;
+    private boolean hit = false;
     public Level level;
     protected final Random random = new Random();
     
@@ -40,11 +41,11 @@ public class Entity {
     	return y;
     }
     
-    public double getTileX(){
+    public int getTileX(){
     	return (int)(x + 7) >> 4;
     }
     
-    public double getTileY(){
+    public int getTileY(){
     	return (int)(y + 6) >> 4;
     }
     
@@ -66,6 +67,10 @@ public class Entity {
     
     public boolean isRemoved(){
         return removed;
+    }
+    
+    public boolean isHit(){
+    	return hit;
     }
     
     public Sprite getSprite(){

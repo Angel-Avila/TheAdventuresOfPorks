@@ -16,4 +16,8 @@ class RockTile extends Tile {
     public boolean solid(){
         return true;
     }
+    
+    public boolean walkable(){
+    	return false;
+    }
 }

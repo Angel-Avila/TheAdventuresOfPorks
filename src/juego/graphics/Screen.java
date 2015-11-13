@@ -19,6 +19,8 @@ public class Screen {
     public int[] tiles = new int[MAP_SIZE * MAP_SIZE];
     //private Random random = new Random();
     
+    private final int ALPHA_COL = 0xff00ff50;
+    
     public Screen(int width, int height){
         this.width = width;
         this.height = height;
@@ -61,6 +63,40 @@ public class Screen {
     			int xa = x + xp;
     			if(xa < 0 || xa >= width || ya < 0 || ya >= height) continue;
     			int col = sprite.pixels[x + y * sprite.getWidth()];
+    			if(col != ALPHA_COL)
+    				pixels[xa + ya * width] = col;
+    		}
+    	}
+    }
+    
+    public void renderTextCharacter(int xp, int yp, Sprite sprite, int color, boolean fixed){
+    	if(fixed){
+	    	xp -= xOffset;
+	    	yp -= yOffset;
+    	}
+    	for(int y = 0; y < sprite.getHeight(); y++){
+    		int ya = y + yp;
+    		for(int x = 0; x < sprite.getWidth(); x++){
+    			int xa = x + xp;
+    			if(xa < 0 || xa >= width || ya < 0 || ya >= height) continue;
+    			int col = sprite.pixels[x + y * sprite.getWidth()];
+    			if(col != 0xffFF00FF && col != 0xff7F007F)
+    				pixels[xa + ya * width] = color;
+    		}
+    	}
+    }
+    
+    public void renderSheet(int xp, int yp, SpriteSheet sheet, boolean fixed){
+    	if(fixed){
+	    	xp -= xOffset;
+	    	yp -= yOffset;
+    	}
+    	for(int y = 0; y < sheet.SPRITE_HEIGHT; y++){
+    		int ya = y + yp;
+    		for(int x = 0; x < sheet.SPRITE_WIDTH; x++){
+    			int xa = x + xp;
+    			if(xa < 0 || xa >= width || ya < 0 || ya >= height) continue;
+    			int col = sheet.pixels[x + y * sheet.SPRITE_WIDTH];
     			if(col != 0xff00ff50)
     				pixels[xa + ya * width] = col;
     		}
@@ -103,7 +139,7 @@ public class Screen {
 				if (xa < -p.getSpriteSize() || xa >= width || ya < 0 || ya >= height ) break;
 				if (xa < 0) xa = 0;
 				int col = p.getSprite().pixels[x + y * p.getSpriteSize()];
-				if(col != 0xff00ff50)
+				if(col != ALPHA_COL)
 					pixels[xa + ya * width] = col;
 			}
 		}
@@ -127,7 +163,7 @@ public class Screen {
             }
         }
     }
-	
+
 	public void renderMob(int xp, int yp, Mob mob){
         xp -= xOffset;
         yp -= yOffset;
@@ -160,8 +196,33 @@ public class Screen {
         }
     }
     
+	public void drawRect(int xp, int yp, int width, int height, 
+						 int color, boolean fixed) {
+		
+		if(fixed){
+			xp -= xOffset;
+			yp -= yOffset;
+		}
+		
+		for(int x = xp; x < xp + width; x++){
+			if(yp >= this.height || x < 0 || x >= this.width) continue;
+			if(yp > 0) pixels[x + yp * this.width] = color;
+			if(yp + height >= this.height) continue;
+			if(yp + height > 0) pixels[x + (yp + height) * this.width] = color;
+		}
+		
+		for(int y = yp; y <= yp + height; y++){
+			if(xp >= this.width || y < 0 || y >= this.height) continue;
+			if(xp > 0) pixels[xp + y * this.width] = color;
+			if(xp + width >= this.width) continue;
+			if(xp + width > 0) pixels[(xp + width) + y * this.width] = color;
+		}
+				
+	}
+	
     public void setOffset(int xOffset, int yOffset){
         this.xOffset = xOffset;
         this.yOffset = yOffset;
     }
+
 }

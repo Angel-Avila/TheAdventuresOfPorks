@@ -1,5 +1,8 @@
 package juego.sound;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -9,6 +12,10 @@ public class Sound {
 	public static Sound spawnMusic = loadSound("/res/audio/spawnMusic.wav");
 	public static Sound encounter = loadSound("/res/audio/encounter.wav");
 
+	public List<Sound> sounds = new ArrayList<>();
+	
+	private boolean added = false;
+	
 	//This will load your sound
 	public static Sound loadSound(String fileName) {
 
@@ -21,9 +28,16 @@ public class Sound {
 	    } catch (Exception e) {
 	        System.out.println(e);
 	    }
+	    
 	    return sound;
 	}
 
+	public void addAllSounds(){
+		sounds.add(JOHNCENA);
+		sounds.add(spawnMusic);
+		sounds.add(encounter);
+	}
+	
 	public Clip clip;
 	//you can play the clip by running this
 	public void play() {
@@ -66,14 +80,14 @@ public class Sound {
 	    }
 	}
 	
-	public void quickPlay(Sound toPause){
-		try {
-	        if (clip != null) {
-                if(toPause.clip.isActive()) toPause.clip.stop();
-                this.play();
-	        }
-	    } catch (Exception e) {
-	        System.out.println(e + ":(");
-	    }
+	public void stopAll(){
+		if(!added){
+			addAllSounds();
+			added = true;
+		}
+
+		for(int i = 0; i < sounds.size(); i++){
+			if(sounds.get(i).clip != null && sounds.get(i).clip.isActive()) sounds.get(i).stop();
+		}
 	}
 }

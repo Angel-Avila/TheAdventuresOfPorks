@@ -15,7 +15,7 @@ import javax.swing.JFrame;
 
 import juego.entity.mob.Player;
 import juego.graphics.Screen;
-import juego.graphics.Sprite;
+import juego.graphics.ui.UIManager;
 import juego.input.Keyboard;
 import juego.input.Mouse;
 import juego.level.Level;
@@ -26,7 +26,7 @@ public class Game extends Canvas implements Runnable {
 
     private static final long serialVersionUID = 1L;
 
-    private static int width = 300;
+    private static int width = 300 - 60;
     private static int height = width / 16 * 9;
     private static int scale = 3;
     public static String title = "The Adventures of Porki";
@@ -35,17 +35,20 @@ public class Game extends Canvas implements Runnable {
     private JFrame frame;
     private Keyboard key;
     private Mouse mouse;
-    private Level level;
+    public Level level;
     private Player player;
     private boolean running = false;
     private Screen screen;
+    //private Font font;
     
-    private TileCoordinate spawn_teleporter = new TileCoordinate(28, 24);
-    private TileCoordinate playerSpawn_spawnLevel = new TileCoordinate(30, 40);
-    private TileCoordinate playerSpawn_labyrinth = new TileCoordinate(30, 43);
+    private static UIManager uiManager;
     
-    private int time = 0;
-    private boolean teleporting = false;
+    //private TileCoordinate spawn_teleporter = new TileCoordinate(28, 24);
+    public TileCoordinate playerSpawn_spawnLevel = new TileCoordinate(30, 40);
+    public TileCoordinate playerSpawn_labyrinth = new TileCoordinate(30, 43);
+    
+    //private int time = 0;
+    //private boolean teleporting = false;
     
     // Create the image
     private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -53,7 +56,7 @@ public class Game extends Canvas implements Runnable {
     private int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
 
     public Game() {
-        Dimension size = new Dimension(width * scale, height * scale);
+        Dimension size = new Dimension(width * scale + 60 * 3, height * scale);
         setPreferredSize(size);
 
         screen = new Screen(width, height);
@@ -61,8 +64,10 @@ public class Game extends Canvas implements Runnable {
         key = new Keyboard();
         mouse = new Mouse();
         level = Level.spawn;
+        //font = new Font();
+        uiManager = new UIManager();
         
-        player = new Player(playerSpawn_spawnLevel.getX(), playerSpawn_spawnLevel.getY() + 6, key);
+        player = new Player("Ragnarök", playerSpawn_spawnLevel.getX(), playerSpawn_spawnLevel.getY() + 6, key);
         level.addLevelMobs();
         level.add(player);
         
@@ -81,6 +86,10 @@ public class Game extends Canvas implements Runnable {
     	return height * scale;
     }
 
+    public static UIManager getUIManager(){
+    	return uiManager;
+    }
+    
     //Synchronized avoids some problems, boosts performance of the threads
     // This method just starts the game
     public synchronized void start() {
@@ -135,79 +144,15 @@ public class Game extends Canvas implements Runnable {
 
     public void update() {
         key.update();
-        level.update();/*
+        level.update(this, player);
+        uiManager.update();
+        /*
         if(key.up){
         	if(Sound.spawnMusic.clip.isActive())
         		Sound.JOHNCENA.quickPlay(Sound.spawnMusic);
         	if(!Sound.JOHNCENA.clip.isActive())
         		Sound.spawnMusic.loop();
         }*/
-        // If the player is in the spawnlevel on the teleporter from the left side he goes to the labyrinth
-        if(level == Level.spawn && 
-        player.getTileX() == spawn_teleporter.getTileX() && 
-        player.getTileY() == spawn_teleporter.getTileY()){
-        	time++;
-        	teleporting = true;
-        	if(time % 120 == 0){
-        		changeLevel(Level.labyrinth);		
-        		return;
-        	}
-        }
-        
-        // But if he is in the labyrinth and manages to get to the other side, he returns to the spawn
-        else if(level == Level.labyrinth && player.getTileY() == 44){
-        	time++;
-        	teleporting = true;
-        	if(time % 120 == 0){
-        		changeLevel(Level.spawn);
-        		return;
-        	}
-        }
-        
-        else{
-        	time = 0;
-        	teleporting = false;
-        }
-    }
-    
-    /**
-     * In order to change level we remove all the entities we have from the current one to avoid null pointer
-     * exceptions and then we proceed to go to the next level where we add the level entities we should.
-     */
-    public void changeLevel(Level level){
-    	for (int i = 0; i < this.level.entities.size(); i++) {
-    		this.level.entities.get(i).remove();
-		}
-    	
-    	for (int i = 0; i < this.level.projectiles.size(); i++) {
-    		this.level.projectiles.get(i).remove();
-		}
-    	
-    	for (int i = 0; i < this.level.particles.size(); i++) {
-    		this.level.particles.get(i).remove();
-		}
-    	
-    	for (int i = 0; i < this.level.players.size(); i++) {
-    		this.level.players.get(i).remove();
-		}
-    	
-    	this.level = level;
-    	player.level = level;
-    	
-    	if(level == Level.labyrinth){
-    		player.setXY(playerSpawn_labyrinth.getX(), playerSpawn_labyrinth.getY());
-    		Sound.spawnMusic.stop();
-    		Sound.encounter.play();
-    	} else if(level == Level.spawn){
-    		player.setXY(playerSpawn_spawnLevel.getX(), playerSpawn_spawnLevel.getY());
-    		Sound.encounter.stop();
-    		Sound.spawnMusic.loop();
-    	}
-    	
-    	level.update();
-    	level.add(player);
-    	player.unRemove();
-    	level.addLevelMobs();
     }
      
      public void render() {
@@ -223,11 +168,7 @@ public class Game extends Canvas implements Runnable {
         double xScroll = player.getX() - screen.width / 2;
         double yScroll = player.getY() - screen.height / 2;
         level.render((int)xScroll, (int)yScroll, screen);
-        
-        //Shows the teleporting "energy" under our player when he's about to teleport
-        if(teleporting)
-        	screen.renderSprite((int)player.getX() - 2, (int)player.getY() - 23, Sprite.teleporter_particles, true);
-        
+        //font.render(-5, 120, "Welcum to a new\nadventure.", screen);
         
         // Copy the pixels we have in Screen.java to the pixels array here/*
         for (int i = 0; i < pixels.length; i++) {
@@ -236,7 +177,8 @@ public class Game extends Canvas implements Runnable {
 
         Graphics g = bs.getDrawGraphics();
         // Next comes all the graphics that should be displayed
-        g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
+        g.drawImage(image, 0, 0, width * scale, height * scale, null);
+        uiManager.render(g);
         
         /* g.fillRect(Mouse.getX() - 32, Mouse.getY() - 32, 64, 64);
         g.setColor(Color.WHITE);

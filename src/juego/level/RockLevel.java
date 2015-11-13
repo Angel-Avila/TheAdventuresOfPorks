@@ -5,9 +5,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class SpawnLevel extends Level{
-    
-    public SpawnLevel(String path) {
+public class RockLevel extends Level{
+	public RockLevel(String path) {
         super(path);
     }
     
@@ -46,5 +45,4 @@ public class SpawnLevel extends Level{
     protected void generateLevel(){
         
     }
-    
 }
