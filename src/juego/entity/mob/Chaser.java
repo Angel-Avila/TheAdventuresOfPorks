@@ -19,16 +19,24 @@ public class Chaser extends Mob{
 	
 	private void move(){
 		xa = ya = 0;
+		
+		// List of all the players in a radius of 64px or 4 tiles
 		List<Player> players = level.getPlayers(this, 64);
+		// If there's someone in its range...
 		if(players.size() > 0){
+			// Gets the first one from the list
 			Player player = players.get(0);
 			
+			// Chasing simple algorithm
 			if(x < player.getX()) xa += speed;
 			else if(x > player.getX()) xa -= speed;
 			
 			if(y < player.getY()) ya += speed;
 			else if(y > player.getY()) ya -= speed;
 			
+			// Makes it so if the player's X/Y value positions are slightly off, the mob doesn't go crazy trying to 
+			// compensate it. This is because of our movement in this game; since its handled with doubles that stuff
+			// can happen quite often if not all of the time.
 			if (Math.floor(x) == Math.floor(player.getX())) xa = 0;
 			if (Math.floor(y) == Math.floor(player.getY())) ya = 0;
 		}

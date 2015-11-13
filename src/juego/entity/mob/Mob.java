@@ -8,6 +8,7 @@ import juego.graphics.Screen;
 public abstract class Mob extends Entity{
     
     protected boolean walking = false;
+    protected int actualHealth, maxHealth;
     
     protected enum Direction{
     	UP, DOWN, LEFT, RIGHT
@@ -16,6 +17,7 @@ public abstract class Mob extends Entity{
     protected Direction dir;
     
     public void move(double xa, double ya){
+    	// Sliding
     	if(xa != 0 && ya != 0){
     		move(xa, 0);
     		move(0, ya);
@@ -27,6 +29,10 @@ public abstract class Mob extends Entity{
         if(ya > 0) dir = Direction.DOWN; 
         if(ya < 0) dir = Direction.UP;
         
+        // This is the new algorithm I made to make it possible to move with doubles. Basically we move precisely
+        // by taking units of xa little by little and if what we have left from xa is less than one, we add it to
+        // our X since we don't wanna lose these decimals. At some point they'll make an integer so we'll move one
+        // more pixel.
         while(xa != 0){
         	if(Math.abs(xa) > 1){
         		if(!collision(abs(xa), ya))

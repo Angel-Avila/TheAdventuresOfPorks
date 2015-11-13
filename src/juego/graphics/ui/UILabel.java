@@ -13,9 +13,9 @@ public class UILabel extends UIComponent{
 	
 	public UILabel(Vector2i position, String text) {
 		super(position);
-		font = new Font("Helvetica", Font.BOLD, 20);
+		font = new Font("Helvetica", Font.BOLD, 16);
 		this.text = text;
-		color = new Color(0xffffff);
+		color = new Color(0);
 	}
 	
 	public UILabel setFont(Font font){

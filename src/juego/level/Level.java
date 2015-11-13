@@ -387,7 +387,7 @@ public class Level {
     	else if(this == labyrinth){
     		add(new Star(30, 40));
     		add(new Chaser(30, 40));
-    		add(new Solver(42, 18));
+    		add(new Solver(42, 18, new Vector2i(30, 43)));
     	}
     }
     

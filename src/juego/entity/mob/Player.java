@@ -1,12 +1,16 @@
 package juego.entity.mob;
 
+import java.awt.Font;
+
 import juego.Game;
 import juego.entity.projectile.WizardProjectile;
 import juego.graphics.Screen;
 import juego.graphics.Sprite;
+import juego.graphics.ui.UIButton;
 import juego.graphics.ui.UILabel;
 import juego.graphics.ui.UIManager;
 import juego.graphics.ui.UIPanel;
+import juego.graphics.ui.UIProgressBar;
 import juego.input.Keyboard;
 import juego.input.Mouse;
 import juego.util.Vector2i;
@@ -18,12 +22,17 @@ public class Player extends Mob{
     private Sprite sprite;
     private int anim = 0;
     
+    private int actualMana, maxMana;
+    
     public Vector2i position;
     
     private int fireRate = 0;
     
     private UIManager ui;
+    private UIProgressBar uiHealthBar, uiManaBar;
+    private UIButton button;
     
+    @Deprecated
     public Player(Keyboard input){
         this.input = input;
         sprite = Sprite.player_forward;  
@@ -39,15 +48,47 @@ public class Player extends Mob{
         sprite = Sprite.player_forward;
         fireRate = WizardProjectile.FIRE_RATE;
         
+        /* FOR NOW SINCE HE'S A WIZARD */
+        actualHealth = maxHealth = 60;
+        actualMana = maxMana = 120;
+
         // We start our UI objects
         ui = Game.getUIManager();
-        
+
         // This creates the gray panel on the right side of the screen
         UIPanel panel = (UIPanel) new UIPanel(new Vector2i(240 * 3, 0), new Vector2i(60 * 3, 168 * 3)).setColor(0x4f4f4f);
         // And this adds it to our UI
         ui.addPanel(panel);
-        // Then we add a label to our panel
-        panel.addComponent(new UILabel(new Vector2i(40, 180), name).setColor(0xbbbbbb));
+        // Then we add a label with our name to our panel
+        panel.addComponent(new UILabel(new Vector2i(40, 180), name).setFont(new Font("Helvetica", Font.BOLD, 20)).setColor(0xbbbbbb));
+        
+        // We create our healthbar, set its colors and add it to our panel  
+        uiHealthBar = new UIProgressBar(new Vector2i(10, 190), new Vector2i(160, 15));
+        uiHealthBar.setColor(0x6a6a6a); // Dark gray
+        uiHealthBar.setForegroundColor(0xee3030); // Red
+        panel.addComponent(uiHealthBar);
+        // We just put a label to it so the player knows it is his HP
+        UILabel HPLabel = new UILabel(new Vector2i(uiHealthBar.position).add(new Vector2i(2, 13)), "HP");
+        HPLabel.setColor(0xffffff);
+        HPLabel.setFont(new Font("Verdana", Font.BOLD, 14));
+        panel.addComponent(HPLabel);
+        
+        // The same thing but for mana
+        uiManaBar = new UIProgressBar(new Vector2i(10, 210), new Vector2i(160, 15));
+        uiManaBar.setColor(0x6a6a6a); // Dark gray
+        uiManaBar.setForegroundColor(0xff0026FF); // Blue
+        panel.addComponent(uiManaBar);
+        // We just put a label to it so the player knows it is his Mana
+        UILabel ManaLabel = new UILabel(new Vector2i(uiManaBar.position).add(new Vector2i(2, 13)), "MP");
+        ManaLabel.setColor(0xffffff);
+        ManaLabel.setFont(new Font("Verdana", Font.BOLD, 14));
+        panel.addComponent(ManaLabel);
+        
+        // Our Button
+        button = new UIButton(new Vector2i(10, 240), new Vector2i(25, 15));
+        button.setText("Hi");
+        panel.addComponent(button);
+        
     }
     
     public void update(){/*
@@ -73,7 +114,10 @@ public class Player extends Mob{
         else
             walking = false;
         
+        // act / max = x / 1
         position.set(getTileX(), getTileY());
+        uiHealthBar.setProgress((actualHealth * 1.0) / maxHealth);
+        uiManaBar.setProgress((actualMana * 1.0) / maxMana);
         
         // Takes 1 from firerate because the player only shoots in the updateShooting() method if fireRate is <= 0
         // and after shooting it resets the fireRate int value to the declared FIRE_RATE value in WizardProjectile

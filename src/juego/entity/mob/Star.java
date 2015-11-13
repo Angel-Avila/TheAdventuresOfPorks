@@ -23,12 +23,17 @@ public class Star extends Mob {
 	 
 	private void move(){
 		xa = ya = 0;
+		// If there are players in the level
 		if(level.players.size() > 0){
+			// We get their position (with an offset to match where they really graphcally are)
 			int px = (int)level.getPlayerAt(0).getX() + 7;
 			int py = (int)level.getPlayerAt(0).getY() + 6;
+			// Get the vectors of position from where he is and where we are
 			Vector2i start = new Vector2i((int)(getX() + 7) >> 4, ((int)getY() + 6) >> 4);
 			Vector2i goal = new Vector2i(px >> 4, py >> 4);
-			if(time % 3 == 0) path = level.findPath(start, goal);
+			// And we calculate a path to get to them about 12 times per/sec so we are always looking for the shortest 
+			// path and updating it
+			if(time % 5 == 0) path = level.findPath(start, goal);
 			if(path != null){
 				if(path.size() > 0){
 					Vector2i v = path.get(path.size() - 1).tile;

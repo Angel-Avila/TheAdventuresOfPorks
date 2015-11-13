@@ -13,29 +13,33 @@ public class Solver extends Mob{
 	private double xa = 0, ya = 0;
 	private double speed = 0.8;
 	private List<Node> path = null;
+	private Vector2i goal;
 	int path_size = 0;
 	
-	public Solver(int x, int y){
+	public Solver(int x, int y, Vector2i goal){
 		this.x = x << 4;
 		this.y = y << 4;
+		this.goal = goal;
 		sprite = Sprite.zombie_pig_forward;
-		
 	}
 	 
 	private void move(){
+		// If he hasn't "thought" of a path yet,
 		if(path == null){
-			
+			// He uses 2 vectors consisting of where he is and of where he wants to get
 			Vector2i start = new Vector2i((int)(getX() + 7) >> 4, ((int)getY() + 6) >> 4);
-			Vector2i goal = new Vector2i(30, 43);
+			// Then he finds the shortest path posible with the A* search algorithm
 			path = level.findPath(start, goal);
+			// We store the size of the path in an integer variable
 			path_size = path.size();
-			
-			
 		}
 		xa = ya = 0;
 		
 		if(path != null){
 			if(path_size > 0){
+				// And we use it to get the position of the next tile we have to go to in order to get to our goal.
+				// Since the last element of the path list is the closest one to us, we simply get the position vector
+				// of that tile, we get there with the next lines of code
 				Vector2i v = path.get(path_size - 1).tile;
 				if(x < v.getX() << 4) xa += speed;
 				if(x > v.getX() << 4) xa -= speed;
@@ -45,6 +49,8 @@ public class Solver extends Mob{
 				if (Math.floor(x) == v.getX() << 4) xa = 0;
 				if (Math.floor(y) == v.getY() << 4) ya = 0;
 				
+				// And when we do, we substract one from path size so in the next call of this mehod, we get the 
+				// position vector of the next tile closest to us until th path_size is 0, meaning we got to our goal.
 				if(Math.floor(x) == v.getX() << 4 && Math.floor(y) == v.getY() << 4)
 					path_size--;
 			}

@@ -17,6 +17,7 @@ public class Dummy extends Mob {
 
 	public void update() {
 		time++;
+		// Makes it move randomly across the map
 		if ((time % (random.nextInt(100) + 20)) == 0){
 			xa = ya = 0;
 			if(random.nextInt(2) == 0)
