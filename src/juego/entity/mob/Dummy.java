@@ -12,6 +12,7 @@ public class Dummy extends Mob {
 	public Dummy(int x, int y) {
 		this.x = x << 4;
 		this.y = y << 4;
+		this.actualHealth = this.maxHealth = 100;
 		sprite = Sprite.zombie_pig_forward;
 	}
 
@@ -77,6 +78,9 @@ public class Dummy extends Mob {
 				sprite = Sprite.zombie_pig_left2;
 
 		}
+		
+		if(this.actualHealth <= 0)
+			remove();
 	}
 
 	public void render(Screen screen) {

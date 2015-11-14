@@ -14,7 +14,8 @@ public class Solver extends Mob{
 	private double speed = 0.8;
 	private List<Node> path = null;
 	private Vector2i goal;
-	int path_size = 0;
+	private int path_size = 0;
+	private boolean possible = true;
 	
 	public Solver(int x, int y, Vector2i goal){
 		this.x = x << 4;
@@ -25,13 +26,16 @@ public class Solver extends Mob{
 	 
 	private void move(){
 		// If he hasn't "thought" of a path yet,
-		if(path == null){
+		if(path == null && possible){
 			// He uses 2 vectors consisting of where he is and of where he wants to get
 			Vector2i start = new Vector2i((int)(getX() + 7) >> 4, ((int)getY() + 6) >> 4);
 			// Then he finds the shortest path posible with the A* search algorithm
 			path = level.findPath(start, goal);
-			// We store the size of the path in an integer variable
-			path_size = path.size();
+			// We store the size of the path in an integer variable if it's possible to get there
+			if(path != null)
+				path_size = path.size();
+			else
+				possible = false;
 		}
 		xa = ya = 0;
 		

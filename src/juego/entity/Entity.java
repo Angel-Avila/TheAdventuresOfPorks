@@ -11,7 +11,7 @@ public class Entity {
     protected double x, y;
     protected Sprite sprite;
     private boolean removed = false;
-    private boolean hit = false;
+    protected boolean hit = false;
     public Level level;
     protected final Random random = new Random();
     
@@ -67,6 +67,10 @@ public class Entity {
     
     public boolean isRemoved(){
         return removed;
+    }
+    
+    public void hitEntity(int damage){
+
     }
     
     public boolean isHit(){

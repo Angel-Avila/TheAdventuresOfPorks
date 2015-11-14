@@ -327,7 +327,7 @@ public class Level {
     		
     		// Checks the adjacent nodes(8)
     		for (int i = 0; i < 9; i++) {
-				if( i == 4) continue; // Because it would be the node we're actually on
+				if(i == 4) continue; // Because it would be the node we're actually on
 				int x = current.tile.getX();
 				int y = current.tile.getY();
 				
@@ -341,6 +341,14 @@ public class Level {
 				// If the tile is null or is solid we don't wanna check it
 				if(at == null) continue;
 				if(!at.walkable()) continue;
+				
+				// We check the diagonals and if the 2 tiles next to them aren't walkable we ignore them, because
+				// if the mob tries this path he'll just get stuck.
+				if((i == 0 && !getTile(x + xi + 1, y + yi).walkable() && !getTile(x + xi, y + yi + 1).walkable()) || 
+				   (i == 2 && !getTile(x + xi - 1, y + yi).walkable() && !getTile(x + xi, y + yi + 1).walkable()) ||
+				   (i == 6 && !getTile(x + xi + 1, y + yi).walkable() && !getTile(x + xi, y + yi - 1).walkable()) ||
+				  (i == 8 && !getTile(x + xi - 1, y + yi).walkable() && !getTile(x + xi, y + yi - 1).walkable())) 
+					continue;
 				
 				// We make a vector from the Tile we're checking
 				Vector2i atVector = new Vector2i(x + xi, y + yi);
@@ -385,15 +393,15 @@ public class Level {
     		add(new Dummy(27, 40));
     	}
     	else if(this == labyrinth){
-    		add(new Star(30, 40));
+    		add(new Star(36, 40));
     		add(new Chaser(30, 40));
     		add(new Solver(42, 18, new Vector2i(30, 43)));
     	}
     }
     
     /**
-     * @param x position of our entity + the direction in which it's heading
-     * @param y position of our entity + the direction in which it's heading
+     * @param x position of our entity + the direction in which our projectile is heading
+     * @param y position of our entity + the direction in which our projectile is heading
      * @param size of the entity
      * @return if the tile our object is moving to is solid or not
      */
@@ -407,12 +415,21 @@ public class Level {
         return solid;
     }
     
-    public boolean entityProjectileCollision(int x, int y, int size, int xOffset, int yOffset){
+    /**
+     * We also check if we hit entities and we apply the damage with "hitEntity" 
+     * @param x position of our entity + the direction in which our projectile is heading
+     * @param y position of our entity + the direction in which our projectile is heading
+     * @param p our projectile
+     * @return if we hit an entity or not
+     */
+    public boolean entityProjectileCollision(int x, int y, int xOffset, int yOffset, Projectile p){
     	boolean isHit = false;
     	for(int i = 0; i < entities.size(); i++){
     		if((x-5) < entities.get(i).getX() + 10 && (x-5) > entities.get(i).getX() - 8 &&
-    		   (y+1) < entities.get(i).getY() + 12 && (y+1) > entities.get(i).getY() - 12)
+    		   (y+1) < entities.get(i).getY() + 12 && (y+1) > entities.get(i).getY() - 12){
     			isHit = true;
+    			entities.get(i).hitEntity(p.damage);
+    		}
     	}
         return isHit;
     }

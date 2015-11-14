@@ -63,6 +63,11 @@ public abstract class Mob extends Entity{
     	return 1;
     }
     
+    public void hitEntity(int damage){
+    	this.actualHealth -= damage;
+    	hit = true;
+    }
+    
     public abstract void update();
     
     public abstract void render(Screen screen);
