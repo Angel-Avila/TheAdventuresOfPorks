@@ -21,6 +21,7 @@ public class Solver extends Mob{
 		this.x = x << 4;
 		this.y = y << 4;
 		this.goal = goal;
+		this.actualHealth = this.maxHealth = 40;
 		sprite = Sprite.zombie_pig_forward;
 	}
 	 
@@ -73,9 +74,15 @@ public class Solver extends Mob{
 			else if (dir == Direction.LEFT)
 				sprite = Sprite.zombie_pig_left;
 		}
+		
 	}
 	
 	public void update() {
+		checkHit();
+		
+		if(this.actualHealth <= 0)
+			remove();
+		
 		move();
 		
 		if (anim < 7500)

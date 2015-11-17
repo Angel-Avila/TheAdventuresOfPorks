@@ -102,7 +102,10 @@ public class Sprite {
     public static Sprite particle_wizard_p = new Sprite(3, 0xFF0F65FF);
     public static Sprite particle_wizard_p_fire = new Sprite(3, 0xFFFF3B00);
     
+    // Animations/more complex particles
+    
     public static Sprite teleporter_particles = new Sprite(16, 32, 6, 4, SpriteSheet.tiles);
+    public static Sprite fire_specialAbility = new Sprite(16, 32, 8, 4, SpriteSheet.tiles);
     
     // Just the void sprite
     

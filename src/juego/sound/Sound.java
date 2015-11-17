@@ -11,6 +11,7 @@ public class Sound {
 	public static Sound JOHNCENA = loadSound("/res/audio/JOHNCENA.wav");
 	public static Sound spawnMusic = loadSound("/res/audio/spawnMusic.wav");
 	public static Sound encounter = loadSound("/res/audio/encounter.wav");
+	public static Sound vsRed = loadSound("/res/audio/vsRed.wav");
 
 	public List<Sound> sounds = new ArrayList<>();
 	

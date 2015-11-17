@@ -11,13 +11,14 @@ public class Star extends Mob {
 	
 	private int anim = 0;
 	private double xa = 0, ya = 0;
-	private double speed = 0.8;
+	private double speed = 1.1;
 	private List<Node> path = null;
 	private int time = 0;
 	
 	public Star(int x, int y){
 		this.x = x << 4;
 		this.y = y << 4;
+		this.actualHealth = this.maxHealth = 200;
 		sprite = Sprite.zombie_pig_forward;
 	}
 	 
@@ -42,8 +43,8 @@ public class Star extends Mob {
 					if(y < v.getY() << 4) ya += speed;
 					if(y > v.getY() << 4) ya -= speed;
 					
-					if (Math.floor(x) == v.getX() << 4) xa = 0;
-					if (Math.floor(y) == v.getY() << 4) ya = 0;
+					if (Math.abs(Math.floor(x) - (v.getX() << 4)) < 2) xa = 0;
+					if (Math.abs(Math.floor(y) - (v.getY() << 4)) < 2) ya = 0;
 				}
 			}
 			if (xa != 0 || ya != 0) {
@@ -64,6 +65,11 @@ public class Star extends Mob {
 	}
 	
 	public void update() {
+		checkHit();
+		
+		if(this.actualHealth <= 0)
+			remove();
+		
 		move();
 		
 		if (anim < 7500)

@@ -176,6 +176,7 @@ public class Screen {
                 // X and Y in the sprite because they aren't offset, only
                 // things in the screen get offset, not in the sprite
                 int col = mob.getSprite().pixels[x + y * 32];
+                // We render the brain of Chaser and Star in different colors to tell a difference easily 
                 if(mob instanceof Chaser){
                 	if(col == 0xffD89F97) 
                 		col = 0xff2D2AD3;
@@ -187,11 +188,18 @@ public class Screen {
                 		col = 0xffB200FF;
                 	else if(col == 0xffDDB4AC) // Light brain color
                 		col = 0xffFF00DC;
-                	//else if(col == 0xffCC0000) // Blood color
-                		
+                	//else if(col == 0xffCC0000) // Blood color   		
                 }
-                if(col != 0xff00ff50)
-                    pixels[xa + ya * width] = col;
+               
+                if(col != 0xff00ff50){
+                	if(mob.isHit())
+                    	//col = 0xffCC0000;
+                		col += 0xffD80000;
+                		//col += 0xff0000;
+                		
+                	
+                	pixels[xa + ya * width] = col;
+                }
             }
         }
     }

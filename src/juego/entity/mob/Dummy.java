@@ -17,6 +17,11 @@ public class Dummy extends Mob {
 	}
 
 	public void update() {
+		checkHit();
+		
+		if(this.actualHealth <= 0)
+			remove();
+		
 		time++;
 		// Makes it move randomly across the map
 		if ((time % (random.nextInt(100) + 20)) == 0){
@@ -79,12 +84,10 @@ public class Dummy extends Mob {
 
 		}
 		
-		if(this.actualHealth <= 0)
-			remove();
 	}
 
 	public void render(Screen screen) {
-		screen.renderMob((int)x, (int)(y - 19), sprite);
+		screen.renderMob((int)x, (int)(y - 19), this);
 	}
 
 }

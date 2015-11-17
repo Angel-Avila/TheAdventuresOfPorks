@@ -45,7 +45,7 @@ public class Game extends Canvas implements Runnable {
     
     //private TileCoordinate spawn_teleporter = new TileCoordinate(28, 24);
     public TileCoordinate playerSpawn_spawnLevel = new TileCoordinate(30, 40);
-    public TileCoordinate playerSpawn_labyrinth = new TileCoordinate(30, 43);
+    public TileCoordinate playerSpawn_labyrinth = new TileCoordinate(17, 10);
     
     //private int time = 0;
     //private boolean teleporting = false;
@@ -68,8 +68,8 @@ public class Game extends Canvas implements Runnable {
         uiManager = new UIManager();
         
         player = new Player("Ragnarök", playerSpawn_spawnLevel.getX(), playerSpawn_spawnLevel.getY() + 6, key);
-        level.addLevelMobs();
         level.add(player);
+        level.addLevelMobs();
         
         Sound.spawnMusic.loop();
         

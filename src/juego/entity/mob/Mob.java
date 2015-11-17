@@ -8,6 +8,7 @@ import juego.graphics.Screen;
 public abstract class Mob extends Entity{
     
     protected boolean walking = false;
+    protected int hitTimer = 0;
     protected int actualHealth, maxHealth;
     
     protected enum Direction{
@@ -65,7 +66,20 @@ public abstract class Mob extends Entity{
     
     public void hitEntity(int damage){
     	this.actualHealth -= damage;
-    	hit = true;
+    	this.hit = true;
+    	hitTimer = 0;
+    }
+    
+    protected void checkHit(){
+    	if(hit) hitTimer++;
+    	if(hitTimer % 30 == 0){
+    		hit = false;
+    		hitTimer = 0;
+    	}
+    }
+    
+    protected void die(){
+    	remove();
     }
     
     public abstract void update();

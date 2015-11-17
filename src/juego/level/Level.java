@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 
 import juego.Game;
 import juego.entity.Entity;
@@ -242,6 +243,7 @@ public class Level {
     		players.get(i).remove();
 		}
     
+    	// We set the level value from game and player to the new level
     	game.level = level;
     	player.level = level;
     	
@@ -256,14 +258,34 @@ public class Level {
     		Sound.spawnMusic.loop();
     	} else if(level == Level.rock){
     		player.setXY(9 << 4, 70 << 4);
-    		Sound.JOHNCENA.stopAll();
-    		Sound.JOHNCENA.loop();
+    		Sound.vsRed.stopAll();
+    		Sound.vsRed.loop();
     	}
     	
+    	// This checks which entities are removed(in this case all of them) and it removes them from the game
     	remove();
+    	// We change the "removed" value from player to false and we add it now to the level
     	player.unRemove();
     	level.add(player);
+    	// We add the mobs that should spawn in a certain level, depending on which it is
     	level.addLevelMobs();
+    }
+    
+    public List<Integer> getEntitiesIndex(Player e, int radius){
+    	List<Integer> result = new ArrayList<>();
+    	for(int i = 0; i < entities.size(); i++){
+    		Entity entity = entities.get(i);
+    		int x = (int)entity.getX();
+    		int y = (int)entity.getY();
+    		
+    		int dx = (int)Math.abs(x - e.getX());
+    		int dy = (int)Math.abs(y - e.getY());
+    		
+    		double dt = Math.sqrt((dx * dx) + (dy * dy));
+    		
+    		if(dt <= radius) result.add(i);
+    	}
+    	return result;
     }
     
     public List<Entity> getEntities(Entity e, int radius){
@@ -386,15 +408,37 @@ public class Level {
     	return Math.sqrt((dx * dx) + (dy * dy));
     }
     
+    public void damageMobAt(int i, int damage){
+    	entities.get(i).hitEntity(damage);
+    }
+    
     public void addLevelMobs(){
     	if(this == spawn){
-    		add(new Dummy(30, 40));
-    		add(new Dummy(33, 40));
-    		add(new Dummy(27, 40));
+    		Random random = new Random();
+    		int x = 0;
+    		int y = 0;
+    		for(int i = 0; i < 20; i++){
+    			x = random.nextInt(29);
+    			y = random.nextInt(29);
+    			// In the spawnlevel we spawn the dummies in walkable tiles and at least 1 tile away from our player
+    			if(getTile(x + 15,y + 15).walkable() && 
+    			getDistance(
+    			new Vector2i(x + 15, y + 15),new Vector2i((int)players.get(0).getX(),(int)players.get(0).getY())) > 16)
+    				add(new Dummy(x + 15, y + 15));
+    			else 
+    				i--;
+    		}
     	}
     	else if(this == labyrinth){
     		add(new Star(36, 40));
+    		add(new Star(44, 41));
+    		add(new Star(30, 42));
+    		add(new Star(41, 22));
+    		add(new Star(15, 24));
+    		add(new Star(30, 40));
+    		add(new Chaser(32, 19));
     		add(new Chaser(30, 40));
+    		add(new Chaser(17, 30));
     		add(new Solver(42, 18, new Vector2i(30, 43)));
     	}
     }
@@ -429,6 +473,7 @@ public class Level {
     		   (y+1) < entities.get(i).getY() + 12 && (y+1) > entities.get(i).getY() - 12){
     			isHit = true;
     			entities.get(i).hitEntity(p.damage);
+    			return isHit;
     		}
     	}
         return isHit;

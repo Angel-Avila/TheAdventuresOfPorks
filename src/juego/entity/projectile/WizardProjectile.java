@@ -12,7 +12,7 @@ public class WizardProjectile extends Projectile{
 		super(x - 2, y - 7, dir);
 		range = 110;
 		speed = 3;
-		damage = 20;
+		damage = 15;
 		sprite = Sprite.rotate(Sprite.wizard_projectile_fire, angle);
 		
 		// Vector algebra here; nx and ny are the coordinates where our projectile wants to go to

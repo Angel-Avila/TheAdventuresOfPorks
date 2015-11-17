@@ -9,11 +9,12 @@ public class Chaser extends Mob{
 
 	private int anim = 0;
 	private double xa = 0, ya = 0;
-	private double speed = 0.75;
+	private double speed = 0.88;
 	
 	public Chaser(int x, int y){
 		this.x = x << 4;
 		this.y = y << 4;
+		this.actualHealth = this.maxHealth = 140;
 		sprite = Sprite.zombie_pig_forward;
 	}
 	
@@ -54,9 +55,16 @@ public class Chaser extends Mob{
 			else if (dir == Direction.LEFT)
 				sprite = Sprite.zombie_pig_left;
 		}
+		
+		if(this.actualHealth <= 0)
+			remove();
 	}
 	
 	public void update() {
+		checkHit();
+		if(this.actualHealth <= 0)
+			remove();
+		
 		move();
 		if (anim < 7500)
 			anim++;

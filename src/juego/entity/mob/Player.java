@@ -1,6 +1,7 @@
 package juego.entity.mob;
 
 import java.awt.Font;
+import java.util.List;
 
 import juego.Game;
 import juego.entity.projectile.WizardProjectile;
@@ -22,7 +23,11 @@ public class Player extends Mob{
     private Sprite sprite;
     private int anim = 0;
     
-    private int actualMana, maxMana;
+    private double actualMana, maxMana, manaRegen;
+    private final int COOLDOWN = 60;
+    private int cooldown = 60;
+    
+    private Vector2i usedAt;
     
     public Vector2i position;
     
@@ -44,6 +49,7 @@ public class Player extends Mob{
         this.y = y;
         this.input = input;
         position = new Vector2i(x, y);
+        usedAt = new Vector2i();
         dir = Direction.DOWN;
         sprite = Sprite.player_forward;
         fireRate = WizardProjectile.FIRE_RATE;
@@ -51,7 +57,8 @@ public class Player extends Mob{
         /* FOR NOW SINCE HE'S A WIZARD */
         actualHealth = maxHealth = 60;
         actualMana = maxMana = 120;
-
+        manaRegen = 0.15;
+        
         // We start our UI objects
         ui = Game.getUIManager();
 
@@ -98,6 +105,8 @@ public class Player extends Mob{
         if(anim < 7500) anim++;
         else anim = 0;
         
+        if(cooldown < COOLDOWN) cooldown++;
+        if(actualMana < maxMana) actualMana += manaRegen; 
         double speed = 1.25;
         double xa = 0, ya = 0;
                 
@@ -105,7 +114,12 @@ public class Player extends Mob{
         if(input.down) ya += speed;
         if(input.left) xa -= speed;
         if(input.right) xa += speed;
-        
+        if(input.spA){
+        	if(this.actualMana >= 30 && cooldown >= COOLDOWN){
+        		specialAbility();
+        		cooldown = 0;
+        	}
+        }
         
         if(xa != 0 || ya != 0) {
             move(xa, ya);
@@ -149,6 +163,16 @@ public class Player extends Mob{
     	}
 	}
 	
+	private void specialAbility(){
+		int damage = 40;
+		this.actualMana -= 30;
+		usedAt.set((int)x, (int)y);
+		List<Integer> entities = level.getEntitiesIndex(this, 48);
+		for(Integer i : entities)
+			level.damageMobAt(i, damage);
+			
+	}
+	
 	public void setX(int x){
 		this.x = x;
 	}
@@ -164,8 +188,14 @@ public class Player extends Mob{
 
 	 public Player getClientPlayer(){
 	    	return this;
-	    }
+	}
 	
+	 private double getDistance(Vector2i v1, Vector2i v2){
+	    	double dx = v1.getX() - v2.getX();
+	    	double dy = v1.getY() - v2.getY();
+	    	return Math.sqrt((dx * dx) + (dy * dy));
+	 }
+	 
 	// The anim % 20 > 10 is just an animation to alternate between the 2 walking sprites, one with the right leg
 	// and one with the left leg
 	public void render(Screen screen){
@@ -196,6 +226,16 @@ public class Player extends Mob{
                 if(anim % 20 > 10) sprite = Sprite.player_left_1;
                 else sprite = Sprite.player_left_2; 
             }
+        }
+        
+        if(cooldown <= 30){
+        	//screen.renderSprite((int)(x - 2), (int)(y - 23), Sprite.fire_specialAbility, true);
+        	for(int xtemp = (int)usedAt.x - 48; xtemp < (int)usedAt.x + 49; xtemp += 12){
+        		for(int ytemp = (int)usedAt.y - 48; ytemp < (int)usedAt.y + 49; ytemp += 12){
+        			if(getDistance(new Vector2i(xtemp, ytemp), usedAt) < 41)
+        				screen.renderSprite(xtemp - 2, (int)ytemp - 23, Sprite.fire_specialAbility, true);
+        		}
+        	}
         }
         
         // Renders the player with a slight offset
