@@ -7,6 +7,7 @@ import juego.Game;
 import juego.entity.projectile.WizardProjectile;
 import juego.graphics.Screen;
 import juego.graphics.Sprite;
+import juego.graphics.ui.UIActionListener;
 import juego.graphics.ui.UIButton;
 import juego.graphics.ui.UILabel;
 import juego.graphics.ui.UIManager;
@@ -92,7 +93,11 @@ public class Player extends Mob{
         panel.addComponent(ManaLabel);
         
         // Our Button
-        button = new UIButton(new Vector2i(10, 240), new Vector2i(25, 15));
+        button = new UIButton(new Vector2i(10, 240), new Vector2i(25, 15), new UIActionListener(){
+        	public void perform(){
+        		System.out.println("Pressed!");
+        	}
+        });
         button.setText("Hi");
         panel.addComponent(button);
         
@@ -198,6 +203,7 @@ public class Player extends Mob{
 	 
 	// The anim % 20 > 10 is just an animation to alternate between the 2 walking sprites, one with the right leg
 	// and one with the left leg
+	@SuppressWarnings("deprecation")
 	public void render(Screen screen){
         if(dir == Direction.UP) {
             sprite = Sprite.player_backward;

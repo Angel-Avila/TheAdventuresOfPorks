@@ -145,7 +145,7 @@ public class Screen {
 		}
 	}
     
-    // Renders our player and the mobs
+    @Deprecated
 	public void renderMob(int xp, int yp, Sprite sprite){
         xp -= xOffset;
         yp -= yOffset;
