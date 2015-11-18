@@ -71,7 +71,7 @@ public class Game extends Canvas implements Runnable {
         level.add(player);
         level.addLevelMobs();
         
-        Sound.spawnMusic.loop();
+        //Sound.spawnMusic.loop();
         
         addKeyListener(key);
         addMouseListener(mouse);

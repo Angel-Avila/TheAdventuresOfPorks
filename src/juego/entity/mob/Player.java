@@ -1,7 +1,10 @@
 package juego.entity.mob;
 
 import java.awt.Font;
+import java.io.IOException;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import juego.Game;
 import juego.entity.projectile.WizardProjectile;
@@ -9,6 +12,7 @@ import juego.graphics.Screen;
 import juego.graphics.Sprite;
 import juego.graphics.ui.UIActionListener;
 import juego.graphics.ui.UIButton;
+import juego.graphics.ui.UIButtonListener;
 import juego.graphics.ui.UILabel;
 import juego.graphics.ui.UIManager;
 import juego.graphics.ui.UIPanel;
@@ -60,9 +64,10 @@ public class Player extends Mob{
         actualMana = maxMana = 120;
         manaRegen = 0.15;
         
-        // We start our UI objects
+        // ================================ HERE WE START ALL THE UI STUFF ================================
         ui = Game.getUIManager();
-
+        
+        /* UI PANEL -------------------------------------------------------------------------------------*/
         // This creates the gray panel on the right side of the screen
         UIPanel panel = (UIPanel) new UIPanel(new Vector2i(240 * 3, 0), new Vector2i(60 * 3, 168 * 3)).setColor(0x4f4f4f);
         // And this adds it to our UI
@@ -70,6 +75,7 @@ public class Player extends Mob{
         // Then we add a label with our name to our panel
         panel.addComponent(new UILabel(new Vector2i(40, 180), name).setFont(new Font("Helvetica", Font.BOLD, 20)).setColor(0xbbbbbb));
         
+        /* HEALTH AND MANA PROGRESS BARS ----------------------------------------------------------------*/
         // We create our healthbar, set its colors and add it to our panel  
         uiHealthBar = new UIProgressBar(new Vector2i(10, 190), new Vector2i(160, 15));
         uiHealthBar.setColor(0x6a6a6a); // Dark gray
@@ -92,14 +98,40 @@ public class Player extends Mob{
         ManaLabel.setFont(new Font("Verdana", Font.BOLD, 14));
         panel.addComponent(ManaLabel);
         
-        // Our Button
+        /* THE BUTTON -------------------------------------------------------------------------------------*/
+        // We initialize our button
         button = new UIButton(new Vector2i(10, 240), new Vector2i(25, 15), new UIActionListener(){
+        	// and we override the perform() action to specify what the button does
         	public void perform(){
         		System.out.println("Pressed!");
         	}
         });
+        
+        // We can override the normal UIButtonListener actions here with the setButtonL with an anonymous class
+        button.setButtonListener(new UIButtonListener(){
+        	public void pressed(UIButton button) {
+        		super.pressed(button);
+        		button.performAction();
+        		button.ignoreNextPress();
+        	}
+        });
+        
         button.setText("Hi");
         panel.addComponent(button);
+        
+        /* THE BUTTON WITH AN IMAGE ------------------------------------------------------------------------*/
+        try {
+        	UIButton imageButton = new UIButton(new Vector2i(10, 270), 
+        	ImageIO.read(getClass().getResource("/res/textures/pig_icon.png")), new UIActionListener(){
+            	// and we override the perform() action to specify what the button does
+            	public void perform(){
+            		System.out.println("Pressed!");
+            	}
+            });
+        	panel.addComponent(imageButton);
+        } catch(IOException e){
+        	e.printStackTrace();
+        }
         
     }
     
