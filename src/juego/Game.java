@@ -20,14 +20,14 @@ import juego.input.Keyboard;
 import juego.input.Mouse;
 import juego.level.Level;
 import juego.level.TileCoordinate;
-import juego.sound.Sound;
+import juego.menu.Menu;
 
 public class Game extends Canvas implements Runnable {
 
     private static final long serialVersionUID = 1L;
 
     private static int width = 300 - 60;
-    private static int height = width / 16 * 9;
+    private static int height = (width + 60) / 16 * 9;
     private static int scale = 3;
     public static String title = "The Adventures of Porki";
 
@@ -39,6 +39,7 @@ public class Game extends Canvas implements Runnable {
     private Player player;
     private boolean running = false;
     private Screen screen;
+    private Menu menu;
     //private Font font;
     
     private static UIManager uiManager;
@@ -55,6 +56,13 @@ public class Game extends Canvas implements Runnable {
     // Access the image
     private int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
 
+    public enum STATE {
+    	Menu, 
+    	Game
+    };
+    
+    public static STATE gameState = STATE.Menu;
+    
     public Game() {
         Dimension size = new Dimension(width * scale + 60 * 3, height * scale);
         setPreferredSize(size);
@@ -63,15 +71,17 @@ public class Game extends Canvas implements Runnable {
         frame = new JFrame();
         key = new Keyboard();
         mouse = new Mouse();
+        menu = new Menu();
         level = Level.spawn;
         //font = new Font();
         uiManager = new UIManager();
         
         player = new Player("Ragnarök", playerSpawn_spawnLevel.getX(), playerSpawn_spawnLevel.getY() + 6, key);
+        
         level.add(player);
         level.addLevelMobs();
         
-        Sound.spawnMusic.loop();
+        //Sound.spawnMusic.loop();
         
         addKeyListener(key);
         addMouseListener(mouse);
@@ -88,6 +98,10 @@ public class Game extends Canvas implements Runnable {
 
     public static UIManager getUIManager(){
     	return uiManager;
+    }
+    
+    public static void setGameState(STATE state){
+    	gameState = state;
     }
     
     //Synchronized avoids some problems, boosts performance of the threads
@@ -144,8 +158,12 @@ public class Game extends Canvas implements Runnable {
 
     public void update() {
         key.update();
-        level.update(this, player);
-        uiManager.update();
+        if(gameState == STATE.Game){
+	        level.update(this, player);
+	        uiManager.update();
+        } else if(gameState == STATE.Menu){
+        	menu.update();
+        }
         /*
         if(key.up){
         	if(Sound.spawnMusic.clip.isActive())
@@ -165,30 +183,38 @@ public class Game extends Canvas implements Runnable {
         }
         
         screen.clear();
-        double xScroll = player.getX() - screen.width / 2;
-        double yScroll = player.getY() - screen.height / 2;
-        level.render((int)xScroll, (int)yScroll, screen);
-        //font.render(-5, 120, "Welcum to a new\nadventure.", screen);
-        
-        // Copy the pixels we have in Screen.java to the pixels array here/*
-        for (int i = 0; i < pixels.length; i++) {
-            pixels[i] = screen.pixels[i];
-        }
-
         Graphics g = bs.getDrawGraphics();
-        // Next comes all the graphics that should be displayed
-        g.drawImage(image, 0, 0, width * scale, height * scale, null);
-        uiManager.render(g);
         
-        /* g.fillRect(Mouse.getX() - 32, Mouse.getY() - 32, 64, 64);
-        g.setColor(Color.WHITE);
-        g.setFont(new Font("Verdana",0,50));
-        g.drawString("Coord: " + Mouse.mouseX + " " + Mouse.mouseY, 80, 80);
-        g.drawString("solid: " + level.getTile(29, 45).solid(), 80, 80);
-        */
-        // Dispose of all the graphics that aren't gonna be used
-        g.dispose();
-
+        if(gameState == STATE.Game){
+	        double xScroll = player.getX() - screen.width / 2;
+	        double yScroll = player.getY() - screen.height / 2;
+	        level.render((int)xScroll, (int)yScroll, screen);
+	        //font.render(-5, 120, "Welcum to a new\nadventure.", screen);
+	        
+	        // Copy the pixels we have in Screen.java to the pixels array here/*
+	        for (int i = 0; i < pixels.length; i++) {
+	            pixels[i] = screen.pixels[i];
+	        }
+	     // Next comes all the graphics that should be displayed
+	        g.drawImage(image, 0, 0, width * scale, height * scale, null);
+	        uiManager.render(g);
+        } else if(gameState == STATE.Menu){
+        	g.drawImage(image, 0, 0, width * scale + 180, height * scale, null);
+        	menu.render(g);
+//        	g.setColor(Color.white);
+//        	g.drawString("Menu", 100, 100);
+        }
+	
+	 
+	        
+	        /* g.fillRect(Mouse.getX() - 32, Mouse.getY() - 32, 64, 64);
+	        g.setColor(Color.WHITE);
+	        g.setFont(new Font("Verdana",0,50));
+	        g.drawString("Coord: " + Mouse.mouseX + " " + Mouse.mouseY, 80, 80);
+	        g.drawString("solid: " + level.getTile(29, 45).solid(), 80, 80);
+	        */
+	        // Dispose of all the graphics that aren't gonna be used
+	        g.dispose();
         // Buffer swapping or "blitting", shows the next buffer visible
         bs.show();
     }
