@@ -38,6 +38,12 @@ public class UIButton extends UIComponent {
 	public UIButton(Vector2i position, BufferedImage image, UIActionListener actionListener) {
 		super(position, new Vector2i(image.getWidth(), image.getHeight()));
 		this.actionListener = actionListener;
+		Vector2i lp = new Vector2i(position);
+		lp.x += 4;
+		lp.y += size.y - 2;
+		label = new UILabel(lp, "");
+		label.active = false;
+		label.setColor(0x444444);
 		setImage(image);
 		init();
 	}
@@ -141,10 +147,10 @@ public class UIButton extends UIComponent {
 		} else {
 			g.setColor(color);
 			g.fillRect(x, y, size.x, size.y);
-
-			if (label != null)
-				label.render(g);
 		}
+		
+		if (label != null)
+			label.render(g);
 	}
 
 }

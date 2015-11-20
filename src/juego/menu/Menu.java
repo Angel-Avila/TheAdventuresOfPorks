@@ -1,5 +1,7 @@
 package juego.menu;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -23,57 +25,51 @@ public class Menu {
 	private UIButton startGame;
 	private UIButton help;
 	private UIButton exit;
+	private boolean renderHelp = false;
 	private UIButtonListener buttonListener;
-	private BufferedImage startGameButtonImg;
-	private BufferedImage helpButtonImg;
-	private BufferedImage exitButtonImg;
-	private Image background;
+	private BufferedImage buttonImg = null;
+	private Image background = null;
+	private Image background_clouds = null;
+	private double background_clouds_x = 0;
+	private Font bitMadness;
 
 	public Menu() {
-		background = null;
-		startGameButtonImg = null;
-		helpButtonImg = null;
-		exitButtonImg = null;
 
+		bitMadness = new Font("8-Bit Madness", Font.PLAIN, 52);
+		
 		// We get our images
 		try {
 			background = ImageIO.read(getClass().getResource("/res/textures/background.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+		
 		try {
-			startGameButtonImg = ImageIO.read(getClass().getResource("/res/textures/pig_icon.png"));
+			background_clouds = ImageIO.read(getClass().getResource("/res/textures/background_clouds.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 		try {
-			helpButtonImg = ImageIO.read(getClass().getResource("/res/textures/pig_icon.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		try {
-			exitButtonImg = ImageIO.read(getClass().getResource("/res/textures/pig_icon.png"));
+			buttonImg = ImageIO.read(getClass().getResource("/res/textures/menu_button.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 		// We declare our buttons and override the UIActionListener
-		startGame = new UIButton(new Vector2i(100, 100), startGameButtonImg, new UIActionListener() {
+		startGame = new UIButton(new Vector2i(50, 200), buttonImg, new UIActionListener() {
 			public void perform() {
 				Game.setGameState(STATE.Game);
 			}
 		});
 
-		help = new UIButton(new Vector2i(100, 200), helpButtonImg, new UIActionListener() {
+		help = new UIButton(new Vector2i(50, 300), buttonImg, new UIActionListener() {
 			public void perform() {
-
+				renderHelp = !renderHelp;
 			}
 		});
 
-		exit = new UIButton(new Vector2i(100, 300), exitButtonImg, new UIActionListener() {
+		exit = new UIButton(new Vector2i(50, 400), buttonImg, new UIActionListener() {
 			public void perform() {
 				System.exit(0);
 			}
@@ -82,46 +78,45 @@ public class Menu {
 		// We override the buttonListener
 		buttonListener = new UIButtonListener() {
 			public void entered(UIButton button) {
-				if (button == startGame)
-					button.setImage(ImageUtils.changeBrightness(startGameButtonImg, 80));
-				else if(button == help)
-					button.setImage(ImageUtils.changeBrightness(helpButtonImg, 80));
-				else if(button == exit)
-					button.setImage(ImageUtils.changeBrightness(exitButtonImg, 80));
+				button.setImage(ImageUtils.changeBrightness(buttonImg, 50));
 			}
 
 			public void exited(UIButton button) {
-				if (button == startGame)
-					button.setImage(startGameButtonImg);
-				else if(button == help)
-					button.setImage(helpButtonImg);
-				else if(button == exit)
-					button.setImage(exitButtonImg);
+				button.setImage(buttonImg);
 			}
 
 			public void pressed(UIButton button) {
-				if (button == startGame)
-					button.setImage(ImageUtils.changeBrightness(startGameButtonImg, -20));
-				else if(button == help)
-					button.setImage(ImageUtils.changeBrightness(helpButtonImg, -20));
-				else if(button == exit)
-					button.setImage(ImageUtils.changeBrightness(exitButtonImg, -20));
+				button.setImage(ImageUtils.changeBrightness(buttonImg, -20));
 			}
 
 			public void released(UIButton button) {
-				if (button == startGame)
-					button.setImage(ImageUtils.changeBrightness(startGameButtonImg, 80));
-				else if(button == help)
-					button.setImage(ImageUtils.changeBrightness(helpButtonImg, 80));
-				else if(button == exit)
-					button.setImage(ImageUtils.changeBrightness(exitButtonImg, 80));
+				button.setImage(ImageUtils.changeBrightness(buttonImg, 50));
 			}
 		};
-		
+
 		// We set the overrided buttonListener as the new listener
 		startGame.setButtonListener(buttonListener);
 		help.setButtonListener(buttonListener);
 		exit.setButtonListener(buttonListener);
+
+		// We set the labels for our buttons
+		// startGame label -----------------
+		startGame.setText("Start");
+		startGame.label.setFont(bitMadness);
+		startGame.label.setColor(0xffffff);
+		startGame.label.position = new Vector2i(120, 236);
+
+		// help label ----------------------
+		help.setText("Help");
+		help.label.setFont(bitMadness);
+		help.label.setColor(0xffffff);
+		help.label.position = new Vector2i(120, 336);
+
+		// exit label ----------------------
+		exit.setText("Exit");
+		exit.label.setFont(bitMadness);
+		exit.label.setColor(0xffffff);
+		exit.label.position = new Vector2i(120, 436);
 
 		// We add the buttons to our button arraylist
 		buttons.add(startGame);
@@ -130,15 +125,35 @@ public class Menu {
 	}
 
 	public void update() {
+		// Movement of the clouds in the background
+		background_clouds_x-=.5;
+		// So it loops again when it has already passed through all our screen (width = 900)
+		if(background_clouds_x == -900) 
+			background_clouds_x = 0;
+		
 		for (UIButton button : buttons)
 			button.update();
 	}
 
 	public void render(Graphics g) {
 		g.drawImage(background, 0, 0, null);
+		// The cloud image gets rendered twice so the black parts one leaves behind are covered by the other one
+		g.drawImage(background_clouds, (int)background_clouds_x, 259, null);
+		g.drawImage(background_clouds, 900 + (int)background_clouds_x, 259, null);
 
 		for (UIButton button : buttons)
 			button.render(g);
+		
+		if(renderHelp){
+			g.setFont(bitMadness);
+			g.setColor(new Color(.28f, .0f, 1f, .15f));
+			g.fillRect(350, 250, 450, 120);
+			g.setColor(Color.WHITE);
+			g.drawRect(350, 250, 450, 120);
+			g.drawString("WASD/Arrows: Move", 355, 280);
+			g.drawString("Left click: Shoot", 355, 320);
+			g.drawString("Spacebar: Sp Ability", 355, 360);
+		}
 	}
 
 }

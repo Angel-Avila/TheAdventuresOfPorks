@@ -148,7 +148,7 @@ public class Player extends Mob {
 			// and we override the perform() action to specify what
 			// the button does
 			public void perform() {
-				System.out.println("Pressed!");
+				System.out.println("Pig Pressed!");
 			}
 		});
 		

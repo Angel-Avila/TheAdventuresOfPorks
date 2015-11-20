@@ -19,6 +19,7 @@ public class ImageUtils {
 		
 		int offset = 0;
 		for(int y = 0; y < original.getHeight(); y++){
+			
 			for(int x = 0; x < original.getWidth(); x++){
 				
 				int a = Byte.toUnsignedInt(pixels[offset++]);
@@ -29,6 +30,7 @@ public class ImageUtils {
 				r = clamp(r + amount, 0, 255);
 				g = clamp(g + amount, 0, 255);
 				b = clamp(b + amount, 0, 255);
+				
 				
 				resultPixels[x + y * original.getWidth()] = a << 24 | r << 16 | g << 8 | b;
 			}
