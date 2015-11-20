@@ -37,6 +37,7 @@ public class Sound {
 		sounds.add(JOHNCENA);
 		sounds.add(spawnMusic);
 		sounds.add(encounter);
+		sounds.add(vsRed);
 	}
 	
 	public Clip clip;
@@ -61,6 +62,7 @@ public class Sound {
 	}
 	
 	public void loop() {
+		stopAll();
 	    try {
 	        if (clip != null) {
                 clip.loop(100000000);

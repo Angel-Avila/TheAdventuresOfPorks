@@ -14,6 +14,7 @@ import java.awt.image.DataBufferInt;
 import javax.swing.JFrame;
 
 import juego.entity.mob.Player;
+import juego.graphics.GameOverScreen;
 import juego.graphics.Screen;
 import juego.graphics.ui.UIManager;
 import juego.input.Keyboard;
@@ -21,6 +22,7 @@ import juego.input.Mouse;
 import juego.level.Level;
 import juego.level.TileCoordinate;
 import juego.menu.Menu;
+import juego.sound.Sound;
 
 public class Game extends Canvas implements Runnable {
 
@@ -40,6 +42,7 @@ public class Game extends Canvas implements Runnable {
     private boolean running = false;
     private Screen screen;
     private Menu menu;
+    private GameOverScreen gameOverScreen;
     //private Font font;
     
     private static UIManager uiManager;
@@ -58,10 +61,11 @@ public class Game extends Canvas implements Runnable {
 
     public enum STATE {
     	Menu, 
-    	Game
+    	Game,
+    	End
     };
     
-    public static STATE gameState = STATE.Menu;
+    public static STATE gameState = STATE.End;
     
     public Game() {
         Dimension size = new Dimension(width * scale + 60 * 3, height * scale);
@@ -71,21 +75,22 @@ public class Game extends Canvas implements Runnable {
         frame = new JFrame();
         key = new Keyboard();
         mouse = new Mouse();
-        menu = new Menu();
-        level = Level.spawn;
+        menu = new Menu(this);
+        gameOverScreen = new GameOverScreen();
         //font = new Font();
         uiManager = new UIManager();
-        
-        player = new Player("Ragnarök", playerSpawn_spawnLevel.getX(), playerSpawn_spawnLevel.getY() + 6, key);
-        
-        level.add(player);
-        level.addLevelMobs();
-        
-        //Sound.spawnMusic.loop();
         
         addKeyListener(key);
         addMouseListener(mouse);
         addMouseMotionListener(mouse);
+    }
+    
+    public void init(){
+    	level = Level.spawn;
+    	player = new Player("Ragnarök", playerSpawn_spawnLevel.getX(), playerSpawn_spawnLevel.getY() + 6, key);
+        level.add(player);
+        level.addLevelMobs();
+        Sound.spawnMusic.loop();
     }
     
     public static int getWindowWidth(){
@@ -98,6 +103,10 @@ public class Game extends Canvas implements Runnable {
 
     public static UIManager getUIManager(){
     	return uiManager;
+    }
+    
+    public static STATE getGameState(){
+    	return gameState;
     }
     
     public static void setGameState(STATE state){
@@ -163,6 +172,9 @@ public class Game extends Canvas implements Runnable {
 	        uiManager.update();
         } else if(gameState == STATE.Menu){
         	menu.update();
+        } else if(gameState == STATE.End){
+        	gameOverScreen.update();
+//        	level.removeAll();
         }
         /*
         if(key.up){
@@ -203,6 +215,9 @@ public class Game extends Canvas implements Runnable {
         	menu.render(g);
 //        	g.setColor(Color.white);
 //        	g.drawString("Menu", 100, 100);
+        } else if(gameState == STATE.End) {
+        	g.drawImage(image, 0, 0, width * scale + 180, height * scale, null);
+        	gameOverScreen.render(g);
         }
 	
 	 

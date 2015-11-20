@@ -31,7 +31,7 @@ public class Player extends Mob {
 	private int anim = 0;
 
 	private BufferedImage image = null;
-	
+
 	private double actualMana, maxMana, manaRegen;
 	private final int COOLDOWN = 60;
 	private int cooldown = 60;
@@ -68,10 +68,15 @@ public class Player extends Mob {
 		actualMana = maxMana = 120;
 		manaRegen = 0.12;
 
-		// ================================ HERE WE START ALL THE UI STUFF ================================
+		// ================================ HERE WE START ALL THE UI STUFF
+		// ================================
 		ui = Game.getUIManager();
 
-		/* UI PANEL -------------------------------------------------------------------------------------*/
+		/*
+		 * UI PANEL
+		 * ---------------------------------------------------------------------
+		 * ----------------
+		 */
 		// This creates the gray panel on the right side of the screen
 		UIPanel panel = (UIPanel) new UIPanel(new Vector2i(240 * 3, 0), new Vector2i(60 * 3, 168 * 3))
 				.setColor(0x4f4f4f);
@@ -137,10 +142,10 @@ public class Player extends Mob {
 		 * THE BUTTON WITH AN IMAGE
 		 * ---------------------------------------------------------------------
 		 */
-		
-		try{
+
+		try {
 			image = ImageIO.read(getClass().getResource("/res/textures/pig_icon.png"));
-		} catch (IOException e){
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
@@ -151,26 +156,30 @@ public class Player extends Mob {
 				System.out.println("Pig Pressed!");
 			}
 		});
-		
-		// We override the buttonListener normal actions to make the image brighter if hovered or make it darker if 
+
+		// We override the buttonListener normal actions to make the image
+		// brighter if hovered or make it darker if
 		// pressed.
-		imageButton.setButtonListener(new UIButtonListener(){
-			public void entered(UIButton button){
+		imageButton.setButtonListener(new UIButtonListener() {
+			public void entered(UIButton button) {
 				button.setImage(ImageUtils.changeBrightness(image, 80));
 			}
-			public void exited(UIButton button){
+
+			public void exited(UIButton button) {
 				button.setImage(image);
 			}
-			public void pressed(UIButton button){
+
+			public void pressed(UIButton button) {
 				button.setImage(ImageUtils.changeBrightness(image, -20));
 			}
-			public void released(UIButton button){
+
+			public void released(UIButton button) {
 				button.setImage(ImageUtils.changeBrightness(image, 80));
 			}
 		});
-		
+
 		panel.addComponent(imageButton);
-	
+
 	}
 
 	public void update() {/*
@@ -224,6 +233,10 @@ public class Player extends Mob {
 			fireRate--;
 
 		updateShooting();
+		
+		if (actualHealth <= 0) {
+			Game.setGameState(Game.STATE.End);
+		}
 	}
 
 	public void setName(String name) {
@@ -236,9 +249,9 @@ public class Player extends Mob {
 
 	private void updateShooting() {
 		// If the player is in the UIPanel, don't shoot
-		if(Mouse.getX() >= 720)
+		if (Mouse.getX() >= 720)
 			return;
-		
+
 		// If the player is clicking the left click and the fireRate is <= 0
 		if (Mouse.getB() == 1 && fireRate <= 0) {
 			// Gets the x and y coordinates from where the user wants to shoot

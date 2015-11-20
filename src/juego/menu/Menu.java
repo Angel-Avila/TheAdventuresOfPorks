@@ -33,8 +33,7 @@ public class Menu {
 	private double background_clouds_x = 0;
 	private Font bitMadness;
 
-	public Menu() {
-
+	public Menu(Game game) {
 		bitMadness = new Font("8-Bit Madness", Font.PLAIN, 52);
 		
 		// We get our images
@@ -60,6 +59,7 @@ public class Menu {
 		startGame = new UIButton(new Vector2i(50, 200), buttonImg, new UIActionListener() {
 			public void perform() {
 				Game.setGameState(STATE.Game);
+				game.init();
 			}
 		});
 
@@ -110,13 +110,13 @@ public class Menu {
 		help.setText("Help");
 		help.label.setFont(bitMadness);
 		help.label.setColor(0xffffff);
-		help.label.position = new Vector2i(120, 336);
+		help.label.position = new Vector2i(125, 336);
 
 		// exit label ----------------------
 		exit.setText("Exit");
 		exit.label.setFont(bitMadness);
 		exit.label.setColor(0xffffff);
-		exit.label.position = new Vector2i(120, 436);
+		exit.label.position = new Vector2i(130, 436);
 
 		// We add the buttons to our button arraylist
 		buttons.add(startGame);
