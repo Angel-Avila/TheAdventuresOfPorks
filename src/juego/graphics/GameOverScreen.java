@@ -88,8 +88,8 @@ public class GameOverScreen {
 	}
 	
 	public void render(Graphics g){
-		//g.setColor(Color.BLACK);
-		//g.fillRect(0, 0, 900, 504);
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, 900, 504);
 		g.setColor(Color.WHITE);
 		g.setFont(bitMadness.deriveFont(85f));
 		g.drawString("YOU AND YOUR FRIENDS", 70, 70);

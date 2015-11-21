@@ -128,6 +128,12 @@ public class Level {
 			teleporting = false;
 		}
 
+		for (int i = 0; i < entities.size(); i++) {
+			if(entities.get(i).position.equals(player.position))
+				player.hitEntity(entities.get(i).damage);
+			
+		}
+		
 		remove();
 	}
 

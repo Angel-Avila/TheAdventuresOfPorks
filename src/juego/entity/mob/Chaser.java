@@ -4,6 +4,7 @@ import java.util.List;
 
 import juego.graphics.Screen;
 import juego.graphics.Sprite;
+import juego.util.Vector2i;
 
 public class Chaser extends Mob{
 
@@ -14,6 +15,8 @@ public class Chaser extends Mob{
 	public Chaser(int x, int y){
 		this.x = x << 4;
 		this.y = y << 4;
+		damage = 1.5;
+		position = new Vector2i(x, y);
 		this.actualHealth = this.maxHealth = 140;
 		sprite = Sprite.zombie_pig_forward;
 	}
@@ -66,6 +69,7 @@ public class Chaser extends Mob{
 			remove();
 		
 		move();
+		position.set(getTileX(), getTileY());
 		if (anim < 7500)
 			anim++;
 		else

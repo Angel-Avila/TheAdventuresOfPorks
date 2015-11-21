@@ -2,6 +2,7 @@ package juego.entity.mob;
 
 import juego.graphics.Screen;
 import juego.graphics.Sprite;
+import juego.util.Vector2i;
 
 public class Dummy extends Mob {
 
@@ -12,6 +13,8 @@ public class Dummy extends Mob {
 	public Dummy(int x, int y) {
 		this.x = x << 4;
 		this.y = y << 4;
+		damage = 0.05;
+		position = new Vector2i(x, y);
 		this.actualHealth = this.maxHealth = 100;
 		sprite = Sprite.zombie_pig_forward;
 	}
@@ -35,7 +38,7 @@ public class Dummy extends Mob {
 		}
 		
 		if (xa != 0 || ya != 0) {
-			move(xa, ya);
+			//move(xa, ya);
 			walking = true;
 		} else {
 			walking = false;
@@ -84,6 +87,7 @@ public class Dummy extends Mob {
 
 		}
 		
+		position.set(getTileX(), getTileY());
 	}
 
 	public void render(Screen screen) {

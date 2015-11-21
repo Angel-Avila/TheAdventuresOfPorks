@@ -45,6 +45,8 @@ public class Game extends Canvas implements Runnable {
     private GameOverScreen gameOverScreen;
     //private Font font;
     
+    public static boolean paused = false;
+    
     private static UIManager uiManager;
     
     //private TileCoordinate spawn_teleporter = new TileCoordinate(28, 24);
@@ -65,7 +67,7 @@ public class Game extends Canvas implements Runnable {
     	End
     };
     
-    public static STATE gameState = STATE.End;
+    public static STATE gameState = STATE.Menu;
     
     public Game() {
         Dimension size = new Dimension(width * scale + 60 * 3, height * scale);
@@ -168,13 +170,15 @@ public class Game extends Canvas implements Runnable {
     public void update() {
         key.update();
         if(gameState == STATE.Game){
-	        level.update(this, player);
-	        uiManager.update();
+        	if(!paused){
+        		level.update(this, player);
+	        	uiManager.update();
+        	}
         } else if(gameState == STATE.Menu){
         	menu.update();
         } else if(gameState == STATE.End){
         	gameOverScreen.update();
-//        	level.removeAll();
+        	level.removeAll();
         }
         /*
         if(key.up){

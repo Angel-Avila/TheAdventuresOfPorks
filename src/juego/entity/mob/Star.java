@@ -18,6 +18,8 @@ public class Star extends Mob {
 	public Star(int x, int y){
 		this.x = x << 4;
 		this.y = y << 4;
+		position = new Vector2i(x, y);
+		damage = .5;
 		this.actualHealth = this.maxHealth = 200;
 		sprite = Sprite.zombie_pig_forward;
 	}
@@ -71,7 +73,7 @@ public class Star extends Mob {
 			remove();
 		
 		move();
-		
+		position.set(getTileX(), getTileY());
 		if (anim < 7500)
 			anim++;
 		else

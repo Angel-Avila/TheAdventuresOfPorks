@@ -145,7 +145,7 @@ public class Screen {
 		}
 	}
     
-    @Deprecated // We really just use it for the player now
+    @Deprecated 
 	public void renderMob(int xp, int yp, Sprite sprite){
         xp -= xOffset;
         yp -= yOffset;

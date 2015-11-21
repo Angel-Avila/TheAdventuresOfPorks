@@ -12,7 +12,7 @@ public abstract class Projectile extends Entity{
 	protected double nx, ny;
 	protected double distance;
 	protected double speed, range;
-	public int damage;
+	public double damage;
 	
 	//private final Random random = new Random();
 	

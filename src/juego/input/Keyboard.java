@@ -3,10 +3,12 @@ package juego.input;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import juego.Game;
+
 public class Keyboard implements KeyListener{
 
     private boolean[] keys =  new boolean[300];
-    public boolean up, down, left, right, spA;
+    public boolean up, down, left, right, pause, spA;
     
     public void update(){
         // True if the desired key is pressed
@@ -14,11 +16,21 @@ public class Keyboard implements KeyListener{
         down  = keys[KeyEvent.VK_DOWN]  || keys[KeyEvent.VK_S];
         left  = keys[KeyEvent.VK_LEFT]  || keys[KeyEvent.VK_A];
         right = keys[KeyEvent.VK_RIGHT] || keys[KeyEvent.VK_D];
+        pause = keys[KeyEvent.VK_P];
         spA   = keys[KeyEvent.VK_SPACE];
     }
     
     public void keyPressed(KeyEvent e) {
         keys[e.getKeyCode()] = true;
+        
+        if(e.getKeyCode() == KeyEvent.VK_P){
+        	if(Game.STATE.Game == Game.getGameState()){
+	        	if(Game.paused)
+	        		Game.paused = false;
+				else
+					Game.paused = true;
+        	}
+        }
     }
 
     public void keyReleased(KeyEvent e) {

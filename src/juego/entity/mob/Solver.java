@@ -21,6 +21,8 @@ public class Solver extends Mob{
 		this.x = x << 4;
 		this.y = y << 4;
 		this.goal = goal;
+		damage = .01;
+		position = new Vector2i(x, y);
 		this.actualHealth = this.maxHealth = 40;
 		sprite = Sprite.zombie_pig_forward;
 	}
@@ -84,6 +86,7 @@ public class Solver extends Mob{
 			remove();
 		
 		move();
+		position.set(getTileX(), getTileY());
 		
 		if (anim < 7500)
 			anim++;

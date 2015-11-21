@@ -9,7 +9,7 @@ public abstract class Mob extends Entity{
     
     protected boolean walking = false;
     protected int hitTimer = 0;
-    protected int actualHealth, maxHealth;
+    protected double actualHealth, maxHealth;
     
     protected enum Direction{
     	UP, DOWN, LEFT, RIGHT
@@ -64,7 +64,7 @@ public abstract class Mob extends Entity{
     	return 1;
     }
     
-    public void hitEntity(int damage){
+    public void hitEntity(double damage){
     	this.actualHealth -= damage;
     	this.hit = true;
     	hitTimer = 0;

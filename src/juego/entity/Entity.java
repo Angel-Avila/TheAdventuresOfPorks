@@ -5,6 +5,7 @@ import java.util.Random;
 import juego.graphics.Screen;
 import juego.graphics.Sprite;
 import juego.level.Level;
+import juego.util.Vector2i;
 
 public class Entity {
  
@@ -14,6 +15,8 @@ public class Entity {
     protected boolean hit = false;
     public Level level;
     protected final Random random = new Random();
+    public Vector2i position;
+    public double damage;
     
     public Entity(){
     	
@@ -22,6 +25,8 @@ public class Entity {
     public Entity(int x, int y, Sprite sprite){
     	this.x = x;
     	this.y = y ;
+    	position = new Vector2i(x, y);
+    	damage = 0;
     	this.sprite = sprite;
     }
     
@@ -69,7 +74,7 @@ public class Entity {
         return removed;
     }
     
-    public void hitEntity(int damage){
+    public void hitEntity(double damage){
 
     }
     

@@ -27,15 +27,17 @@ public class Player extends Mob {
 
 	private String name;
 	private Keyboard input;
-	private Sprite sprite;
 	private int anim = 0;
 
 	private BufferedImage image = null;
 
 	private double actualMana, maxMana, manaRegen;
+	private double healthRegen;
 	private final int COOLDOWN = 60;
 	private int cooldown = 60;
 
+	private int sinceHit = 90;
+	
 	private Vector2i usedAt;
 
 	public Vector2i position;
@@ -63,20 +65,16 @@ public class Player extends Mob {
 		sprite = Sprite.player_forward;
 		fireRate = WizardProjectile.FIRE_RATE;
 
-		/* FOR NOW SINCE HE'S A WIZARD */
+		/* ----- STATS FOR NOW SINCE HE'S A WIZARD ---- */
 		actualHealth = maxHealth = 60;
 		actualMana = maxMana = 120;
 		manaRegen = 0.12;
-
-		// ================================ HERE WE START ALL THE UI STUFF
-		// ================================
+		healthRegen = .015;
+		
+		// ================================ HERE WE START ALL THE UI STUFF ================================
 		ui = Game.getUIManager();
 
-		/*
-		 * UI PANEL
-		 * ---------------------------------------------------------------------
-		 * ----------------
-		 */
+		/* UI PANEL------------------------------------------------------------------------------------- */
 		// This creates the gray panel on the right side of the screen
 		UIPanel panel = (UIPanel) new UIPanel(new Vector2i(240 * 3, 0), new Vector2i(60 * 3, 168 * 3))
 				.setColor(0x4f4f4f);
@@ -86,10 +84,7 @@ public class Player extends Mob {
 		panel.addComponent(new UILabel(new Vector2i(40, 180), name).setFont(new Font("Helvetica", Font.BOLD, 20))
 				.setColor(0xbbbbbb));
 
-		/*
-		 * HEALTH AND MANA PROGRESS BARS
-		 * ----------------------------------------------------------------
-		 */
+		/* HEALTH AND MANA PROGRESS BARS --------------------------------------------------------------- */
 		// We create our healthbar, set its colors and add it to our panel
 		uiHealthBar = new UIProgressBar(new Vector2i(10, 190), new Vector2i(160, 15));
 		uiHealthBar.setColor(0x6a6a6a); // Dark gray
@@ -112,10 +107,7 @@ public class Player extends Mob {
 		ManaLabel.setFont(new Font("Verdana", Font.BOLD, 14));
 		panel.addComponent(ManaLabel);
 
-		/*
-		 * THE BUTTON
-		 * ---------------------------------------------------------------------
-		 */
+		/* THE BUTTON------------------------------------------------------------------------------------- */
 		// We initialize our button
 		button = new UIButton(new Vector2i(10, 240), new Vector2i(25, 15), new UIActionListener() {
 			// and we override the perform() action to specify what the button
@@ -138,10 +130,7 @@ public class Player extends Mob {
 		button.setText("Hi");
 		panel.addComponent(button);
 
-		/*
-		 * THE BUTTON WITH AN IMAGE
-		 * ---------------------------------------------------------------------
-		 */
+		/* THE BUTTON WITH AN IMAGE---------------------------------------------------------------------------- */
 
 		try {
 			image = ImageIO.read(getClass().getResource("/res/textures/pig_icon.png"));
@@ -187,6 +176,18 @@ public class Player extends Mob {
 							 * 6) / 16); System.out.println(xi + ", " + yi +
 							 * ", " + level.getTile(xi, yi).walkable());
 							 */
+		checkHit();
+		
+		if(hit) sinceHit = 0;
+		if(!hit && sinceHit < 90) sinceHit++;
+		
+		if(sinceHit == 90 && actualHealth < maxHealth){
+			if(maxHealth - actualHealth < healthRegen)
+				actualHealth = maxHealth;
+			else
+				actualHealth += healthRegen;
+		}
+		
 		if (anim < 7500)
 			anim++;
 		else
@@ -220,7 +221,6 @@ public class Player extends Mob {
 		} else
 			walking = false;
 
-		// act / max = x / 1
 		position.set(getTileX(), getTileY());
 		uiHealthBar.setProgress((actualHealth * 1.0) / maxHealth);
 		uiManaBar.setProgress((actualMana * 1.0) / maxMana);
@@ -304,7 +304,6 @@ public class Player extends Mob {
 	// The anim % 20 > 10 is just an animation to alternate between the 2
 	// walking sprites, one with the right leg
 	// and one with the left leg
-	@SuppressWarnings("deprecation")
 	public void render(Screen screen) {
 		if (dir == Direction.UP) {
 			sprite = Sprite.player_backward;
@@ -355,6 +354,6 @@ public class Player extends Mob {
 		}
 
 		// Renders the player with a slight offset
-		screen.renderMob((int) (x), (int) (y - 19), sprite);
+		screen.renderMob((int) (x), (int) (y - 19), this);
 	}
 }
