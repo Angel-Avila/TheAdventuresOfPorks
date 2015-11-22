@@ -5,6 +5,7 @@ package juego;
  * http://www.spriters-resource.com/game_boy_advance/pokeem/
  */
 import java.awt.Canvas;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
@@ -23,6 +24,7 @@ import juego.level.TileCoordinate;
 import juego.menus.GameOverScreen;
 import juego.menus.Menu;
 import juego.menus.PauseMenu;
+import juego.sound.Sound;
 
 public class Game extends Canvas implements Runnable {
 
@@ -36,7 +38,7 @@ public class Game extends Canvas implements Runnable {
 
     private Thread thread;
     private JFrame frame;
-    private Keyboard key;
+    public Keyboard key;
     private Mouse mouse;
     
     public Level level;
@@ -91,12 +93,15 @@ public class Game extends Canvas implements Runnable {
         addMouseMotionListener(mouse);
     }
     
-    public void init(){
+    public void init(String name){
     	level = Level.spawn;
-    	player = new Player("Ragnarök", playerSpawn_spawnLevel.getX(), playerSpawn_spawnLevel.getY() + 6, key);
+    	player = new Player(name, playerSpawn_spawnLevel.getX(), playerSpawn_spawnLevel.getY() + 6, key);
         level.add(player);
         level.addLevelMobs();
-        //Sound.spawnMusic.loop();
+        if(name.toUpperCase().equals("JOHN CENA"))
+        	Sound.JOHNCENA.loop();
+        else
+        	Sound.spawnMusic.loop();
     }
     
     public static int getWindowWidth(){
@@ -186,13 +191,6 @@ public class Game extends Canvas implements Runnable {
         	gameOverScreen.update();
         	level.removeAll();
         }
-        /*
-        if(key.up){
-        	if(Sound.spawnMusic.clip.isActive())
-        		Sound.JOHNCENA.quickPlay(Sound.spawnMusic);
-        	if(!Sound.JOHNCENA.clip.isActive())
-        		Sound.spawnMusic.loop();
-        }*/
     }
      
      public void render() {
@@ -217,11 +215,16 @@ public class Game extends Canvas implements Runnable {
 	        for (int i = 0; i < pixels.length; i++) {
 	            pixels[i] = screen.pixels[i];
 	        }
-	     // Next comes all the graphics that should be displayed
+	        // Next comes all the graphics that should be displayed
 	        g.drawImage(image, 0, 0, width * scale, height * scale, null);
+	        // We render all the uicomponents
 	        uiManager.render(g);
+	        // If it's paused, we render over the game
 	        if(paused)
 	        	pauseMenu.render(g);
+	        
+	        g.setColor(Color.WHITE);
+	        g.drawRect(730, 10, 160, 160);
         } else if(gameState == STATE.Menu){
         	g.drawImage(image, 0, 0, width * scale + 180, height * scale, null);
         	menu.render(g);

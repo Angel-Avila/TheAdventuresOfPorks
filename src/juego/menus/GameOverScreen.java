@@ -14,6 +14,7 @@ import juego.Game.STATE;
 import juego.graphics.ui.UIActionListener;
 import juego.graphics.ui.UIButton;
 import juego.graphics.ui.UIButtonListener;
+import juego.graphics.ui.UITextBox;
 import juego.util.ImageUtils;
 import juego.util.Vector2i;
 
@@ -40,6 +41,7 @@ public class GameOverScreen {
 		// We create our buttons and set the performed action
 		returnToMenuB = new UIButton(new Vector2i(323, 300), buttonImg, new UIActionListener() {
 			public void perform() {
+				UITextBox.name = "";
 				Game.setGameState(STATE.Menu);
 			}
 		});

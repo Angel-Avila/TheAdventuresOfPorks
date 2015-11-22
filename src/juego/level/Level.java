@@ -230,6 +230,10 @@ public class Level {
 			screen.renderSprite((int) getClientPlayer().getX() - 2, (int) getClientPlayer().getY() - 23,
 					Sprite.teleporter_particles, true);
 	}
+	
+	public void renderMiniMap(int x, int y, int width, int height, Screen screen){
+		
+	}
 
 	// Adds entities to our arraylists
 	public void add(Entity e) {

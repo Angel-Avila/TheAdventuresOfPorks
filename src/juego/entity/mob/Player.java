@@ -81,12 +81,12 @@ public class Player extends Mob {
 		// And this adds it to our UI
 		ui.addPanel(panel);
 		// Then we add a label with our name to our panel
-		panel.addComponent(new UILabel(new Vector2i(40, 180), name).setFont(new Font("Helvetica", Font.BOLD, 20))
+		panel.addComponent(new UILabel(new Vector2i(28, 200), name).setFont(new Font("Helvetica", Font.BOLD, 20))
 				.setColor(0xbbbbbb));
 
 		/* HEALTH AND MANA PROGRESS BARS --------------------------------------------------------------- */
 		// We create our healthbar, set its colors and add it to our panel
-		uiHealthBar = new UIProgressBar(new Vector2i(10, 190), new Vector2i(160, 15));
+		uiHealthBar = new UIProgressBar(new Vector2i(10, 210), new Vector2i(160, 15));
 		uiHealthBar.setColor(0x6a6a6a); // Dark gray
 		uiHealthBar.setForegroundColor(0xee3030); // Red
 		panel.addComponent(uiHealthBar);
@@ -97,7 +97,7 @@ public class Player extends Mob {
 		panel.addComponent(HPLabel);
 
 		// The same thing but for mana
-		uiManaBar = new UIProgressBar(new Vector2i(10, 210), new Vector2i(160, 15));
+		uiManaBar = new UIProgressBar(new Vector2i(10, 230), new Vector2i(160, 15));
 		uiManaBar.setColor(0x6a6a6a); // Dark gray
 		uiManaBar.setForegroundColor(0xff0026FF); // Blue
 		panel.addComponent(uiManaBar);
@@ -109,7 +109,7 @@ public class Player extends Mob {
 
 		/* THE BUTTON------------------------------------------------------------------------------------- */
 		// We initialize our button
-		button = new UIButton(new Vector2i(10, 240), new Vector2i(25, 15), new UIActionListener() {
+		button = new UIButton(new Vector2i(10, 260), new Vector2i(25, 15), new UIActionListener() {
 			// and we override the perform() action to specify what the button
 			// does
 			public void perform() {
@@ -133,12 +133,12 @@ public class Player extends Mob {
 		/* THE BUTTON WITH AN IMAGE---------------------------------------------------------------------------- */
 
 		try {
-			image = ImageIO.read(getClass().getResource("/res/textures/pig_icon.png"));
+			image = ImageIO.read(getClass().getResource("/res/textures/porki_icon.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		UIButton imageButton = new UIButton(new Vector2i(10, 270), image, new UIActionListener() {
+		UIButton imageButton = new UIButton(new Vector2i(6, 182), image, new UIActionListener() {
 			// and we override the perform() action to specify what
 			// the button does
 			public void perform() {
@@ -151,7 +151,7 @@ public class Player extends Mob {
 		// pressed.
 		imageButton.setButtonListener(new UIButtonListener() {
 			public void entered(UIButton button) {
-				button.setImage(ImageUtils.changeBrightness(image, 80));
+				button.setImage(ImageUtils.changeBrightness(image, 120));
 			}
 
 			public void exited(UIButton button) {
@@ -163,7 +163,7 @@ public class Player extends Mob {
 			}
 
 			public void released(UIButton button) {
-				button.setImage(ImageUtils.changeBrightness(image, 80));
+				button.setImage(ImageUtils.changeBrightness(image, 120));
 			}
 		});
 
