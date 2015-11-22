@@ -14,19 +14,20 @@ import java.awt.image.DataBufferInt;
 import javax.swing.JFrame;
 
 import juego.entity.mob.Player;
-import juego.graphics.GameOverScreen;
 import juego.graphics.Screen;
 import juego.graphics.ui.UIManager;
 import juego.input.Keyboard;
 import juego.input.Mouse;
 import juego.level.Level;
 import juego.level.TileCoordinate;
-import juego.menu.Menu;
-import juego.sound.Sound;
+import juego.menus.GameOverScreen;
+import juego.menus.Menu;
+import juego.menus.PauseMenu;
 
 public class Game extends Canvas implements Runnable {
 
     private static final long serialVersionUID = 1L;
+    private boolean running = false;
 
     private static int width = 300 - 60;
     private static int height = (width + 60) / 16 * 9;
@@ -37,11 +38,12 @@ public class Game extends Canvas implements Runnable {
     private JFrame frame;
     private Keyboard key;
     private Mouse mouse;
+    
     public Level level;
     private Player player;
-    private boolean running = false;
     private Screen screen;
     private Menu menu;
+    private PauseMenu pauseMenu;
     private GameOverScreen gameOverScreen;
     //private Font font;
     
@@ -62,7 +64,8 @@ public class Game extends Canvas implements Runnable {
     private int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
 
     public enum STATE {
-    	Menu, 
+    	Menu,
+    	CreateChar,
     	Game,
     	End
     };
@@ -78,6 +81,7 @@ public class Game extends Canvas implements Runnable {
         key = new Keyboard();
         mouse = new Mouse();
         menu = new Menu(this);
+        pauseMenu = new PauseMenu();
         gameOverScreen = new GameOverScreen();
         //font = new Font();
         uiManager = new UIManager();
@@ -92,7 +96,7 @@ public class Game extends Canvas implements Runnable {
     	player = new Player("Ragnarök", playerSpawn_spawnLevel.getX(), playerSpawn_spawnLevel.getY() + 6, key);
         level.add(player);
         level.addLevelMobs();
-        Sound.spawnMusic.loop();
+        //Sound.spawnMusic.loop();
     }
     
     public static int getWindowWidth(){
@@ -174,6 +178,8 @@ public class Game extends Canvas implements Runnable {
         		level.update(this, player);
 	        	uiManager.update();
         	}
+        	else
+        		pauseMenu.update();
         } else if(gameState == STATE.Menu){
         	menu.update();
         } else if(gameState == STATE.End){
@@ -214,6 +220,8 @@ public class Game extends Canvas implements Runnable {
 	     // Next comes all the graphics that should be displayed
 	        g.drawImage(image, 0, 0, width * scale, height * scale, null);
 	        uiManager.render(g);
+	        if(paused)
+	        	pauseMenu.render(g);
         } else if(gameState == STATE.Menu){
         	g.drawImage(image, 0, 0, width * scale + 180, height * scale, null);
         	menu.render(g);

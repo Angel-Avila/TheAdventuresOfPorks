@@ -1,10 +1,11 @@
-package juego.graphics;
+package juego.menus;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
@@ -17,6 +18,8 @@ import juego.util.ImageUtils;
 import juego.util.Vector2i;
 
 public class GameOverScreen {
+	
+	private ArrayList<UIButton> buttons = new ArrayList<>();
 	
 	private UIButton returnToMenuB;
 	private UIButton exitB;
@@ -80,11 +83,15 @@ public class GameOverScreen {
 		exitB.label.setFont(bitMadness);
 		exitB.label.setColor(0xffffff);
 		exitB.label.position = new Vector2i(408, 436);
+		
+		// We add the buttons to our ArrayList
+		buttons.add(returnToMenuB);
+		buttons.add(exitB);
 	}
 	
 	public void update(){
-		returnToMenuB.update();
-		exitB.update();
+		for(UIButton button : buttons)
+			button.update();
 	}
 	
 	public void render(Graphics g){
@@ -96,7 +103,7 @@ public class GameOverScreen {
 		g.drawString("ARE DEAD.", 285, 130);
 		g.drawString("GAME OVER", 270, 250);
 		
-		returnToMenuB.render(g);
-		exitB.render(g);
+		for(UIButton button : buttons)
+			button.render(g);
 	}
 }

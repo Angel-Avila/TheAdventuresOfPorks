@@ -1,4 +1,4 @@
-package juego.menu;
+package juego.menus;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -25,13 +25,17 @@ public class Menu {
 	private UIButton startGame;
 	private UIButton help;
 	private UIButton exit;
-	private boolean renderHelp = false;
 	private UIButtonListener buttonListener;
+	
 	private BufferedImage buttonImg = null;
 	private Image background = null;
 	private Image background_clouds = null;
-	private double background_clouds_x = 0;
+	
 	private Font bitMadness;
+	
+	private boolean renderHelp = false;
+	
+	private double background_clouds_x = 0;
 
 	public Menu(Game game) {
 		bitMadness = new Font("8-Bit Madness", Font.PLAIN, 52);
