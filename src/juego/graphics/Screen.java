@@ -6,11 +6,15 @@ import juego.entity.mob.Mob;
 import juego.entity.mob.Star;
 import juego.entity.projectile.Projectile;
 import juego.level.tile.Tile;
+import juego.level.tile.spawn_level.SpawnGrassTile;
+import juego.level.tile.spawn_level.SpawnWaterTile;
 
 public class Screen {
     
     public int width, height;
+    public int miniMapWidth, miniMapHeight;
     public int[] pixels;
+    public int[] miniMapPixels;
     public final int MAP_SIZE = 64;
     public final int MAP_SIZE_MASK = MAP_SIZE - 1;
     
@@ -30,6 +34,15 @@ public class Screen {
         for(int i = 0; i < MAP_SIZE * MAP_SIZE; i++){
             tiles[i] = random.nextInt(0xffffff);
         }random shit*/
+    }
+    
+    public Screen(int width, int height, int miniMapWidth, int miniMapHeight){
+        this.width = width;
+        this.height = height;
+        this.miniMapWidth = miniMapWidth;
+        this.miniMapHeight = miniMapHeight;
+        pixels = new int[width * height];
+        miniMapPixels = new int[miniMapWidth * miniMapHeight];
     }
     
     public void clear(){
@@ -127,6 +140,17 @@ public class Screen {
             }
         }
     }
+    
+    public void renderTileMiniMap(int xMM, int yMM, Tile tile) {
+    	int color = 0xff0000;
+    	if(tile instanceof SpawnGrassTile)
+    		color = 0x4CFF00;
+    	else if(tile instanceof SpawnWaterTile)
+    		color = 0x4800FF;
+    	
+    	if(xMM >= miniMapWidth || yMM >= miniMapHeight || yMM < 0) return;
+    	miniMapPixels[xMM + yMM * miniMapWidth] = color;
+	}
     
     // Renders our projectile
     public void renderProjectile(int xp, int yp, Projectile p){

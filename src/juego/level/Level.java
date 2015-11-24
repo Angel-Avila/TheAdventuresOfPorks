@@ -72,7 +72,7 @@ public class Level {
 	}
 
 	// Updates all of our ArrayLists and removes them if they should be removed
-	public void update(Game game, Player player) {
+	public void update(Game game, Player player, Screen screen) {
 
 		for (int i = 0; i < entities.size(); i++) {
 			entities.get(i).update();
@@ -97,14 +97,14 @@ public class Level {
 				time++;
 				teleporting = true;
 				if (time % 120 == 0) {
-					changeLevel(labyrinth, game, player);
+					changeLevel(labyrinth, game, player, screen);
 					return;
 				}
 			} else if (player.position.equals(new Vector2i(31, 24))) {
 				time++;
 				teleporting = true;
 				if (time % 120 == 0) {
-					changeLevel(rock, game, player);
+					changeLevel(rock, game, player, screen);
 					return;
 				}
 			} else {
@@ -118,7 +118,7 @@ public class Level {
 			time++;
 			teleporting = true;
 			if (time % 120 == 0) {
-				changeLevel(spawn, game, player);
+				changeLevel(spawn, game, player, screen);
 				return;
 			}
 		}
@@ -129,11 +129,11 @@ public class Level {
 		}
 
 		for (int i = 0; i < entities.size(); i++) {
-			if(entities.get(i).position.equals(player.position))
+			if (entities.get(i).position.equals(player.position))
 				player.hitEntity(entities.get(i).damage);
-			
+
 		}
-		
+
 		remove();
 	}
 
@@ -229,10 +229,52 @@ public class Level {
 		if (teleporting)
 			screen.renderSprite((int) getClientPlayer().getX() - 2, (int) getClientPlayer().getY() - 23,
 					Sprite.teleporter_particles, true);
+
 	}
-	
-	public void renderMiniMap(int x, int y, int width, int height, Screen screen){
+
+	public void renderMiniMap(int xScroll, int yScroll, Screen screen) {
+		int x0 = xScroll >> 4;
+		int x1 = (xScroll + screen.miniMapWidth + 16) >> 4;
+		int y0 = yScroll >> 4;
+		int y1 = (yScroll + screen.miniMapHeight + 16) >> 4;
+
+		for (int y = y0; y < y1; y++) {
+			for (int x = x0; x < x1; x++) {
+				getTile(x, y).renderMiniMap(x, y, screen);
+			}
+		}
+		/*
+		for (int i = 0; i < projectiles.size(); i++) {
+			projectiles.get(i).render(screen);
+		}
+
+		for (int i = 0; i < particles.size(); i++) {
+			particles.get(i).render(screen);
+		}
+
+		for (int i = 0; i < entities.size(); i++) {
+			entities.get(i).render(screen);
+		}
+
+		for (int i = 0; i < players.size(); i++) {
+			players.get(i).render(screen);
+		}
+
 		
+		/*
+		for (int i = 0; i < tiles.length; i++) {
+			screen.renderMiniMap(i - (), i, tile.get(i).getColor(), width, height, x, y);
+		}
+		
+		for (int i = 0; i < players.size(); i++) {
+			screen.renderMiniMap(players.get(i).getX(), players.get(i).getY(), players.get(i).getColor(), width, height,
+					x, y);
+		}
+		
+		for (int i = 0; i < entities.size(); i++) {
+			screen.renderMiniMap(entities.get(i).getX(), entities.get(i).getY(), entities.get(i).getColor(), width,
+					height, x, y);
+		}*/
 	}
 
 	// Adds entities to our arraylists
@@ -270,7 +312,7 @@ public class Level {
 	 * current one to avoid null pointer exceptions and then we proceed to go to
 	 * the next level where we add the level entities we should.
 	 */
-	public void changeLevel(Level level, Game game, Player player) {
+	public void changeLevel(Level level, Game game, Player player, Screen screen) {
 		for (int i = 0; i < entities.size(); i++) {
 			entities.get(i).remove();
 		}
@@ -287,6 +329,10 @@ public class Level {
 			players.get(i).remove();
 		}
 
+		for(int i = 0; i < screen.miniMapPixels.length; i++){
+			screen.miniMapPixels[i] = 0;
+		}
+		
 		// We set the level value from game and player to the new level
 		game.level = level;
 		player.level = level;

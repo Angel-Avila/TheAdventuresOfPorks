@@ -1,5 +1,6 @@
 package juego.entity.mob;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -301,6 +302,10 @@ public class Player extends Mob {
 		return Math.sqrt((dx * dx) + (dy * dy));
 	}
 
+	public Color getColor() {
+		return new Color(0xFFD800);
+	}
+	
 	// The anim % 20 > 10 is just an animation to alternate between the 2
 	// walking sprites, one with the right leg
 	// and one with the left leg

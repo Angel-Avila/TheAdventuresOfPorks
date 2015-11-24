@@ -33,6 +33,8 @@ public class Game extends Canvas implements Runnable {
 
     private static int width = 300 - 60;
     private static int height = (width + 60) / 16 * 9;
+    private static int miniMapWidth = 50;
+    private static int miniMapHeight = 50;
     private static int scale = 3;
     public static String title = "The Adventures of Porki";
 
@@ -51,6 +53,8 @@ public class Game extends Canvas implements Runnable {
     
     public static boolean paused = false;
     
+    private boolean dead_resetMM = false;
+    
     private static UIManager uiManager;
     
     //private TileCoordinate spawn_teleporter = new TileCoordinate(28, 24);
@@ -64,6 +68,10 @@ public class Game extends Canvas implements Runnable {
     private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
     // Access the image
     private int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
+    
+    // MiniMap stuff
+    private BufferedImage miniMapImage = new BufferedImage(miniMapWidth, miniMapHeight, BufferedImage.TYPE_INT_RGB);
+    private int[] miniMapPixels = ((DataBufferInt) miniMapImage.getRaster().getDataBuffer()).getData();
 
     public enum STATE {
     	Menu,
@@ -78,7 +86,7 @@ public class Game extends Canvas implements Runnable {
         Dimension size = new Dimension(width * scale + 60 * 3, height * scale);
         setPreferredSize(size);
 
-        screen = new Screen(width, height);
+        screen = new Screen(width, height, miniMapWidth, miniMapHeight);
         frame = new JFrame();
         key = new Keyboard();
         mouse = new Mouse();
@@ -98,6 +106,7 @@ public class Game extends Canvas implements Runnable {
     	player = new Player(name, playerSpawn_spawnLevel.getX(), playerSpawn_spawnLevel.getY() + 6, key);
         level.add(player);
         level.addLevelMobs();
+        dead_resetMM = false;
         if(name.toUpperCase().equals("JOHN CENA"))
         	Sound.JOHNCENA.loop();
         else
@@ -180,7 +189,7 @@ public class Game extends Canvas implements Runnable {
         key.update();
         if(gameState == STATE.Game){
         	if(!paused){
-        		level.update(this, player);
+        		level.update(this, player, screen);
 	        	uiManager.update();
         	}
         	else
@@ -223,14 +232,31 @@ public class Game extends Canvas implements Runnable {
 	        if(paused)
 	        	pauseMenu.render(g);
 	        
+	        g.setColor(Color.BLACK);
+	        g.fillRect(735, 15, 150, 150);
+	        
+	        level.renderMiniMap((int)xScroll, (int)yScroll, screen);
+	        
+	        for(int i = 0; i < miniMapPixels.length; i++)
+	        	miniMapPixels[i] = screen.miniMapPixels[i];
+	        
+	        g.drawImage(miniMapImage, 735, 15, miniMapWidth * scale, miniMapHeight * scale, null);
+	        
 	        g.setColor(Color.WHITE);
-	        g.drawRect(730, 10, 160, 160);
+	        g.drawRect(735, 15, 150, 150);
+	        
         } else if(gameState == STATE.Menu){
         	g.drawImage(image, 0, 0, width * scale + 180, height * scale, null);
         	menu.render(g);
 //        	g.setColor(Color.white);
 //        	g.drawString("Menu", 100, 100);
         } else if(gameState == STATE.End) {
+        	if(!dead_resetMM){
+        		for(int i = 0; i < miniMapPixels.length; i++)
+    	        	screen.miniMapPixels[i] = 0;
+        		dead_resetMM = true;
+        	}
+        	
         	g.drawImage(image, 0, 0, width * scale + 180, height * scale, null);
         	gameOverScreen.render(g);
         }

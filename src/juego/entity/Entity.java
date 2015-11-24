@@ -1,5 +1,6 @@
 package juego.entity;
 
+import java.awt.Color;
 import java.util.Random;
 
 import juego.graphics.Screen;
@@ -89,4 +90,8 @@ public class Entity {
     public void init(Level level){
     	this.level = level;
     }
+
+	public Color getColor() {
+		return new Color(0xff0000);
+	}
 }

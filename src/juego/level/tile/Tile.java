@@ -99,6 +99,10 @@ public class Tile {
         
     }
     
+    public void renderMiniMap(int xMM, int yMM, Screen screen){
+    	screen.renderTileMiniMap(xMM, yMM, this);
+    }
+    
     public boolean solid(){
         return false;
     }
