@@ -187,12 +187,13 @@ public class Menu {
 		if(renderHelp && !creatingChar){
 			g.setFont(bitMadness);
 			g.setColor(new Color(.28f, .0f, 1f, .15f));
-			g.fillRect(350, 250, 450, 120);
+			g.fillRect(350, 250, 450, 160);
 			g.setColor(Color.WHITE);
-			g.drawRect(350, 250, 450, 120);
+			g.drawRect(350, 250, 450, 160);
 			g.drawString("WASD/Arrows: Move", 355, 280);
 			g.drawString("Left click: Shoot", 355, 320);
-			g.drawString("Spacebar: Sp Ability", 355, 360);
+			g.drawString("Right click: Shoot++", 355, 360);
+			g.drawString("Spacebar: Sp Ability", 355, 400);
 		}
 	}
 

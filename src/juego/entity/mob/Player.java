@@ -38,7 +38,7 @@ public class Player extends Mob {
 	private int cooldown = 60;
 
 	private int sinceHit = 90;
-	
+
 	private Vector2i usedAt;
 
 	public Vector2i position;
@@ -71,11 +71,16 @@ public class Player extends Mob {
 		actualMana = maxMana = 120;
 		manaRegen = 0.12;
 		healthRegen = .015;
-		
-		// ================================ HERE WE START ALL THE UI STUFF ================================
+
+		// ================================ HERE WE START ALL THE UI STUFF
+		// ================================
 		ui = Game.getUIManager();
 
-		/* UI PANEL------------------------------------------------------------------------------------- */
+		/*
+		 * UI
+		 * PANEL----------------------------------------------------------------
+		 * ---------------------
+		 */
 		// This creates the gray panel on the right side of the screen
 		UIPanel panel = (UIPanel) new UIPanel(new Vector2i(240 * 3, 0), new Vector2i(60 * 3, 168 * 3))
 				.setColor(0x4f4f4f);
@@ -85,7 +90,10 @@ public class Player extends Mob {
 		panel.addComponent(new UILabel(new Vector2i(28, 200), name).setFont(new Font("Helvetica", Font.BOLD, 20))
 				.setColor(0xbbbbbb));
 
-		/* HEALTH AND MANA PROGRESS BARS --------------------------------------------------------------- */
+		/*
+		 * HEALTH AND MANA PROGRESS BARS
+		 * ---------------------------------------------------------------
+		 */
 		// We create our healthbar, set its colors and add it to our panel
 		uiHealthBar = new UIProgressBar(new Vector2i(10, 210), new Vector2i(160, 15));
 		uiHealthBar.setColor(0x6a6a6a); // Dark gray
@@ -108,7 +116,11 @@ public class Player extends Mob {
 		ManaLabel.setFont(new Font("Verdana", Font.BOLD, 14));
 		panel.addComponent(ManaLabel);
 
-		/* THE BUTTON------------------------------------------------------------------------------------- */
+		/*
+		 * THE
+		 * BUTTON---------------------------------------------------------------
+		 * ----------------------
+		 */
 		// We initialize our button
 		button = new UIButton(new Vector2i(10, 260), new Vector2i(25, 15), new UIActionListener() {
 			// and we override the perform() action to specify what the button
@@ -131,7 +143,11 @@ public class Player extends Mob {
 		button.setText("Hi");
 		panel.addComponent(button);
 
-		/* THE BUTTON WITH AN IMAGE---------------------------------------------------------------------------- */
+		/*
+		 * THE BUTTON WITH AN
+		 * IMAGE----------------------------------------------------------------
+		 * ------------
+		 */
 
 		try {
 			image = ImageIO.read(getClass().getResource("/res/textures/porki_icon.png"));
@@ -178,17 +194,19 @@ public class Player extends Mob {
 							 * ", " + level.getTile(xi, yi).walkable());
 							 */
 		checkHit();
-		
-		if(hit) sinceHit = 0;
-		if(!hit && sinceHit < 90) sinceHit++;
-		
-		if(sinceHit == 90 && actualHealth < maxHealth){
-			if(maxHealth - actualHealth < healthRegen)
+
+		if (hit)
+			sinceHit = 0;
+		if (!hit && sinceHit < 90)
+			sinceHit++;
+
+		if (sinceHit == 90 && actualHealth < maxHealth) {
+			if (maxHealth - actualHealth < healthRegen)
 				actualHealth = maxHealth;
 			else
 				actualHealth += healthRegen;
 		}
-		
+
 		if (anim < 7500)
 			anim++;
 		else
@@ -234,7 +252,7 @@ public class Player extends Mob {
 			fireRate--;
 
 		updateShooting();
-		
+
 		if (actualHealth <= 0) {
 			Game.setGameState(Game.STATE.End);
 		}
@@ -266,6 +284,21 @@ public class Player extends Mob {
 			shoot(x, y, dir);
 			// Resets the fireRate so it can shoot again
 			fireRate = WizardProjectile.FIRE_RATE;
+		}
+
+		if (Mouse.getB() == 3 && actualMana > 4) {
+			// Gets the x and y coordinates from where the user wants to shoot
+			// relative to the window, not the map
+			double dx = Mouse.getX() - Game.getWindowWidth() / 2;
+			double dy = Mouse.getY() - Game.getWindowHeight() / 2;
+			// Uses the atan function of y / x to get the angle. The - 10 is an
+			// offset I did to center the projectile
+			double dir = Math.atan2(dy, dx - 10);
+			// Shoots to the desired direction
+			shoot(x, y, dir);
+			
+			actualMana -= 5;
+			actualMana = actualMana < 0 ? 0 : actualMana;
 		}
 	}
 
@@ -305,7 +338,7 @@ public class Player extends Mob {
 	public Color getColor() {
 		return new Color(0xFFD800);
 	}
-	
+
 	// The anim % 20 > 10 is just an animation to alternate between the 2
 	// walking sprites, one with the right leg
 	// and one with the left leg
