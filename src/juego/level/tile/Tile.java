@@ -2,6 +2,7 @@ package juego.level.tile;
 
 import juego.graphics.Screen;
 import juego.graphics.Sprite;
+import juego.level.tile.rock_level.RockLavaTile;
 import juego.level.tile.spawn_level.SpawnGrassTile;
 import juego.level.tile.spawn_level.SpawnSignTile;
 import juego.level.tile.spawn_level.SpawnTeleporterTile;
@@ -35,17 +36,17 @@ public class Tile {
     
     // Rock tiles:
     
-    public static Tile rock_floor 		  	 = new GrassTile(Sprite.rock_floor);
-    public static Tile rock_lava_ledge_0  	 = new SpawnWaterTile(Sprite.rock_lava_ledge_0);
-    public static Tile rock_lava_ledge_1  	 = new SpawnWaterTile(Sprite.rock_lava_ledge_1);
-    public static Tile rock_lava_ledge_2  	 = new SpawnWaterTile(Sprite.rock_lava_ledge_2);
-    public static Tile rock_lava_ledge_3  	 = new SpawnWaterTile(Sprite.rock_lava_ledge_3);
-    public static Tile rock_lava_ledge_5  	 = new SpawnWaterTile(Sprite.rock_lava_ledge_5);
-    public static Tile rock_lava_ledge_6   	 = new SpawnWaterTile(Sprite.rock_lava_ledge_6);
-    public static Tile rock_lava_ledge_7  	 = new SpawnWaterTile(Sprite.rock_lava_ledge_7);
-    public static Tile rock_lava_ledge_8  	 = new SpawnWaterTile(Sprite.rock_lava_ledge_8);
-    public static Tile rock_lava_normal  	 = new SpawnWaterTile(Sprite.rock_lava_normal);
-    public static Tile rock_lava_bubbles 	 = new SpawnWaterTile(Sprite.rock_lava_bubbles);
+    public static Tile rock_floor 		  	 = new SpawnGrassTile(Sprite.rock_floor);
+    public static Tile rock_lava_ledge_0  	 = new RockLavaTile(Sprite.rock_lava_ledge_0);
+    public static Tile rock_lava_ledge_1  	 = new RockLavaTile(Sprite.rock_lava_ledge_1);
+    public static Tile rock_lava_ledge_2  	 = new RockLavaTile(Sprite.rock_lava_ledge_2);
+    public static Tile rock_lava_ledge_3  	 = new RockLavaTile(Sprite.rock_lava_ledge_3);
+    public static Tile rock_lava_ledge_5  	 = new RockLavaTile(Sprite.rock_lava_ledge_5);
+    public static Tile rock_lava_ledge_6   	 = new RockLavaTile(Sprite.rock_lava_ledge_6);
+    public static Tile rock_lava_ledge_7  	 = new RockLavaTile(Sprite.rock_lava_ledge_7);
+    public static Tile rock_lava_ledge_8  	 = new RockLavaTile(Sprite.rock_lava_ledge_8);
+    public static Tile rock_lava_normal  	 = new RockLavaTile(Sprite.rock_lava_normal);
+    public static Tile rock_lava_bubbles 	 = new RockLavaTile(Sprite.rock_lava_bubbles);
     public static Tile rock_wall_center_up	 = new RockTile(Sprite.rock_wall_center_up);
     public static Tile rock_wall_LU			 = new RockTile(Sprite.rock_wall_LU);
     public static Tile rock_wall_center_right= new RockTile(Sprite.rock_wall_center_right);

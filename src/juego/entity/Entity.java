@@ -94,4 +94,8 @@ public class Entity {
 	public Color getColor() {
 		return new Color(0xff0000);
 	}
+
+	public void renderMiniMap(Screen screen) {
+		screen.renderMobMiniMap(this);
+	}
 }

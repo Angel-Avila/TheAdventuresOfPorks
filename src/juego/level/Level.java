@@ -233,31 +233,24 @@ public class Level {
 	}
 
 	public void renderMiniMap(int xScroll, int yScroll, Screen screen) {
-		int x0 = xScroll >> 4;
-		int x1 = (xScroll + screen.miniMapWidth + 16) >> 4;
-		int y0 = yScroll >> 4;
-		int y1 = (yScroll + screen.miniMapHeight + 16) >> 4;
+		screen.setMiniMapOffset(xScroll, yScroll);
+		int x0 = xScroll;
+		int x1 = (xScroll + screen.miniMapWidth + 1);
+		int y0 = yScroll;
+		int y1 = (yScroll + screen.miniMapHeight + 1);
 
 		for (int y = y0; y < y1; y++) {
 			for (int x = x0; x < x1; x++) {
 				getTile(x, y).renderMiniMap(x, y, screen);
 			}
 		}
-		/*
-		for (int i = 0; i < projectiles.size(); i++) {
-			projectiles.get(i).render(screen);
-		}
-
-		for (int i = 0; i < particles.size(); i++) {
-			particles.get(i).render(screen);
-		}
-
+		
 		for (int i = 0; i < entities.size(); i++) {
-			entities.get(i).render(screen);
+			entities.get(i).renderMiniMap(screen);
 		}
 
 		for (int i = 0; i < players.size(); i++) {
-			players.get(i).render(screen);
+			players.get(i).renderMiniMap(screen);
 		}
 
 		

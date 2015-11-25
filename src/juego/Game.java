@@ -234,8 +234,11 @@ public class Game extends Canvas implements Runnable {
 	        
 	        g.setColor(Color.BLACK);
 	        g.fillRect(735, 15, 150, 150);
+	    
+	        int xMMScroll = player.getTileX() - miniMapWidth / 2;
+	        int yMMScroll = player.getTileY() - miniMapHeight / 2;
 	        
-	        level.renderMiniMap((int)xScroll, (int)yScroll, screen);
+	        level.renderMiniMap(xMMScroll, yMMScroll, screen);
 	        
 	        for(int i = 0; i < miniMapPixels.length; i++)
 	        	miniMapPixels[i] = screen.miniMapPixels[i];

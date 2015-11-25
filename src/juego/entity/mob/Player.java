@@ -361,4 +361,8 @@ public class Player extends Mob {
 		// Renders the player with a slight offset
 		screen.renderMob((int) (x), (int) (y - 19), this);
 	}
+
+	public void renderMiniMap(Screen screen) {
+		screen.renderPlayerMinimap(this);
+	}
 }
