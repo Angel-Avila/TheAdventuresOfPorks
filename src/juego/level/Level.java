@@ -539,9 +539,9 @@ public class Level {
 			add(new Chaser(19, 49));
 			add(new Chaser(43, 23));
 			add(new Chaser(47, 65));
-			add(new Chaser(81, 8));
 			add(new Chaser(66, 58));
 			add(new Chaser(22, 17));
+			add(new PokemonTrainer(81, 8));
 			Random random = new Random();
 			int x = 0;
 			int y = 0;

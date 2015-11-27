@@ -27,7 +27,7 @@ public class UIButton extends UIComponent {
 		super(position, size);
 		this.actionListener = actionListener;
 		Vector2i lp = new Vector2i(position);
-		lp.x += 4;
+		lp.x += 3;
 		lp.y += size.y - 2;
 		label = new UILabel(lp, "");
 		label.active = false;

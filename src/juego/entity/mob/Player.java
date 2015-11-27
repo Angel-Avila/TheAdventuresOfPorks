@@ -19,6 +19,7 @@ import juego.graphics.ui.UILabel;
 import juego.graphics.ui.UIManager;
 import juego.graphics.ui.UIPanel;
 import juego.graphics.ui.UIProgressBar;
+import juego.graphics.ui.UIStat;
 import juego.input.Keyboard;
 import juego.input.Mouse;
 import juego.util.ImageUtils;
@@ -30,7 +31,20 @@ public class Player extends Mob {
 	private Keyboard input;
 	private int anim = 0;
 
-	private BufferedImage image = null;
+	private BufferedImage pig_icon = null;
+	private BufferedImage health_icon = null;
+	private BufferedImage damage_icon = null;
+	private BufferedImage mana_icon = null;
+	private BufferedImage cooldown_icon = null;
+	private BufferedImage attackSpeed_icon = null;
+	private BufferedImage speed_icon = null;
+
+	private UIStat health_stat;
+	private UIStat damage_stat;
+	private UIStat mana_stat;
+	private UIStat cooldown_stat;
+	private UIStat attackSpeed_stat;
+	private UIStat speed_stat;
 
 	private double actualMana, maxMana, manaRegen;
 	private double healthRegen;
@@ -44,10 +58,13 @@ public class Player extends Mob {
 	public Vector2i position;
 
 	private int fireRate = 0;
+	private double speed;
 
 	private UIManager ui;
 	private UIProgressBar uiHealthBar, uiManaBar;
 	private UIButton button;
+	
+	public static boolean displayStats = true;
 
 	@Deprecated
 	public Player(Keyboard input) {
@@ -71,6 +88,8 @@ public class Player extends Mob {
 		actualMana = maxMana = 120;
 		manaRegen = 0.12;
 		healthRegen = .012;
+		damage = 15;
+		speed = 1.25;
 
 		// ================================ HERE WE START ALL THE UI STUFF
 		// ================================
@@ -116,17 +135,18 @@ public class Player extends Mob {
 		ManaLabel.setFont(new Font("Verdana", Font.BOLD, 14));
 		panel.addComponent(ManaLabel);
 
+		panel.addComponent(new UILabel(new Vector2i(10,270), "Stats").setColor(0xffffff));
 		/*
 		 * THE
 		 * BUTTON---------------------------------------------------------------
 		 * ----------------------
-		 */
+		 
 		// We initialize our button
-		button = new UIButton(new Vector2i(10, 260), new Vector2i(25, 15), new UIActionListener() {
+		button = new UIButton(new Vector2i(10, 260), new Vector2i(45, 15), new UIActionListener() {
 			// and we override the perform() action to specify what the button
 			// does
 			public void perform() {
-				System.out.println("Pressed!");
+				displayStats = !displayStats;
 			}
 		});
 
@@ -140,7 +160,7 @@ public class Player extends Mob {
 			}
 		});
 
-		button.setText("Hi");
+		button.setText("Stats");
 		panel.addComponent(button);
 
 		/*
@@ -150,12 +170,12 @@ public class Player extends Mob {
 		 */
 
 		try {
-			image = ImageIO.read(getClass().getResource("/res/textures/porki_icon.png"));
+			pig_icon = ImageIO.read(getClass().getResource("/res/textures/porki_icon.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		UIButton imageButton = new UIButton(new Vector2i(6, 182), image, new UIActionListener() {
+		UIButton imageButton = new UIButton(new Vector2i(6, 182), pig_icon, new UIActionListener() {
 			// and we override the perform() action to specify what
 			// the button does
 			public void perform() {
@@ -168,25 +188,107 @@ public class Player extends Mob {
 		// pressed.
 		imageButton.setButtonListener(new UIButtonListener() {
 			public void entered(UIButton button) {
-				button.setImage(ImageUtils.changeBrightness(image, 120));
+				button.setImage(ImageUtils.changeBrightness(pig_icon, 120));
 			}
 
 			public void exited(UIButton button) {
-				button.setImage(image);
+				button.setImage(pig_icon);
 			}
 
 			public void pressed(UIButton button) {
-				button.setImage(ImageUtils.changeBrightness(image, -20));
+				button.setImage(ImageUtils.changeBrightness(pig_icon, -20));
 			}
 
 			public void released(UIButton button) {
-				button.setImage(ImageUtils.changeBrightness(image, 120));
+				button.setImage(ImageUtils.changeBrightness(pig_icon, 120));
 			}
 		});
 
 		panel.addComponent(imageButton);
 
+		// Stats ============================================================
+
+		UIPanel statPanel = (UIPanel) new UIPanel(new Vector2i(240 * 3 + 5, 280), 
+				new Vector2i(170, 67)).setColor(0x4C687C);
+		
+		ui.addPanel(statPanel);
+		
+		// Health-stat-------------------------------------------------------
+
+		try {
+			health_icon = ImageIO.read(getClass().getResource("/res/textures/health_icon.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		health_stat = new UIStat(new Vector2i(5, 5), health_icon);
+		health_stat.setText(String.valueOf(actualHealth));
+		statPanel.addComponent(health_stat);
+
+		// Dmg-stat-------------------------------------------------------
+
+		try {
+			damage_icon = ImageIO.read(getClass().getResource("/res/textures/damage_icon.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		damage_stat = new UIStat(new Vector2i(90, 5), damage_icon);
+		damage_stat.setText(String.valueOf(damage));
+		statPanel.addComponent(damage_stat);
+
+		// Mana-stat-------------------------------------------------------
+
+		try {
+			mana_icon = ImageIO.read(getClass().getResource("/res/textures/mana_icon.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		mana_stat = new UIStat(new Vector2i(5, 25), mana_icon);
+		mana_stat.setText(String.valueOf(actualMana));
+		statPanel.addComponent(mana_stat);
+
+		// Cooldown-stat-------------------------------------------------------
+
+		try {
+			cooldown_icon = ImageIO.read(getClass().getResource("/res/textures/cooldown_icon.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		cooldown_stat = new UIStat(new Vector2i(90, 25), cooldown_icon);
+		cooldown_stat.setText(String.valueOf(COOLDOWN / 60));
+		statPanel.addComponent(cooldown_stat);
+
+		// AttackSpeed-stat-------------------------------------------------------
+
+		try {
+			attackSpeed_icon = ImageIO.read(getClass().getResource("/res/textures/attackSpeed_icon.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		attackSpeed_stat = new UIStat(new Vector2i(5, 45), attackSpeed_icon);
+		attackSpeed_stat.setText(String.valueOf(60.0 / WizardProjectile.FIRE_RATE));
+		statPanel.addComponent(attackSpeed_stat);
+
+		// Speed-stat-------------------------------------------------------
+
+		try {
+			speed_icon = ImageIO.read(getClass().getResource("/res/textures/speed_icon.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		speed_stat = new UIStat(new Vector2i(90, 45), speed_icon);
+		speed_stat.setText(String.valueOf(speed));
+		statPanel.addComponent(speed_stat);
 	}
+
+	// =======================================================================================================
+	// =======================================================================================================
+	// =======================================================================================================
 
 	public void update() {/*
 							 * int xi = (int)((x + 7) / 16); int yi = (int)((y +
@@ -214,13 +316,14 @@ public class Player extends Mob {
 
 		if (cooldown < COOLDOWN)
 			cooldown++;
-		if (actualMana < maxMana)
-			actualMana += manaRegen;
-		double speed = 1.25;
+		if (actualMana < maxMana){
+			if (maxMana - actualMana < manaRegen)
+				actualMana = maxMana;
+			else
+				actualMana += manaRegen;
+		}
 		double xa = 0, ya = 0;
-		
-		
-		
+
 		if (input.up)
 			ya -= speed;
 		if (input.down)
@@ -258,6 +361,13 @@ public class Player extends Mob {
 		if (actualHealth <= 0) {
 			Game.setGameState(Game.STATE.End);
 		}
+
+		health_stat.setText(String.format("%.2f", actualHealth));
+		damage_stat.setText(String.format("%.2f", damage));
+		mana_stat.setText(String.format("%.2f", actualMana));
+		cooldown_stat.setText(String.format("%.2f", COOLDOWN / 60.0));
+		attackSpeed_stat.setText(String.format("%.2f", 60.0 / WizardProjectile.FIRE_RATE));
+		speed_stat.setText(String.format("%.2f", speed));
 	}
 
 	public void setName(String name) {
@@ -283,7 +393,7 @@ public class Player extends Mob {
 			// offset I did to center the projectile
 			double dir = Math.atan2(dy, dx - 10);
 			// Shoots to the desired direction
-			shoot(x, y, dir);
+			shoot(x, y, dir, damage);
 			// Resets the fireRate so it can shoot again
 			fireRate = WizardProjectile.FIRE_RATE;
 		}
@@ -297,8 +407,8 @@ public class Player extends Mob {
 			// offset I did to center the projectile
 			double dir = Math.atan2(dy, dx - 10);
 			// Shoots to the desired direction
-			shoot(x, y, dir);
-			
+			shoot(x, y, dir, damage);
+
 			actualMana -= 5;
 			actualMana = actualMana < 0 ? 0 : actualMana;
 		}

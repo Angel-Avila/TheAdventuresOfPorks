@@ -87,10 +87,10 @@ public abstract class Mob extends Entity{
     
     public abstract void render(Screen screen);
     
-    protected void shoot(double x, double y, double dir){
+    protected void shoot(double x, double y, double dir, double damage){
     	// Adds a new WizardProjectile in x and y in the desired direction and adds it into the projectile ArrayList
     	// in Level.java
-    	Projectile p = new WizardProjectile(x + 3, y + 3, dir);
+    	Projectile p = new WizardProjectile(x + 3, y + 3, dir, damage);
     	level.add(p);
     }
     

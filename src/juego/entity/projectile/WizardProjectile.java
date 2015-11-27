@@ -8,12 +8,13 @@ public class WizardProjectile extends Projectile{
 	
 	public static final int FIRE_RATE = 15; // The higher, the slower
 	public static final int WIZARD_P_SIZE = 10;
+	public static double wizardProjectileDamage = 15;
 	
-	public WizardProjectile(double x, double y, double dir) {
+	public WizardProjectile(double x, double y, double dir, double damage) {
 		super(x - 2, y - 7, dir);
 		range = 110;
 		speed = 3;
-		damage = 15;
+		this.damage = damage;
 		sprite = Sprite.rotate(Sprite.wizard_projectile_fire, angle);
 		
 		// Vector algebra here; nx and ny are the coordinates where our projectile wants to go to
