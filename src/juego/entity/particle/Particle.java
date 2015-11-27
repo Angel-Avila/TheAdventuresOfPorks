@@ -13,13 +13,13 @@ public class Particle extends Entity{
 	protected double xx, yy, zz;
 	protected double xa, ya, za;
 	
-	public Particle(int x, int y, int life){
+	public Particle(int x, int y, int life, Sprite sprite){
 		this.x = x;
 		this.y = y;
 		this.xx = x;
 		this.yy = y;
 		this.life = life + (random.nextInt(30) - 10);
-		sprite = Sprite.particle_wizard_p_fire;
+		this.sprite = sprite;
 		
 		// xa and ya with randoms are for the movement in this axis; zz is for the bounce. The +(int) in zz
 		// can be changed depending on how much you want the particles to bounce after a projectile collision.

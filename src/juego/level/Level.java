@@ -11,7 +11,7 @@ import juego.entity.Entity;
 import juego.entity.mob.Chaser;
 import juego.entity.mob.Dummy;
 import juego.entity.mob.Player;
-import juego.entity.mob.Solver;
+import juego.entity.mob.PokemonTrainer;
 import juego.entity.mob.Star;
 import juego.entity.particle.Particle;
 import juego.entity.projectile.Projectile;
@@ -122,7 +122,15 @@ public class Level {
 				return;
 			}
 		}
-
+		else if (player.level == rock && 
+				getClientPlayer().getTileX() == 82 && getClientPlayer().getTileY() == 7){
+			time++;
+			teleporting = true;
+			if (time % 120 == 0) {
+				changeLevel(labyrinth, game, player, screen);
+				return;
+			}
+		}
 		else {
 			time = 0;
 			teleporting = false;
@@ -252,22 +260,6 @@ public class Level {
 		for (int i = 0; i < players.size(); i++) {
 			players.get(i).renderMiniMap(screen);
 		}
-
-		
-		/*
-		for (int i = 0; i < tiles.length; i++) {
-			screen.renderMiniMap(i - (), i, tile.get(i).getColor(), width, height, x, y);
-		}
-		
-		for (int i = 0; i < players.size(); i++) {
-			screen.renderMiniMap(players.get(i).getX(), players.get(i).getY(), players.get(i).getColor(), width, height,
-					x, y);
-		}
-		
-		for (int i = 0; i < entities.size(); i++) {
-			screen.renderMiniMap(entities.get(i).getX(), entities.get(i).getY(), entities.get(i).getColor(), width,
-					height, x, y);
-		}*/
 	}
 
 	// Adds entities to our arraylists
@@ -421,8 +413,7 @@ public class Level {
 				List<Node> path = new ArrayList<>();
 
 				// Only node where this happens would be the start. This is
-				// gonna
-				// backtrace it and return the path
+				// gonna backtrace it and return the path
 				while (current.parent != null) {
 					path.add(current);
 					current = current.parent;
@@ -538,7 +529,62 @@ public class Level {
 			add(new Chaser(32, 19));
 			add(new Chaser(30, 40));
 			add(new Chaser(17, 30));
-			add(new Solver(42, 18, new Vector2i(30, 43)));
+			add(new PokemonTrainer(42, 18));
+		} else if (this == rock){
+			add(new Star(8, 7));
+			add(new Star(82, 71));
+			add(new Star(67, 45));
+			add(new Star(82, 7));
+			add(new Star(44, 20));
+			add(new Chaser(19, 49));
+			add(new Chaser(43, 23));
+			add(new Chaser(47, 65));
+			add(new Chaser(81, 8));
+			add(new Chaser(66, 58));
+			add(new Chaser(22, 17));
+			Random random = new Random();
+			int x = 0;
+			int y = 0;
+			for (int i = 0; i < 25; i++) {
+				x = random.nextInt(75);
+				y = random.nextInt(65);
+				// In the level we spawn the dummies in walkable tiles and
+				// at least 3 tile away from our player
+				if (getTile(x + 8, y + 7).walkable() && getDistance(new Vector2i(x + 8, y + 7),
+						new Vector2i((int) players.get(0).getTileX(), (int) players.get(0).getTileY())) > 3)
+					add(new Dummy(x + 8, y + 7));
+				else
+					i--;
+			}
+			for (int i = 0; i < 10; i++) {
+				x = random.nextInt(75);
+				y = random.nextInt(65);
+				// In the level we spawn the chasers in walkable tiles and
+				// at least 6 tile away from our player
+				// +8 in x and +7 in y because we want it to spawn inside the rectangle of the map. If we don't add that up
+				// the mob could spawn in the outsides of the map and we don't want that since he wouldn't be able to enter 
+				// the level
+				if (getTile(x + 8, y + 7).walkable() && getDistance(new Vector2i(x + 8, y + 7),
+						new Vector2i((int) players.get(0).getTileX(), (int) players.get(0).getTileY())) > 6)
+					add(new Chaser(x + 8, y + 7));
+				else
+					i--;
+			}
+			
+			for(int i = 0; i < 12; i++){
+				x = random.nextInt(74);
+				y = random.nextInt(64);
+				// In the level we spawn the trainers in walkable tiles and
+				// at least 9 away from our player
+				// +8 in x and +7 in y because we want it to spawn inside the rectangle of the map. If we don't add that up
+				// the mob could spawn in the outsides of the map and we don't want that since he wouldn't be able to enter 
+				// the level
+				if (getTile(x + 8, y + 7).walkable() && getDistance(new Vector2i(x + 8, y + 7),
+						new Vector2i((int) players.get(0).getTileX(), (int) players.get(0).getTileY())) > 9)
+					add(new PokemonTrainer(x + 8, y + 7));
+				else
+					i--;
+			}
 		}
 	}
 
@@ -584,6 +630,32 @@ public class Level {
 					&& (y + 1) < entities.get(i).getY() + 12 && (y + 1) > entities.get(i).getY() - 12) {
 				isHit = true;
 				entities.get(i).hitEntity(p.damage);
+				return isHit;
+			}
+		}
+		return isHit;
+	}
+	
+	/**
+	 * We also check if we hit players and we apply the damage with "hitEntity"
+	 * 
+	 * @param x
+	 *            position of our player + the direction in which our projectile
+	 *            is heading
+	 * @param y
+	 *            position of our player + the direction in which our projectile
+	 *            is heading
+	 * @param p
+	 *            our projectile
+	 * @return if we hit an entity or not
+	 */
+	public boolean playerProjectileCollision(int x, int y, int xOffset, int yOffset, Projectile p) {
+		boolean isHit = false;
+		for (int i = 0; i < players.size(); i++) {
+			if ((x - 5) < players.get(i).getX() + 10 && (x - 5) > players.get(i).getX() - 8
+					&& (y + 1) < players.get(i).getY() + 12 && (y + 1) > players.get(i).getY() - 12) {
+				isHit = true;
+				players.get(i).hitEntity(p.damage);
 				return isHit;
 			}
 		}

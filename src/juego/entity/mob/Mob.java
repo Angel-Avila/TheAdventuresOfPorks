@@ -1,6 +1,7 @@
 package juego.entity.mob;
 
 import juego.entity.Entity;
+import juego.entity.projectile.MobProjectile;
 import juego.entity.projectile.Projectile;
 import juego.entity.projectile.WizardProjectile;
 import juego.graphics.Screen;
@@ -90,6 +91,13 @@ public abstract class Mob extends Entity{
     	// Adds a new WizardProjectile in x and y in the desired direction and adds it into the projectile ArrayList
     	// in Level.java
     	Projectile p = new WizardProjectile(x + 3, y + 3, dir);
+    	level.add(p);
+    }
+    
+    protected void shootPlayer(double x, double y, double dir){
+    	// Adds a new MobProjectile in x and y in the desired direction and adds it into the projectile ArrayList
+    	// in Level.java
+    	Projectile p = new MobProjectile(x + 3, y + 3, dir);
     	level.add(p);
     }
     /**

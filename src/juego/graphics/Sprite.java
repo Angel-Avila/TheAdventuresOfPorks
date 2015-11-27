@@ -91,10 +91,29 @@ public class Sprite {
     public static Sprite zombie_pig_left1 = new Sprite(32, 1, 3, SpriteSheet.mobs);
     public static Sprite zombie_pig_left2 = new Sprite(32, 2, 3, SpriteSheet.mobs);
     
+    // Pokemon trainer sprites
+    
+    public static Sprite pokemon_trainer_forward = new Sprite(32, 3, 0, SpriteSheet.mobs);
+    public static Sprite pokemon_trainer_backward = new Sprite(32, 3, 1, SpriteSheet.mobs);
+    public static Sprite pokemon_trainer_right = new Sprite(32, 3, 2, SpriteSheet.mobs);
+    public static Sprite pokemon_trainer_left = new Sprite(32, 3, 3, SpriteSheet.mobs);
+    
+    // Pokemon trainer animation sprites
+    
+    public static Sprite pokemon_trainer_forward1 = new Sprite(32, 4, 0, SpriteSheet.mobs);
+    public static Sprite pokemon_trainer_forward2 = new Sprite(32, 5, 0, SpriteSheet.mobs);
+    public static Sprite pokemon_trainer_backward1 = new Sprite(32, 4, 1, SpriteSheet.mobs);
+    public static Sprite pokemon_trainer_backward2 = new Sprite(32, 5, 1, SpriteSheet.mobs);
+    public static Sprite pokemon_trainer_right1 = new Sprite(32, 4, 2, SpriteSheet.mobs);
+    public static Sprite pokemon_trainer_right2 = new Sprite(32, 5, 2, SpriteSheet.mobs);
+    public static Sprite pokemon_trainer_left1 = new Sprite(32, 4, 3, SpriteSheet.mobs);
+    public static Sprite pokemon_trainer_left2 = new Sprite(32, 5, 3, SpriteSheet.mobs);
+    
     // Projectile Sprites here:
     public static Sprite wizard_projectile_fire = new Sprite(16, 0, 0 , SpriteSheet.wizard_projectile);
     public static Sprite arrow = new Sprite(16, 1, 0 , SpriteSheet.wizard_projectile);
     public static Sprite wizard_projectile = new Sprite(16, 2 , 0 , SpriteSheet.wizard_projectile);
+    public static Sprite mob_projectile = new Sprite(16, 0, 0 , SpriteSheet.mob_projectile);
     
     // Particles
     

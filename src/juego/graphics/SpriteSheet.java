@@ -16,6 +16,7 @@ public class SpriteSheet {
     public static SpriteSheet tiles = new SpriteSheet("/res/textures/sheets/spritesheet.png", 256);
     public static SpriteSheet spawn_level = new SpriteSheet("/res/textures/sheets/spawn_level.png", 64);
     public static SpriteSheet wizard_projectile = new SpriteSheet("/res/textures/sheets/projectiles/wizard.png", 48);
+    public static SpriteSheet mob_projectile = new SpriteSheet("/res/textures/sheets/projectiles/mob.png", 48);
     public static SpriteSheet mobs = new SpriteSheet("/res/textures/sheets/mobs.png", 256);
     public static SpriteSheet rock_level = new SpriteSheet("/res/textures/sheets/rock_level.png", 96);
     

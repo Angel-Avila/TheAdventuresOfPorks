@@ -70,7 +70,7 @@ public class Player extends Mob {
 		actualHealth = maxHealth = 60;
 		actualMana = maxMana = 120;
 		manaRegen = 0.12;
-		healthRegen = .015;
+		healthRegen = .012;
 
 		// ================================ HERE WE START ALL THE UI STUFF
 		// ================================
@@ -218,7 +218,9 @@ public class Player extends Mob {
 			actualMana += manaRegen;
 		double speed = 1.25;
 		double xa = 0, ya = 0;
-
+		
+		
+		
 		if (input.up)
 			ya -= speed;
 		if (input.down)
