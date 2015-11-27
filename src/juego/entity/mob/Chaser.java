@@ -10,22 +10,22 @@ public class Chaser extends Mob{
 
 	private int anim = 0;
 	private double xa = 0, ya = 0;
-	private double speed = 0.88;
+	private double speed = 0.85;
 	
 	public Chaser(int x, int y){
 		this.x = x << 4;
 		this.y = y << 4;
 		damage = 1.5;
 		position = new Vector2i(x, y);
-		this.actualHealth = this.maxHealth = 140;
+		this.actualHealth = this.maxHealth = 150;
 		sprite = Sprite.zombie_pig_forward;
 	}
 	
 	private void move(){
 		xa = ya = 0;
 		
-		// List of all the players in a radius of 64px or 4 tiles
-		List<Player> players = level.getPlayers(this, 64);
+		// List of all the players in a radius of 96px or 6 tiles
+		List<Player> players = level.getPlayers(this, 96);
 		// If there's someone in its range...
 		if(players.size() > 0){
 			// Gets the first one from the list

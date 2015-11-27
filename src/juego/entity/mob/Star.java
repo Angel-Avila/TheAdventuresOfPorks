@@ -11,7 +11,7 @@ public class Star extends Mob {
 	
 	private int anim = 0;
 	private double xa = 0, ya = 0;
-	private double speed = 1.1;
+	private double speed = 1.15;
 	private List<Node> path = null;
 	private int time = 0;
 	

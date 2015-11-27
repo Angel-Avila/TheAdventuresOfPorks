@@ -15,7 +15,7 @@ public class Dummy extends Mob {
 		this.y = y << 4;
 		damage = 0.05;
 		position = new Vector2i(x, y);
-		this.actualHealth = this.maxHealth = 100;
+		this.actualHealth = this.maxHealth = 75;
 		sprite = Sprite.zombie_pig_forward;
 	}
 

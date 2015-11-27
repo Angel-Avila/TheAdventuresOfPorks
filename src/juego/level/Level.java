@@ -338,9 +338,10 @@ public class Level {
 		// it removes them from the game
 		remove();
 		// We change the "removed" value from player to false and we add it now
-		// to the level
+		// to the level fully healed
 		player.unRemove();
 		level.add(player);
+		player.heal();
 		// We add the mobs that should spawn in a certain level, depending on
 		// which it is
 		level.addLevelMobs();

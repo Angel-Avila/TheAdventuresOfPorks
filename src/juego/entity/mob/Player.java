@@ -48,8 +48,8 @@ public class Player extends Mob {
 
 	private double actualMana, maxMana, manaRegen;
 	private double healthRegen;
-	private final int COOLDOWN = 60;
-	private int cooldown = 60;
+	private final double COOLDOWN = 60;
+	private double cooldown = 60;
 
 	private int sinceHit = 90;
 
@@ -62,7 +62,7 @@ public class Player extends Mob {
 
 	private UIManager ui;
 	private UIProgressBar uiHealthBar, uiManaBar;
-	private UIButton button;
+//	private UIButton button;
 	
 	public static boolean displayStats = true;
 
@@ -258,7 +258,7 @@ public class Player extends Mob {
 		}
 
 		cooldown_stat = new UIStat(new Vector2i(90, 25), cooldown_icon);
-		cooldown_stat.setText(String.valueOf(COOLDOWN / 60));
+		cooldown_stat.setText(String.valueOf(1.0 - (cooldown / COOLDOWN)) + "s");
 		statPanel.addComponent(cooldown_stat);
 
 		// AttackSpeed-stat-------------------------------------------------------
@@ -365,7 +365,7 @@ public class Player extends Mob {
 		health_stat.setText(String.format("%.2f", actualHealth));
 		damage_stat.setText(String.format("%.2f", damage));
 		mana_stat.setText(String.format("%.2f", actualMana));
-		cooldown_stat.setText(String.format("%.2f", COOLDOWN / 60.0));
+		cooldown_stat.setText(String.format("%.2f", 1.0 - (cooldown / COOLDOWN)) + "s");
 		attackSpeed_stat.setText(String.format("%.2f", 60.0 / WizardProjectile.FIRE_RATE));
 		speed_stat.setText(String.format("%.2f", speed));
 	}
@@ -376,6 +376,11 @@ public class Player extends Mob {
 
 	public String getName() {
 		return name;
+	}
+	
+	public void heal(){
+		actualHealth = maxHealth;
+		actualMana = maxMana;
 	}
 
 	private void updateShooting() {
@@ -492,9 +497,9 @@ public class Player extends Mob {
 			}
 		}
 
+		// If the cooldown is <= 30, it means the ability was used at maximum half a second ago, so...
 		if (cooldown <= 30) {
-			// screen.renderSprite((int)(x - 2), (int)(y - 23),
-			// Sprite.fire_specialAbility, true);
+			// we render the flames in the radius that affects the mobs
 			for (int xtemp = (int) usedAt.x - 48; xtemp < (int) usedAt.x + 49; xtemp += 12) {
 				for (int ytemp = (int) usedAt.y - 48; ytemp < (int) usedAt.y + 49; ytemp += 12) {
 					if (getDistance(new Vector2i(xtemp, ytemp), usedAt) < 41)

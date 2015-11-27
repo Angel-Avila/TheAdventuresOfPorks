@@ -11,7 +11,7 @@ public class PokemonTrainer extends Mob{
 
 	private int anim = 0;
 	private double xa = 0, ya = 0;
-	private double speed = 0.98;
+	private double speed = 1;
 	private int fireRate = WizardProjectile.FIRE_RATE;
 	
 	public PokemonTrainer(int x, int y){
@@ -19,7 +19,7 @@ public class PokemonTrainer extends Mob{
 		this.y = y << 4;
 		damage = .5;
 		position = new Vector2i(x, y);
-		this.actualHealth = this.maxHealth = 140;
+		this.actualHealth = this.maxHealth = 100;
 		sprite = Sprite.pokemon_trainer_forward;
 	}
 	
