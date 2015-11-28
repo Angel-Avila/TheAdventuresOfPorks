@@ -18,6 +18,7 @@ public class Entity {
     protected final Random random = new Random();
     public Vector2i position;
     public double damage;
+    protected double actualHealth, maxHealth;
     
     public Entity(){
     	
@@ -81,6 +82,13 @@ public class Entity {
     
     public boolean isHit(){
     	return hit;
+    }
+    
+    public boolean isDead(){
+    	if(actualHealth <= 0)
+    		return true;
+    	else
+    		return false;
     }
     
     public Sprite getSprite(){

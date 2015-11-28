@@ -50,6 +50,9 @@ public class Player extends Mob {
 	private double healthRegen;
 	private final double COOLDOWN = 60;
 	private double cooldown = 60;
+	private int fireRate = 0;
+	private double speed;
+	public int score = 0;
 
 	private int sinceHit = 90;
 
@@ -57,11 +60,9 @@ public class Player extends Mob {
 
 	public Vector2i position;
 
-	private int fireRate = 0;
-	private double speed;
-
 	private UIManager ui;
 	private UIProgressBar uiHealthBar, uiManaBar;
+	private UILabel scoreLabel;
 //	private UIButton button;
 	
 	public static boolean displayStats = true;
@@ -84,7 +85,7 @@ public class Player extends Mob {
 		fireRate = WizardProjectile.FIRE_RATE;
 
 		/* ----- STATS FOR NOW SINCE HE'S A WIZARD ---- */
-		actualHealth = maxHealth = 60;
+		actualHealth = maxHealth = 0;
 		actualMana = maxMana = 120;
 		manaRegen = 0.12;
 		healthRegen = .012;
@@ -284,6 +285,18 @@ public class Player extends Mob {
 		speed_stat = new UIStat(new Vector2i(90, 45), speed_icon);
 		speed_stat.setText(String.valueOf(speed));
 		statPanel.addComponent(speed_stat);
+		
+		// PlayerScore========================================================================
+		UIPanel scorePanel = (UIPanel) new UIPanel(new Vector2i(240 * 3 + 5, 380), 
+				new Vector2i(170, 30)).setColor(0);
+		ui.addPanel(scorePanel);
+	
+		panel.addComponent((UILabel) new UILabel(new Vector2i(10, 370), "Score: ").setColor(0xffffff));
+		
+		scoreLabel = ((UILabel) new UILabel(new Vector2i(6, 22), String.valueOf(score)).setColor(0xff00))
+				.setFont(new Font("8-bit Madness", Font.PLAIN, 32));
+		scorePanel.addComponent(scoreLabel);
+		
 	}
 
 	// =======================================================================================================
@@ -368,6 +381,7 @@ public class Player extends Mob {
 		cooldown_stat.setText(String.format("%.2f", 1.0 - (cooldown / COOLDOWN)) + "s");
 		attackSpeed_stat.setText(String.format("%.2f", 60.0 / WizardProjectile.FIRE_RATE));
 		speed_stat.setText(String.format("%.2f", speed));
+		scoreLabel.setText(String.format("%010d", score));
 	}
 
 	public void setName(String name) {

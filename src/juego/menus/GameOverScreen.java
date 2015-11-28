@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 
 import juego.Game;
 import juego.Game.STATE;
+import juego.entity.mob.Player;
 import juego.graphics.ui.UIActionListener;
 import juego.graphics.ui.UIButton;
 import juego.graphics.ui.UIButtonListener;
@@ -27,9 +28,11 @@ public class GameOverScreen {
 	private UIButtonListener buttonListener;
 	private BufferedImage buttonImg = null;
 	private Font bitMadness;
+	private Player player;
 	
-	public GameOverScreen(){
+	public GameOverScreen(Player player){
 		bitMadness = new Font("8-Bit Madness", Font.PLAIN, 52);
+		this.player = player;
 		
 		// We load our image
 		try {
@@ -101,9 +104,10 @@ public class GameOverScreen {
 		g.fillRect(0, 0, 900, 504);
 		g.setColor(Color.WHITE);
 		g.setFont(bitMadness.deriveFont(85f));
-		g.drawString("YOU AND YOUR FRIENDS", 70, 70);
-		g.drawString("ARE DEAD.", 285, 130);
-		g.drawString("GAME OVER", 270, 250);
+		g.drawString("YOU DIED WITH A SCORE OF", 15, 70);
+		g.drawString(String.format("%09d" ,player.score), 255, 140);
+		g.setFont(bitMadness.deriveFont(145f));
+		g.drawString("GAME OVER", 170, 280);
 		
 		for(UIButton button : buttons)
 			button.render(g);

@@ -91,8 +91,6 @@ public class Game extends Canvas implements Runnable {
         key = new Keyboard();
         mouse = new Mouse();
         menu = new Menu(this);
-        pauseMenu = new PauseMenu();
-        gameOverScreen = new GameOverScreen();
         //font = new Font();
         uiManager = new UIManager();
         
@@ -107,6 +105,8 @@ public class Game extends Canvas implements Runnable {
         level.add(player);
         level.addLevelMobs();
         dead_resetMM = false;
+        pauseMenu = new PauseMenu();
+        gameOverScreen = new GameOverScreen(player);
         if(name.toUpperCase().equals("JOHN CENA"))
         	Sound.JOHNCENA.loop();
         else

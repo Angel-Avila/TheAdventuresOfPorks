@@ -631,7 +631,19 @@ public class Level {
 					&& (y + 1) < entities.get(i).getY() + 12 && (y + 1) > entities.get(i).getY() - 12) {
 				isHit = true;
 				entities.get(i).hitEntity(p.damage);
-				return isHit;
+				if(entities.get(i).isDead() && !entities.get(i).isRemoved()){
+					if(entities.get(i) instanceof Dummy)
+						players.get(0).score += 1;
+					else if(entities.get(i) instanceof Chaser)
+						players.get(0).score += 5;
+					else if(entities.get(i) instanceof Star)
+						players.get(0).score += 8;
+					else if(entities.get(i) instanceof PokemonTrainer)
+						players.get(0).score += 16;
+					
+					entities.get(i).remove();
+					return isHit;
+				}
 			}
 		}
 		return isHit;

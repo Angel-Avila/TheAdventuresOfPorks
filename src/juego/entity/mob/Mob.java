@@ -10,7 +10,6 @@ public abstract class Mob extends Entity{
     
     protected boolean walking = false;
     protected int hitTimer = 0;
-    protected double actualHealth, maxHealth;
     
     protected enum Direction{
     	UP, DOWN, LEFT, RIGHT
