@@ -502,6 +502,19 @@ public class Level {
 
 	public void damageMobAt(int i, int damage) {
 		entities.get(i).hitEntity(damage);
+		if(entities.get(i).isDead() && !entities.get(i).isRemoved()){
+			players.get(0).killCount += 1;
+			if(entities.get(i) instanceof Dummy)
+				players.get(0).score += 1;
+			else if(entities.get(i) instanceof Chaser)
+				players.get(0).score += 5;
+			else if(entities.get(i) instanceof Star)
+				players.get(0).score += 8;
+			else if(entities.get(i) instanceof PokemonTrainer)
+				players.get(0).score += 16;
+			
+			entities.get(i).remove();
+		}
 	}
 
 	public void addLevelMobs() {
@@ -632,6 +645,7 @@ public class Level {
 				isHit = true;
 				entities.get(i).hitEntity(p.damage);
 				if(entities.get(i).isDead() && !entities.get(i).isRemoved()){
+					players.get(0).killCount += 1;
 					if(entities.get(i) instanceof Dummy)
 						players.get(0).score += 1;
 					else if(entities.get(i) instanceof Chaser)

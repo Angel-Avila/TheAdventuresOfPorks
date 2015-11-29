@@ -53,7 +53,8 @@ public class Player extends Mob {
 	private int fireRate = 0;
 	private double speed;
 	public int score = 0;
-
+	public int killCount = 0;
+	
 	private int sinceHit = 90;
 
 	private Vector2i usedAt;
@@ -63,6 +64,7 @@ public class Player extends Mob {
 	private UIManager ui;
 	private UIProgressBar uiHealthBar, uiManaBar;
 	private UILabel scoreLabel;
+	private UILabel killCountLabel;
 //	private UIButton button;
 	
 	public static boolean displayStats = true;
@@ -85,7 +87,7 @@ public class Player extends Mob {
 		fireRate = WizardProjectile.FIRE_RATE;
 
 		/* ----- STATS FOR NOW SINCE HE'S A WIZARD ---- */
-		actualHealth = maxHealth = 0;
+		actualHealth = maxHealth = 60;
 		actualMana = maxMana = 120;
 		manaRegen = 0.12;
 		healthRegen = .012;
@@ -287,15 +289,26 @@ public class Player extends Mob {
 		statPanel.addComponent(speed_stat);
 		
 		// PlayerScore========================================================================
-		UIPanel scorePanel = (UIPanel) new UIPanel(new Vector2i(240 * 3 + 5, 380), 
-				new Vector2i(170, 30)).setColor(0);
+		UIPanel scorePanel = (UIPanel) new UIPanel(new Vector2i(240 * 3 + 5, 375), 
+				new Vector2i(170, 30)).setColor(0xff262626);
 		ui.addPanel(scorePanel);
 	
 		panel.addComponent((UILabel) new UILabel(new Vector2i(10, 370), "Score: ").setColor(0xffffff));
 		
-		scoreLabel = ((UILabel) new UILabel(new Vector2i(6, 22), String.valueOf(score)).setColor(0xff00))
+		scoreLabel = ((UILabel) new UILabel(new Vector2i(6, 22), String.valueOf(score)).setColor(0xffffff))
 				.setFont(new Font("8-bit Madness", Font.PLAIN, 32));
 		scorePanel.addComponent(scoreLabel);
+		
+		//PlayerKillCount=====================================================================
+		UIPanel killCountPanel = (UIPanel) new UIPanel(new Vector2i(240 * 3 + 5, 435), 
+				new Vector2i(170, 30)).setColor(0xff262626);
+		ui.addPanel(killCountPanel);
+		
+		panel.addComponent((UILabel) new UILabel(new Vector2i(10, 428), "Kill Count: ").setColor(0xffffff));
+		
+		killCountLabel = ((UILabel) new UILabel(new Vector2i(6, 22), String.valueOf(score)).setColor(0xffffff))
+				.setFont(new Font("8-bit Madness", Font.PLAIN, 32));
+		killCountPanel.addComponent(killCountLabel);
 		
 	}
 
@@ -382,6 +395,7 @@ public class Player extends Mob {
 		attackSpeed_stat.setText(String.format("%.2f", 60.0 / WizardProjectile.FIRE_RATE));
 		speed_stat.setText(String.format("%.2f", speed));
 		scoreLabel.setText(String.format("%010d", score));
+		killCountLabel.setText(String.format("%010d", killCount));
 	}
 
 	public void setName(String name) {
