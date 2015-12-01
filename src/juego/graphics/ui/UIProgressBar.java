@@ -21,6 +21,7 @@ public class UIProgressBar extends UIComponent{
 		this.foregroundColor = new Color(color);
 	}
 	
+	// Maximum progress is always 1
 	public void setProgress(double progress){
 		this.progress = (progress > 1.0) ? 1.0 : progress;
 		this.progress = (progress < 0.0) ? 0.0 : progress;
@@ -31,11 +32,11 @@ public class UIProgressBar extends UIComponent{
 	}
 
 	public void render(Graphics g) {
-		// This is the normal rectangle of our life bar
+		// This is the normal rectangle of our progress bar
 		g.setColor(color);
 		g.fillRect(position.x + offset.x, position.y + offset.y, size.x, size.y);
 		
-		// This renders the actual HP we have left, it's the red rectangle
+		// This renders the actual points we have left, it's the rectangle with the different color
 		g.setColor(foregroundColor);
 		g.fillRect(position.x + offset.x, position.y + offset.y, (int)(progress * size.x), size.y);
 	}

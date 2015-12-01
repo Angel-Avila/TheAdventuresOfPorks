@@ -130,6 +130,7 @@ public class Sprite {
     
     public static Sprite voidSprite = new Sprite(16, 0x3F87D9);
     
+    // Creates a square sized sprite from a spritesheet
     public Sprite(int size, int x, int y, SpriteSheet sheet){
         SIZE = size;
         pixels = new int[SIZE * SIZE];
@@ -143,6 +144,7 @@ public class Sprite {
         load();
     }
     
+    // Creates a rectangle sized sprite from a spritesheet
     public Sprite(int width, int height, int x, int y, SpriteSheet sheet){
         SIZE = (width == height ? width : -1);
         pixels = new int[width * height];
@@ -156,6 +158,7 @@ public class Sprite {
         load();
     }
     
+    // Creates a rectangle sprite in a certain color
     public Sprite(int width, int height, int color){
     	SIZE = (width == height ? width : -1);
     	this.width = width;
@@ -164,6 +167,7 @@ public class Sprite {
     	setColor(color);
     }
     
+    // Creates a square sprite in a certain color
     public Sprite(int size, int color){
         SIZE = size;
         this.width = size;
@@ -172,6 +176,7 @@ public class Sprite {
         setColor(color);
     }
     
+    // Copies the pixels from something into this sprite
     public Sprite(int[] pixels, int width, int height){
     	SIZE = (width == height ? width : -1);
     	this.width = width;
@@ -182,6 +187,7 @@ public class Sprite {
 		}
     }
     
+    // Creates a sprite array out of a spritesheet
     public static Sprite[] split(SpriteSheet sheet) {
     	int amount = (sheet.getWidth() * sheet.getHeight()) / (sheet.SPRITE_WIDTH * sheet.SPRITE_HEIGHT);
     	Sprite[] sprites = new Sprite[amount];
@@ -204,10 +210,12 @@ public class Sprite {
 		return sprites;
 	}
     
+    // Rotates a sprite
     public static Sprite rotate(Sprite sprite, double angle){
     	return new Sprite(rotate(sprite.pixels, sprite.width, sprite.height, angle), sprite.width, sprite.height);
     }
     
+    // Changes the pixel array of a sprite so it's rotated
     private static int[] rotate(int[] pixels, int width, int height, double angle){
     	int[] result = new int[width * height];
     	
@@ -239,17 +247,20 @@ public class Sprite {
     	return result;
     }
     
+    // Calculates rotation in x
     private static double rot_x(double angle, double x, double y){
     	double cos = Math.cos(angle - Math.PI / 2);
     	double sin = Math.sin(angle - Math.PI / 2);
     	return x * cos + y * -sin;
     }
     
+    // Calculates rotation in y
     private static double rot_y(double angle, double x, double y){
     	double cos = Math.cos(angle - Math.PI / 2);
     	double sin = Math.sin(angle - Math.PI / 2);
     	return x * sin + y * cos;
     }
+    
     private void setColor(int color){
         for(int i = 0; i < width * height; i++){
             pixels[i] = color;

@@ -20,7 +20,8 @@ public class SpriteSheet {
     public static SpriteSheet mobs = new SpriteSheet("/res/textures/sheets/mobs.png", 256);
     public static SpriteSheet rock_level = new SpriteSheet("/res/textures/sheets/rock_level.png", 96);
     
-    public SpriteSheet(SpriteSheet sheet, int x, int y, int width, int height, int spriteSize){
+    @ Deprecated
+	public SpriteSheet(SpriteSheet sheet, int x, int y, int width, int height, int spriteSize){
     	int xx = x * spriteSize;
     	int yy = y * spriteSize;
     	int w = width * spriteSize;
@@ -39,6 +40,7 @@ public class SpriteSheet {
     	}
     }
     
+    // Creates a square sized spritesheet
     public SpriteSheet(String path, int size){
         this.path = path;
         SIZE = size;
@@ -48,6 +50,7 @@ public class SpriteSheet {
         load();
     }
     
+ // Creates a rectangle sized spritesheet
     public SpriteSheet(String path, int width, int height){
         this.path = path;
         SIZE = -1;

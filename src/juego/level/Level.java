@@ -240,8 +240,16 @@ public class Level {
 
 	}
 
+	/**
+	 * Renders the minimap
+	 * 
+	 * @param xScroll x coordinate of the player (tile)
+	 * @param yScroll y coordinate of the player (tile)
+	 * @param screen here's where we change the pixels of the screen
+	 */
 	public void renderMiniMap(int xScroll, int yScroll, Screen screen) {
 		screen.setMiniMapOffset(xScroll, yScroll);
+		// Corner pins
 		int x0 = xScroll;
 		int x1 = (xScroll + screen.miniMapWidth + 1);
 		int y0 = yScroll;
@@ -365,6 +373,11 @@ public class Level {
 		return result;
 	}
 
+	/**
+	 * @param e entity from where we are checking
+	 * @param radius maximum distance for entities to be in order to be added to the list
+	 * @return a list of entities in a certain radius
+	 */
 	public List<Entity> getEntities(Entity e, int radius) {
 		List<Entity> result = new ArrayList<>();
 		for (int i = 0; i < entities.size(); i++) {
@@ -383,6 +396,11 @@ public class Level {
 		return result;
 	}
 
+	/**
+	 * @param e entity from where we are checking
+	 * @param radius maximum distance for entities to be in order to be added to the list
+	 * @return a list of players in a certain radius
+	 */
 	public List<Player> getPlayers(Entity e, int radius) {
 		List<Player> result = new ArrayList<>();
 		for (int i = 0; i < players.size(); i++) {
@@ -401,6 +419,11 @@ public class Level {
 		return result;
 	}
 
+	/**
+	 * @param start
+	 * @param goal
+	 * @return list of nodes, the path from start to goal
+	 */
 	public List<Node> findPath(Vector2i start, Vector2i goal) {
 		List<Node> openList = new ArrayList<>();
 		List<Node> closedList = new ArrayList<>();
@@ -517,6 +540,7 @@ public class Level {
 		}
 	}
 
+	// Adds the mobs that should be added to a level
 	public void addLevelMobs() {
 		if (this == spawn) {
 			Random random = new Random();

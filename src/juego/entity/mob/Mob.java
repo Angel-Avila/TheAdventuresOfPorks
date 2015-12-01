@@ -70,6 +70,7 @@ public abstract class Mob extends Entity{
     	hitTimer = 0;
     }
     
+    // Makes it so the mob is 'hit' for half a second after he was damaged
     protected void checkHit(){
     	if(hit) hitTimer++;
     	if(hitTimer % 30 == 0){
@@ -99,6 +100,7 @@ public abstract class Mob extends Entity{
     	Projectile p = new MobProjectile(x + 3, y + 3, dir);
     	level.add(p);
     }
+    
     /**
      * Checks for collision. xt is the coordinate of the tile in x, this algorithm makes it so it checks every side of
      * the square that is a tile and does the same with yt in y; then it calls level.getTile(xt, yt) to check if the 
@@ -126,6 +128,4 @@ public abstract class Mob extends Entity{
     	
         return !walkable;
     }
-    
-    
 }

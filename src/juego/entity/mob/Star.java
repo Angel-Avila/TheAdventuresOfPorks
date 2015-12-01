@@ -45,10 +45,16 @@ public class Star extends Mob {
 					if(y < v.getY() << 4) ya += speed;
 					if(y > v.getY() << 4) ya -= speed;
 					
+					// We round dowm because we are moving with doubles, if we didn't round down, the mob
+					// would go crazy moving left/right or up/down slightly to try to have the same X and/or
+					// Y values but failing because of the speed. He wouldn't be able to have exactly the 
+					// same value so we have to do this to prevent him from becoming insane and moving weirdly.
 					if (Math.abs(Math.floor(x) - (v.getX() << 4)) < 2) xa = 0;
 					if (Math.abs(Math.floor(y) - (v.getY() << 4)) < 2) ya = 0;
 				}
 			}
+			
+			// Move, change sprites
 			if (xa != 0 || ya != 0) {
 				move(xa, ya);
 				walking = true;
@@ -70,10 +76,11 @@ public class Star extends Mob {
 		checkHit();
 		
 		if(this.actualHealth <= 0)
-			remove();
+			die();
 		
 		move();
 		position.set(getTileX(), getTileY());
+		
 		if (anim < 7500)
 			anim++;
 		else
@@ -84,6 +91,7 @@ public class Star extends Mob {
 		else
 			time = 0;
 		
+		// change sprites
 		if (ya < 0) {
 			dir = Direction.UP;
 			if (anim % 20 > 10)

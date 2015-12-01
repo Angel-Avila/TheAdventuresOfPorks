@@ -62,6 +62,8 @@ public class Solver extends Mob{
 					path_size--;
 			}
 		}
+		
+		// Move and change sprites
 		if (xa != 0 || ya != 0) {
 			move(xa, ya);
 			walking = true;
@@ -93,6 +95,7 @@ public class Solver extends Mob{
 		else
 			anim = 0;
 		
+		// Change sprites
 		if (ya < 0) {
 			dir = Direction.UP;
 			if (anim % 20 > 10)

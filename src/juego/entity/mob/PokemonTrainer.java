@@ -19,7 +19,7 @@ public class PokemonTrainer extends Mob{
 		this.y = y << 4;
 		damage = .5;
 		position = new Vector2i(x, y);
-		this.actualHealth = this.maxHealth = 100;
+		this.actualHealth = this.maxHealth = 105;
 		sprite = Sprite.pokemon_trainer_forward;
 	}
 	
@@ -47,8 +47,11 @@ public class PokemonTrainer extends Mob{
 			if (Math.floor(y) == Math.floor(player.getY())) ya = 0;
 			
 			// ----- Some shooting ------
+			// We do this since we already have the player list here, just for some optimization
 			updateShooting(player);
 		}
+		
+		// Update sprites depending on the direction in which the mob is heading
 		if (xa != 0 || ya != 0) {
 			move(xa, ya);
 			walking = true;
@@ -70,8 +73,9 @@ public class PokemonTrainer extends Mob{
 	
 	public void update() {
 		checkHit();
+		
 		if(this.actualHealth <= 0)
-			remove();
+			die();
 		
 		move();
 		position.set(getTileX(), getTileY());
@@ -82,6 +86,8 @@ public class PokemonTrainer extends Mob{
 			anim++;
 		else
 			anim = 0;
+		
+		// Update sprites depending on the direction in which the mob is heading
 		if (ya < 0) {
 			dir = Direction.UP;
 			if (anim % 20 > 10)
@@ -119,14 +125,12 @@ public class PokemonTrainer extends Mob{
 
 	private void updateShooting(Player player) {
 
-		// If the player is clicking the left click and the fireRate is <= 0
+		// If the fireRate is <= 0
 		if (fireRate <= 0) {
-			// Gets the x and y coordinates from where the user wants to shoot
-			// relative to the window, not the map
+			// Gets the x and y coordinates from where the player is relative to the mob
 			double dx = player.getX() - getX();
 			double dy = player.getY() - getY();
-			// Uses the atan function of y / x to get the angle. The - 10 is an
-			// offset I did to center the projectile
+			// Uses the atan function of y / x to get the angle.
 			double dir = Math.atan2(dy, dx);
 			// Shoots to the desired direction
 			shootPlayer(x, y, dir);

@@ -70,10 +70,13 @@ public class Chaser extends Mob{
 		
 		move();
 		position.set(getTileX(), getTileY());
+		
 		if (anim < 7500)
 			anim++;
 		else
 			anim = 0;
+		
+		// Update sprites depending on where he's going
 		if (ya < 0) {
 			dir = Direction.UP;
 			if (anim % 20 > 10)

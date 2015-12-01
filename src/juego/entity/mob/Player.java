@@ -86,7 +86,7 @@ public class Player extends Mob {
 		sprite = Sprite.player_forward;
 		fireRate = WizardProjectile.FIRE_RATE;
 
-		/* ----- STATS FOR NOW SINCE HE'S A WIZARD ---- */
+		/* ------------- STATS FOR NOW SINCE HE'S A WIZARD ------------- */
 		actualHealth = maxHealth = 60;
 		actualMana = maxMana = 120;
 		manaRegen = 0.12;
@@ -328,6 +328,7 @@ public class Player extends Mob {
 		if (!hit && sinceHit < 90)
 			sinceHit++;
 
+		// After 1.5 seconds from being hit, the player starts to regen health
 		if (sinceHit == 90 && actualHealth < maxHealth) {
 			if (maxHealth - actualHealth < healthRegen)
 				actualHealth = maxHealth;
@@ -340,8 +341,11 @@ public class Player extends Mob {
 		else
 			anim = 0;
 
+		// Cooldown for the space bar special ability
 		if (cooldown < COOLDOWN)
 			cooldown++;
+		
+		// Mana regen
 		if (actualMana < maxMana){
 			if (maxMana - actualMana < manaRegen)
 				actualMana = maxMana;
@@ -350,6 +354,7 @@ public class Player extends Mob {
 		}
 		double xa = 0, ya = 0;
 
+		// Checking user input
 		if (input.up)
 			ya -= speed;
 		if (input.down)
@@ -365,6 +370,7 @@ public class Player extends Mob {
 			}
 		}
 
+		// Moving
 		if (xa != 0 || ya != 0) {
 			move(xa, ya);
 			walking = true;
@@ -384,10 +390,10 @@ public class Player extends Mob {
 
 		updateShooting();
 
-		if (actualHealth <= 0) {
+		if (actualHealth <= 0) 
 			Game.setGameState(Game.STATE.End);
-		}
-
+		
+		// Setters for the stats from the UIPanel
 		health_stat.setText(String.format("%.2f", actualHealth));
 		damage_stat.setText(String.format("%.2f", damage));
 		mana_stat.setText(String.format("%.2f", actualMana));
@@ -406,6 +412,7 @@ public class Player extends Mob {
 		return name;
 	}
 	
+	// Fully heals player and regens all of his mana
 	public void heal(){
 		actualHealth = maxHealth;
 		actualMana = maxMana;
@@ -447,6 +454,7 @@ public class Player extends Mob {
 		}
 	}
 
+	// Damages all enemies within 3 tiles radius from the player
 	private void specialAbility() {
 		int damage = 40;
 		this.actualMana -= 30;
@@ -454,7 +462,6 @@ public class Player extends Mob {
 		List<Integer> entities = level.getEntitiesIndex(this, 48);
 		for (Integer i : entities)
 			level.damageMobAt(i, damage);
-
 	}
 
 	public void setX(int x) {

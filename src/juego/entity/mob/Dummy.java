@@ -15,7 +15,7 @@ public class Dummy extends Mob {
 		this.y = y << 4;
 		damage = 0.05;
 		position = new Vector2i(x, y);
-		this.actualHealth = this.maxHealth = 75;
+		this.actualHealth = this.maxHealth = 50;
 		sprite = Sprite.zombie_pig_forward;
 	}
 
@@ -40,7 +40,7 @@ public class Dummy extends Mob {
 		if (xa != 0 || ya != 0) {
 			move(xa, ya);
 			walking = true;
-		} else {
+		} else { // Update sprites depending on where he's going
 			walking = false;
 			if (dir == Direction.UP)
 				sprite = Sprite.zombie_pig_backward;
@@ -56,6 +56,8 @@ public class Dummy extends Mob {
 			anim++;
 		else
 			anim = 0;
+		
+		// Update sprites depending on where he's going
 		if (ya < 0) {
 			dir = Direction.UP;
 			if (anim % 20 > 10)

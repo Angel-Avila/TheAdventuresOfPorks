@@ -17,7 +17,7 @@ public class WizardProjectile extends Projectile{
 		this.damage = damage;
 		sprite = Sprite.rotate(Sprite.wizard_projectile_fire, angle);
 		
-		// Vector algebra here; nx and ny are the coordinates where our projectile wants to go to
+		// Algebra here; nx and ny are the coordinates where our projectile wants to go to
 		nx = speed * Math.cos(angle);
 		ny = speed * Math.sin(angle);
 	}

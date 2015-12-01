@@ -38,7 +38,7 @@ public class Game extends Canvas implements Runnable {
 	private static int miniMapWidth = 50;
 	private static int miniMapHeight = 50;
 	private static int scale = 3;
-	public static String title = "The Adventures of Porki";
+	public static String title = "The Adventures of Porks";
 
 	private Thread thread;
 	private JFrame frame;

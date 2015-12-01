@@ -36,6 +36,7 @@ public class MobProjectile extends Projectile{
 			remove();
 		}
 		
+		// Rotation for the projectile
 		rotation++;
 		rotation_angle++;
 		if(rotation > 9000) rotation = 0;

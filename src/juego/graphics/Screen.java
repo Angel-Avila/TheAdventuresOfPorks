@@ -104,6 +104,7 @@ public class Screen {
 		}
 	}
 
+	// renders a spritesheet
 	public void renderSheet(int xp, int yp, SpriteSheet sheet, boolean fixed) {
 		if (fixed) {
 			xp -= xOffset;
@@ -152,6 +153,13 @@ public class Screen {
 		}
 	}
 
+	/**
+	 * Renders the tiles from the minimap
+	 * 
+	 * @param xMM x value in the minimap
+	 * @param yMM y value in the minimap
+	 * @param tile tile to be rendered
+	 */
 	public void renderTileMiniMap(int xMM, int yMM, Tile tile) {
 		int color = 0;
 		if (tile instanceof SpawnGrassTile) {
@@ -188,6 +196,7 @@ public class Screen {
 		miniMapPixels[xMM + yMM * miniMapWidth] = color;
 	}
 
+	// Renders the player in the minimap
 	public void renderPlayerMinimap(Player player) {
 		int xMM = player.getTileX() - xMMOffset;
 		int yMM = player.getTileY() - yMMOffset;
@@ -197,6 +206,7 @@ public class Screen {
 		miniMapPixels[xMM + yMM * miniMapWidth] = 0xB200FF;
 	}
 
+	// Renders the mobs in the minimap
 	public void renderMobMiniMap(Entity entity) {
 		int xMM = entity.getTileX() - xMMOffset;
 		int yMM = entity.getTileY() - yMMOffset;
@@ -246,11 +256,21 @@ public class Screen {
 		}
 	}
 
+	/**
+	 * Renders all the mobs in the game, including the player
+	 * 
+	 * @param xp x position in pixels
+	 * @param yp y position in pixels
+	 * @param mob mob to be rendered
+	 */
 	public void renderMob(int xp, int yp, Mob mob) {
 		xp -= xOffset;
 		yp -= yOffset;
+		
+		// 32 is the maximum height of all the sprites from our mobs
 		for (int y = 0; y < 32; y++) {
 			int ya = y + yp;
+			// 16 is the maximum width of all the sprites from our mobs
 			for (int x = 0; x < 16; x++) {
 				int xa = x + xp;
 				if (xa < -16 || xa >= width || ya < 0 || ya >= height)
@@ -274,12 +294,12 @@ public class Screen {
 						col = 0xffFF00DC;
 					// else if(col == 0xffCC0000) // Blood color
 				}
-
+				
+				// If the mob has been hit we add a redish value to the colors of our mob so the user knows
+				// that the mob has been damaged recently
 				if (col != 0xff00ff50) {
 					if (mob.isHit())
-						// col = 0xffCC0000;
 						col += 0xffD80000;
-					// col += 0xff0000;
 
 					pixels[xa + ya * width] = col;
 				}
@@ -287,8 +307,8 @@ public class Screen {
 		}
 	}
 
+	// Draws a rectangle in the game
 	public void drawRect(int xp, int yp, int width, int height, int color, boolean fixed) {
-
 		if (fixed) {
 			xp -= xOffset;
 			yp -= yOffset;
