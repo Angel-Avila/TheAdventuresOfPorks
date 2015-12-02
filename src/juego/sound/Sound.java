@@ -12,6 +12,8 @@ public class Sound {
 	public static Sound spawnMusic = loadSound("/res/audio/spawnMusic.wav");
 	public static Sound encounter = loadSound("/res/audio/encounter.wav");
 	public static Sound vsRed = loadSound("/res/audio/vsRed.wav");
+	public static Sound menu = loadSound("/res/audio/menu.wav");
+	public static Sound gameOver = loadSound("/res/audio/gameOver.wav");
 
 	public List<Sound> sounds = new ArrayList<>();
 	
@@ -38,6 +40,8 @@ public class Sound {
 		sounds.add(spawnMusic);
 		sounds.add(encounter);
 		sounds.add(vsRed);
+		sounds.add(menu);
+		sounds.add(gameOver);
 	}
 	
 	public Clip clip;

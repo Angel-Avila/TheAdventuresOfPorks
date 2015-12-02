@@ -22,6 +22,7 @@ import juego.graphics.ui.UIProgressBar;
 import juego.graphics.ui.UIStat;
 import juego.input.Keyboard;
 import juego.input.Mouse;
+import juego.sound.Sound;
 import juego.util.ImageUtils;
 import juego.util.Vector2i;
 
@@ -390,8 +391,10 @@ public class Player extends Mob {
 
 		updateShooting();
 
-		if (actualHealth <= 0) 
+		if (actualHealth <= 0) {
 			Game.setGameState(Game.STATE.End);
+			Sound.gameOver.loop();
+		}
 		
 		// Setters for the stats from the UIPanel
 		health_stat.setText(String.format("%.2f", actualHealth));

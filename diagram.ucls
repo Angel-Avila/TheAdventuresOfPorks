@@ -3,7 +3,7 @@
   realizations="true" associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
   <enumeration id="1" language="java" name="juego.Game.STATE" project="Proyecto POO" 
     file="/Proyecto POO/src/juego/Game.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="4394" y="1476"/>    
+    <position height="-1" width="-1" x="4053" y="881"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -363,7 +363,7 @@
   </class>  
   <class id="41" language="java" name="juego.level.TileCoordinate" project="Proyecto POO" 
     file="/Proyecto POO/src/juego/level/TileCoordinate.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="4048" y="1044"/>    
+    <position height="-1" width="-1" x="4058" y="1096"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -480,7 +480,7 @@
   </class>  
   <class id="54" language="java" name="juego.menus.GameOverScreen" project="Proyecto POO" 
     file="/Proyecto POO/src/juego/menus/GameOverScreen.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="5898" y="3618"/>    
+    <position height="-1" width="-1" x="5963" y="3614"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -498,7 +498,7 @@
   </class>  
   <class id="56" language="java" name="juego.menus.PauseMenu" project="Proyecto POO" 
     file="/Proyecto POO/src/juego/menus/PauseMenu.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="6186" y="3499"/>    
+    <position height="-1" width="-1" x="6179" y="3607"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -1302,6 +1302,7 @@
     <end type="TARGET" refId="42"/>  
   </generalization>  
   <association id="324">    
+    <bendpoint x="4520" y="2386"/>    
     <end type="SOURCE" refId="3" navigable="false">      
       <attribute id="325" name="ui"/>      
       <multiplicity id="326" minimum="0" maximum="1"/>    

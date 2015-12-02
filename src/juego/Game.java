@@ -92,6 +92,7 @@ public class Game extends Canvas implements Runnable {
 		menu = new Menu(this);
 		// font = new Font();
 		uiManager = new UIManager();
+		Sound.menu.loop();
 
 		addKeyListener(key);
 		addMouseListener(mouse);

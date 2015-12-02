@@ -16,6 +16,7 @@ import juego.graphics.ui.UIActionListener;
 import juego.graphics.ui.UIButton;
 import juego.graphics.ui.UIButtonListener;
 import juego.graphics.ui.UITextBox;
+import juego.sound.Sound;
 import juego.util.ImageUtils;
 import juego.util.Vector2i;
 
@@ -46,6 +47,7 @@ public class GameOverScreen {
 			public void perform() {
 				UITextBox.name = "";
 				Game.setGameState(STATE.Menu);
+				Sound.menu.loop();
 			}
 		});
 		
