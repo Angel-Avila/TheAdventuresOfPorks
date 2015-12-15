@@ -107,9 +107,13 @@ public class Game extends Canvas implements Runnable {
 		dead_resetMM = false;
 		pauseMenu = new PauseMenu();
 		gameOverScreen = new GameOverScreen(player);
-		if (name.toUpperCase().equals("JOHN CENA"))
+		if (name.toUpperCase().equals("JOHN CENA")) {
 			Sound.JOHNCENA.loop();
-		else
+			player.activateGodMode();
+		} else if (name.toUpperCase().equals("ANGEL")) {
+			player.activateGodMode();
+			Sound.spawnMusic.loop();
+		} else
 			Sound.spawnMusic.loop();
 	}
 
@@ -282,12 +286,12 @@ public class Game extends Canvas implements Runnable {
 		g = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		String[] fonts = g.getAvailableFontFamilyNames();
 		for (int i = 0; i < fonts.length; i++) {
-//			System.out.println(fonts[i]);
+			// System.out.println(fonts[i]);
 			if (fonts[i].equals("8-Bit Madness")) {
 				System.out.println("Found!");
 			}
 		}
-		
+
 		Game game = new Game();
 
 		// To avoid graphical errors

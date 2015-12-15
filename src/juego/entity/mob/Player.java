@@ -49,6 +49,7 @@ public class Player extends Mob {
 
 	private double actualMana, maxMana, manaRegen;
 	private double healthRegen;
+	private int spADamage = 40;
 	private final double COOLDOWN = 60;
 	private double cooldown = 60;
 	private int fireRate = 0;
@@ -420,6 +421,14 @@ public class Player extends Mob {
 		actualHealth = maxHealth;
 		actualMana = maxMana;
 	}
+	
+	public void activateGodMode(){
+		maxHealth = actualHealth = 10000;
+		healthRegen = 15;
+		maxMana = actualMana = 10000;
+		manaRegen = 2;
+		spADamage = 500;
+	}
 
 	private void updateShooting() {
 		// If the player is in the UIPanel, don't shoot
@@ -459,12 +468,11 @@ public class Player extends Mob {
 
 	// Damages all enemies within 3 tiles radius from the player
 	private void specialAbility() {
-		int damage = 40;
 		this.actualMana -= 30;
 		usedAt.set((int) x, (int) y);
 		List<Integer> entities = level.getEntitiesIndex(this, 48);
 		for (Integer i : entities)
-			level.damageMobAt(i, damage);
+			level.damageMobAt(i, spADamage);
 	}
 
 	public void setX(int x) {
