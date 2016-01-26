@@ -5,3 +5,5 @@ NOTE: This project was made with the font '8-Bit Madness' that comes in the proj
 
 1. Double click the font.
 2. Click 'Install'
+
+ANOTHER NOTE*: I made this project with a lot of time before the deadline, when I was still learning. To avoid any misshapens and what not, I used the native .wav file support from Java, making the file way larger than it should be since .wav consumes much more memory than .mp3 does.
